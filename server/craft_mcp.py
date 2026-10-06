@@ -21,7 +21,7 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 STATE_DIR = os.path.join(os.path.expanduser("~"), ".picode-artcraft")
 PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
@@ -213,6 +213,15 @@ class App:
                 "watch": f"If you have PiCode's computer tool, call it with action screenshot and window {hwnd} "
                          "now: the human's Agent screen panel follows the window you use there."}
 
+    def running_without_control(self):
+        """The app runs, but nothing listens on its control port (the human opened it by hand)."""
+        if WSL:
+            n = powershell(f"@(Get-Process -Name '{self.name}' -ErrorAction SilentlyContinue).Count")
+        else:
+            out = subprocess.run(["pgrep", "-x", self.name], capture_output=True, text=True)
+            n = str(len(out.stdout.split()))
+        return n.isdigit() and int(n) > 0 and not self.listening_pid()
+
     def read_state(self):
         try:
             with open(self.state_file) as f:
@@ -236,6 +245,10 @@ class App:
             st["files_root"] = state.get("root")
         if pid:
             st.update(self.window_hint())
+        elif found and self.running_without_control():
+            st["running_without_control"] = True
+            st["hint"] = (f"{self.spec['title']} is open without its control channel; ask the human to close it "
+                          "so the extension can open it with control on.")
         if not found:
             st["hint"] = f"Install {self.spec['title']} (github.com/storytold/{self.name}/releases)."
         return st
@@ -252,6 +265,11 @@ class App:
                         f"({self.root}). Work with paths under that root, or ask the human to close "
                         f"{self.spec['title']} so the next call opens it here.")
             return False
+        if self.running_without_control():
+            raise ToolError(
+                f"{self.spec['title']} is already open without its control channel, so the extension cannot "
+                f"drive it, and opening a second copy would confuse the human. Ask them to save their work and "
+                f"close {self.spec['title']}; the next call opens it with control on.")
         args = [gui, "--control", str(self.spec["port"])]
         if self.spec["token"]:
             args += ["--control-token-file", self.token_file()]
@@ -402,6 +420,34 @@ OPEN_TOOL = {"photocraft": ("doc_open", {}), "vectorcraft": ("open_file", {}),
              "filmcraft": ("command_run", {"id": "file.open"}), "effectcraft": ("open_project", {})}
 
 
+# Apps whose window can come back tiny or minimized; app_open gives it a usable size.
+RESTORE_WINDOW = {"effectcraft"}
+
+
+def content_value(result):
+    """A tool result's text content as data: parsed JSON when it is JSON, else the text."""
+    texts = [c.get("text", "") for c in (result or {}).get("content", []) if c.get("type") == "text"]
+    if not texts:
+        return None
+    try:
+        return json.loads(texts[0])
+    except ValueError:
+        return texts[0]
+
+
+def restore_window(bridge):
+    """Resize EffectCraft's window when it reports less than a usable size."""
+    try:
+        state = content_value(bridge.call("control", {"method": "ui.inspect"}).get("result"))
+        w, h = (state or {}).get("window") or (0, 0)
+        if w < 1000 or h < 600:
+            bridge.call("control", {"method": "ui.resize", "params": {"width": 1500, "height": 900}})
+            return {"window_restored": [1500, 900]}
+    except (ToolError, OSError, ValueError, TypeError):
+        pass
+    return {}
+
+
 def text_result(obj, error=False):
     return {"content": [{"type": "text", "text": obj if isinstance(obj, str) else json.dumps(obj, indent=1)}],
             "isError": error}
@@ -456,7 +502,9 @@ def main():
                     res = bridge.call(tool_name, call)
                     if "error" in res or (res.get("result") or {}).get("isError"):
                         return res.get("result") or text_result(res.get("error"), True)
-                    out["file"] = res["result"].get("content")
+                    out["file"] = content_value(res["result"])
+                if name in RESTORE_WINDOW:
+                    out.update(restore_window(bridge))
                 out.update(app.window_hint())
                 return text_result(out)
             if tool == "app_path":

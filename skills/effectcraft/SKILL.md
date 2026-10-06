@@ -31,6 +31,18 @@ shape. Everything is an engine command; properties have paths.
    | prores | webm | png, output}` then `execute_command renderQueue.render
    {wait: true}`. Save the project with `save_project {path}` (`.ecproj`).
 
+## Pitfalls (found in a real run)
+
+- An imported image becomes a layer with `layer.addItem {item, duration}`
+  (the item id comes from `file.import`).
+- A 1200 × 1800 still in a 1920 × 1080 comp: scale about 55 % to fit the
+  height; animate `transform/scale` and `transform/position` for a slow push.
+- Text layers: `position` is the left of the baseline with `justify: "left"`.
+- `app_open` resizes the window when it comes back too small. Do not shrink
+  it below about 900 × 560 yourself: EffectCraft 0.3.1 closed at 420 × 300.
+- Render: `renderQueue.add {comp, format: "h264", output}` then
+  `renderQueue.render {wait: true}` — a 10 s 1080p comp took about 10 s.
+
 ## Paths
 
 Two kinds: **property paths** (`transform/position`, `effects/#1/blurriness`)

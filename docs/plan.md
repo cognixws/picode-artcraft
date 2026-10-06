@@ -54,6 +54,22 @@ are vendored as their references.
   FilmCraft `media_import` of a workspace PNG; EffectCraft `comp.new`,
   `save_project` and `render_frame` into the workspace.
 
+## v0.2.1
+
+- `app_open {file}` returns the opened file as an object, not as nested MCP
+  content.
+- An app the human opened by hand (no control channel) is reported by
+  `app_status` (`running_without_control`) and refused by the other tools with
+  a request to close it, instead of a second copy being opened.
+- `app_open` resizes EffectCraft's window when it reports less than
+  1000 × 600 (it sometimes comes back tiny).
+- Skills: the pitfalls and recipes from the recorded run.
+- Verified live, recorded (2026-10-06): one agent drew a Mona Lisa in
+  VectorCraft (about 40 calls), aged it in PhotoCraft (texturizer, craquelure,
+  grain, sepia, curves), animated it in EffectCraft (keyframes, titles,
+  H.264 render) and cut a 20 s film in FilmCraft (three clips, labels,
+  dissolves, H.264 export), with the Agent screen following each app.
+
 ## Next
 
 - The other apps as they mature: LightCraft, PrintCraft, DesignCraft (same

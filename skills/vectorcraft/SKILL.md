@@ -48,6 +48,19 @@ Absolute paths or paths relative to the workspace; PiCode turns them into
 the path Windows sees. `save_file` may answer `background: true` — the file
 is written a moment later.
 
+## Recipes (found in a real run)
+
+- Delete objects: `run_command edit.clear {ids:[...]}`.
+- Opacity and blend: `run_command transparency.set {ids, opacity: 0-100,
+  blend: "Multiply"}` — soft shadows (sfumato) are dark shapes at 20–35 %
+  Multiply with `apply_effect blur.gaussian {ids, params:{radius: 8}}`.
+- Gradients on any fill: `{"gradient": {"kind": "linear"|"radial", "start":
+  [x,y], "end": [x,y], "stops": [{"offset", "color", "opacity"?}]}}`.
+- Later objects draw on top: plan the order back to front (background,
+  figure, face, features, glaze).
+- `draw_path {d}` with SVG path data is the fastest way to place a complex
+  shape in one call.
+
 ## Dialogs
 
 Give a command its params and it runs without a dialog; with no params some

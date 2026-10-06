@@ -32,6 +32,23 @@ Every edit is an undoable engine command.
    "h264"}}` (or `export.quick`); list presets with `export.presets.list`.
    Save the project with `file.save` / `file.saveAs {path}`.
 
+## Pitfalls (found in a real run)
+
+- `file.newSequence {fromItem}` already places that clip on the timeline; a
+  `source.insert` after it duplicates the clip. Use `fromItem` only for the
+  sequence settings, or leave it out and insert every clip yourself.
+- Insert in order: `playhead.set {seconds}` → `source.open {item}` →
+  `source.insert`. A still image lasts 5 s.
+- Stills and media of another size come in at 100 % and get cropped: select
+  them (`timeline.select {clips:[...]}`) and run `clip.scaleToFrameSize`.
+- `graphics.newText {text, position, size, seconds, track, time}`: `position`
+  is the text's left anchor, `track` is the video track index (V2 = 1),
+  `time` is in ticks.
+- Cross dissolves: `timeline.select {clips:[...]}` then
+  `trim.applyDefaultTransition`.
+- `file.exportMedia` returns a job at once; the file is complete when its
+  size stops changing.
+
 ## Paths
 
 Give absolute paths in `media_import` and in command params (`path`,

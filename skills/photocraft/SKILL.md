@@ -50,6 +50,9 @@ workspace: work under that root or ask the human to close PhotoCraft.
 | Sharpen / blur | `filter.sharpen.smartSharpen` (`amount`), `filter.blur.gaussianBlur` (`radius`) |
 | Invert | `image.adjustments.invert` |
 
+| Painterly ageing | `filter.gallery.texturizer` (`texture: "canvas"`), `filter.gallery.craquelure` (`crackSpacing`, `crackDepth`, `crackBrightness`), `filter.gallery.filmGrain` |
+| Warm tone | `layer.newAdjustmentLayer.photoFilter` (`filter: "sepia"`, `density`) |
+
 Check the exact parameters with `command_list` before the first use: the
 parameter doc is a compact signature (`"amount":%=100` means a percentage,
 default 100).
