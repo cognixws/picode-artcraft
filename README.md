@@ -28,9 +28,12 @@ extension adds what PiCode needs around them:
   (it refuses anything outside it); VectorCraft gets paths translated to what
   its OS sees; the others get absolute paths in path-like arguments
   translated, and `app_path` converts a workspace path for command params.
-- **The Agent screen**: `app_open` and `app_status` return the app's window,
-  and the skills tell an agent with PiCode's `computer` tool to take one
-  screenshot of it, so the panel beside the agent follows the app.
+- **The Agent screen**: the extension holds `screen:follow` ("Point your
+  agent's screen at the app it drives") and points the panel beside the agent
+  at the app's window itself, on `app_open` and on the first tool that opens
+  the app — no Computer tool needed. On a PiCode without that door it falls
+  back: `app_open` returns the window and the skills tell an agent with the
+  `computer` tool to take one screenshot of it.
 - **One skill per app** with the working loop, and the app's own agent and
   control-protocol docs plus a command index as references.
 - **Turns itself on** in a workspace with a `.pcraft`, `.vectorcraft`,
@@ -67,7 +70,9 @@ mirrored networking is needed.
 
 ## Requirements
 
-- PiCode with extensions (ADR-0230).
+- PiCode with extensions (ADR-0230). v0.3 declares `screen:follow`, which
+  needs a PiCode with the screen-follow door (ADR-0230 amendment of
+  2026-10-06); an older PiCode refuses the install — use v0.2.1 there.
 - Any of PhotoCraft 0.2, VectorCraft 0.3, EffectCraft 0.3, FilmCraft 0.2
   (tested on Windows 11: 0.2.0, 0.3.1, 0.3.1, 0.2.1).
 - Python 3.10+ on the machine running PiCode.

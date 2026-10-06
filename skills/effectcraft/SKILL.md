@@ -12,9 +12,9 @@ shape. Everything is an engine command; properties have paths.
 
 1. `app_open` (optionally with an `.ecproj` `file`) to start where the human
    can watch; any other tool also opens the app on first use. It returns the
-   app's `window`: if you have PiCode's `computer` tool, call it once with
-   `action: screenshot, window: <that id>` so the human's Agent screen panel
-   follows EffectCraft.
+   app's `window`, and the extension points the human's Agent screen at it
+   (`screen: following this window`). Only on `screen: not followed`, with
+   PiCode's `computer` tool, take one screenshot of that window.
 2. Orient: `get_state` → `get_project` → `get_comp {}`.
 3. `execute_command comp.new {name, width, height, frameRate, duration}`.
 4. Layers: `execute_command layer.newText {text, size, fill}`,

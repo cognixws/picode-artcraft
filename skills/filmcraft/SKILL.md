@@ -12,9 +12,9 @@ Every edit is an undoable engine command.
 
 1. `app_open` (optionally with a `.fcproj` `file`) to start where the human
    can watch; any other tool also opens the app on first use. It returns the
-   app's `window`: if you have PiCode's `computer` tool, call it once with
-   `action: screenshot, window: <that id>` so the human's Agent screen panel
-   follows FilmCraft. The app may open on its demo project: start a new one
+   app's `window`, and the extension points the human's Agent screen at it
+   (`screen: following this window`). Only on `screen: not followed`, with
+   PiCode's `computer` tool, take one screenshot of that window. The app may open on its demo project: start a new one
    (`file.newProject`, then `file.newSequence` or `file.newSequenceFromClip`)
    rather than editing the demo.
 2. Import: `media_import {text}` — absolute paths, one per line (MP4/MOV,

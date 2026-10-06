@@ -11,11 +11,11 @@ menu action is a command; the dedicated tools cover drawing and looking.
 ## Loop
 
 1. `app_open` (optionally with `file`) to start where the human can watch;
-   any other tool also opens the app on first use. It returns the app's
-   `window`: if you have PiCode's `computer` tool, call it once with
-   `action: screenshot, window: <that id>` — the human's Agent screen
-   panel follows the window an agent last used there, and the app is
-   driven over its own channel, not through `computer`.
+   any other tool also opens the app on first use. The extension points
+   the human's Agent screen at the app itself (`screen: following this
+   window`). Only when it answers `screen: not followed` and you have
+   PiCode's `computer` tool, call it once with `action: screenshot,
+   window: <the returned window>` so the panel follows the app.
 2. `run_command {command: "file.new"}` for a new document, or `open_file`.
    `inspect_ui` lists what is open — never close or overwrite the human's own
    documents.

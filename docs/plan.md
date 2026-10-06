@@ -70,6 +70,18 @@ are vendored as their references.
   H.264 render) and cut a 20 s film in FilmCraft (three clips, labels,
   dissolves, H.264 export), with the Agent screen following each app.
 
+## v0.3.0
+
+- Declares `screen:follow` (ADR-0230 amendment of 2026-10-06, found by this
+  extension). PiCode gives each of its MCP servers `PICODE_SCREEN_FOLLOW` (a
+  credential bound to the agent and this extension) and
+  `PICODE_SCREEN_FOLLOW_URL`; `app_open` and the first tool that opens the app
+  POST the app's window to it, and the Agent screen follows the app with no
+  Computer tool and no image in the agent's context. Without the door (older
+  PiCode, permission not granted) the answer says `screen: not followed (…)`
+  and the skills fall back to one `computer` screenshot. `app_status` only
+  reports the window; it never points the screen.
+
 ## Next
 
 - The other apps as they mature: LightCraft, PrintCraft, DesignCraft (same

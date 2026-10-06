@@ -1,11 +1,14 @@
 {
   "id": "artcraft",
   "name": "Crafting Apps",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "apiVersion": 1,
   "publisher": "PiCode",
   "description": "Let your agents work in PhotoCraft, VectorCraft, EffectCraft and FilmCraft while you watch: they edit images, draw vector art, animate and cut video in the real app windows and save into the workspace.",
   "icon": "icons/craft.svg",
+  "permissions": [
+    "screen:follow"
+  ],
   "agent": {
     "mcpServers": {
       "photocraft": {

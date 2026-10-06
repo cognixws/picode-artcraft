@@ -15,13 +15,16 @@ needed. Paths cross with `wslpath`.
 
 import json
 import os
+import ssl
+import urllib.error
+import urllib.request
 import shutil
 import subprocess
 import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.2.1"
+VERSION = "0.3.0"
 STATE_DIR = os.path.join(os.path.expanduser("~"), ".picode-artcraft")
 PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
@@ -201,6 +204,11 @@ class App:
         return int(hwnd) if hwnd.isdigit() and hwnd != "0" else None
 
     def window_hint(self):
+        """The app's window, and the human's Agent screen pointed at it.
+
+        With PiCode's screen-follow door (ADR-0230 amendment of 2026-10-06)
+        the extension points the screen itself; without it (an older PiCode,
+        or the permission not granted) the agent is told how to."""
         hwnd = None
         for _ in range(10):  # the window can appear a moment after the channel
             hwnd = self.window()
@@ -209,9 +217,24 @@ class App:
             time.sleep(0.5)
         if not hwnd:
             return {}
-        return {"window": hwnd,
-                "watch": f"If you have PiCode's computer tool, call it with action screenshot and window {hwnd} "
-                         "now: the human's Agent screen panel follows the window you use there."}
+        out = {"window": hwnd}
+        followed, why = screen_follow(hwnd)
+        if followed:
+            out["screen"] = "following this window"
+            self.followed = hwnd
+        else:
+            out["screen"] = f"not followed ({why})"
+            out["watch"] = (f"If you have PiCode's computer tool, call it with action screenshot and window {hwnd} "
+                            "now: the human's Agent screen panel follows the window you use there.")
+        return out
+
+    def follow_once(self):
+        """Point the screen at the app the first time a tool opens it (not on every call)."""
+        if getattr(self, "followed", None):
+            return
+        hwnd = self.window()
+        if hwnd and screen_follow(hwnd)[0]:
+            self.followed = hwnd
 
     def running_without_control(self):
         """The app runs, but nothing listens on its control port (the human opened it by hand)."""
@@ -244,7 +267,9 @@ class App:
         if self.spec["roots"] and pid:
             st["files_root"] = state.get("root")
         if pid:
-            st.update(self.window_hint())
+            hwnd = self.window()
+            if hwnd:
+                st["window"] = hwnd
         elif found and self.running_without_control():
             st["running_without_control"] = True
             st["hint"] = (f"{self.spec['title']} is open without its control channel; ask the human to close it "
@@ -333,6 +358,41 @@ class App:
             if any(l.strip().startswith("/") for l in lines):
                 return "\n".join(to_app_path(l.strip()) if l.strip().startswith("/") else l for l in lines)
         return value
+
+
+# ---------- PiCode's screen-follow door ----------
+
+def screen_follow(hwnd):
+    """Ask PiCode to point this agent's Agent screen at window hwnd.
+
+    PiCode gives this server PICODE_SCREEN_FOLLOW (a file with a credential
+    bound to this agent and this extension) and PICODE_SCREEN_FOLLOW_URL when
+    the extension holds screen:follow. Returns (followed, why)."""
+    file, url = os.environ.get("PICODE_SCREEN_FOLLOW"), os.environ.get("PICODE_SCREEN_FOLLOW_URL")
+    if not file or not url:
+        return False, "this PiCode has no screen-follow door for this extension"
+    try:
+        with open(file) as f:
+            token = f.read().strip()
+    except OSError as e:
+        return False, f"credential unreadable: {e}"
+    req = urllib.request.Request(url, data=json.dumps({"window": hwnd}).encode(), method="POST",
+                                 headers={"Content-Type": "application/json", "X-PiCode-Screen-Follow": token})
+    ctx = ssl.create_default_context()
+    if urllib.request.urlparse(url).hostname in ("localhost", "127.0.0.1"):
+        ctx.check_hostname = False  # PiCode's own loopback certificate
+        ctx.verify_mode = ssl.CERT_NONE
+    try:
+        with urllib.request.urlopen(req, timeout=10, context=ctx) as r:
+            return r.status == 200, "ok"
+    except urllib.error.HTTPError as e:
+        try:
+            msg = json.loads(e.read() or b"{}").get("error", "")
+        except ValueError:
+            msg = ""
+        return False, msg or f"HTTP {e.code}"
+    except (urllib.error.URLError, OSError) as e:
+        return False, str(e)
 
 
 # ---------- the app's own MCP server, bridged ----------
@@ -467,9 +527,9 @@ def main():
                   if APPS[name]["roots"] else "paths may be absolute or relative to the workspace")
     instructions = (vendored.get("instructions") or "") + (
         f"\n\nThrough PiCode: the app runs on the human's desktop and they watch it. The first call opens it "
-        f"(app_open does so explicitly); {paths_note}. app_open and app_status return the app's `window`: if you "
-        f"have PiCode's computer tool, take one screenshot of that window right away so the human's Agent "
-        f"screen panel follows the app.")
+        f"(app_open does so explicitly); {paths_note}. app_open points the human's Agent screen at the app "
+        f"itself (`screen: following this window`); only when it answers `screen: not followed` and you have "
+        f"PiCode's computer tool, take one screenshot of the returned `window` so the panel follows the app.")
 
     def handle(msg):
         method, params = msg.get("method"), msg.get("params") or {}
@@ -516,6 +576,7 @@ def main():
                     args[key] = app.path_arg(args[key])
             args = app.translate_abs(args, keys=FILE_KEYS | ({"text"} if (name, tool) in TEXT_PATHS else set()))
             app.ensure_open()
+            app.follow_once()
             res = bridge.call(tool, args)
             if "error" in res:
                 return text_result(res["error"].get("message") or res["error"], True)
