@@ -1,0 +1,657 @@
+# effectcraft 0.3.1 command index (id, label, menu, shortcut)
+# Generated from `effectcraft-cli commands --json`; ask the app's command list for parameters and what is enabled now.
+
+file.newProject	New Project	File > New	Cmd+Alt+N
+file.openDemoProject	Open Demo Project	Help	
+file.open	Open Project...	File	Cmd+O
+file.save	Save	File	Cmd+S
+file.saveAs	Save As...	File > Save As	Cmd+Shift+S
+file.incrementAndSave	Increment and Save	File	Cmd+Alt+Shift+S
+file.revert	Revert	File	
+file.import	File...	File > Import	Cmd+I
+file.projectSettings	Project Settings...	File	Cmd+Alt+Shift+K
+file.cycleBitDepth	Cycle Project Bit Depth		
+render.backend	Video Rendering and Effects		
+roto.models	Roto Brush Models		
+roto.model.select	Use Roto Brush Model		
+roto.model.install	Install Roto Brush Model		
+roto.model.download	Download Roto Brush Model		
+roto.model.remove	Remove Roto Brush Model		
+face.models	Face Tracking Models		
+face.model.select	Use Face Tracking Model		
+face.model.install	Install Face Tracking Model		
+face.model.download	Download Face Tracking Model		
+face.model.remove	Remove Face Tracking Model		
+edit.undo	Undo	Edit	Cmd+Z
+edit.redo	Redo	Edit	Cmd+Shift+Z
+edit.cut	Cut	Edit	Cmd+X
+edit.copy	Copy	Edit	Cmd+C
+edit.copyWithPropertyLinks	Copy with Property Links	Edit	Cmd+Alt+C
+edit.copyWithRelativePropertyLinks	Copy with Relative Property Links	Edit	
+edit.copyExpressionOnly	Copy Expression Only	Edit	
+edit.paste	Paste	Edit	Cmd+V
+edit.pasteReversedKeyframes	Paste Reversed Keyframes	Edit	
+edit.clear	Clear	Edit	Delete
+edit.duplicate	Duplicate	Edit	Cmd+D
+edit.splitLayer	Split Layer	Edit	Cmd+Shift+D
+edit.liftWorkArea	Lift Work Area	Edit	
+edit.extractWorkArea	Extract Work Area	Edit	
+edit.selectAll	Select All	Edit	Cmd+A
+edit.deselectAll	Deselect All	Edit	Cmd+Shift+A
+edit.label	Label	Edit > Label	
+edit.selectLabelGroup	Select Label Group	Edit > Label	
+edit.purgeUndo	Undo	Edit > Purge	
+edit.purge	Purge		
+cache.diskStats	Disk Cache Statistics		
+edit.editOriginal	Edit Original...	Edit	Cmd+E
+edit.history.list	History		
+edit.history.goto	Go to History State		
+comp.new	New Composition...	Composition	Cmd+N
+comp.settings	Composition Settings...	Composition	Cmd+K
+comp.setPosterTime	Set Poster Time	Composition	
+comp.trimToWorkArea	Trim Comp to Work Area	Composition	Cmd+Shift+X
+comp.open	Open Composition		
+comp.close	Close Composition		
+comp.workArea	Set Work Area		
+comp.setSwitch	Composition Switch		
+comp.addMarker	Add Marker		Num*
+layer.newText	Text	Layer > New	Cmd+Alt+Shift+T
+layer.newSolid	Solid...	Layer > New	Cmd+Y
+layer.newNull	Null Object	Layer > New	Cmd+Alt+Shift+Y
+layer.newShape	Shape Layer	Layer > New	
+layer.newAdjustment	Adjustment Layer	Layer > New	Cmd+Alt+Y
+layer.settings	Layer Settings...	Layer	Cmd+Shift+Y
+layer.addItem	Add Footage to Comp	File	Cmd+/
+layer.select	Select Layers		
+layer.selectNext	Select Next Layer		Cmd+ArrowDown
+layer.selectPrevious	Select Previous Layer		Cmd+ArrowUp
+layer.setSwitch	Layer Switch		
+layer.rename	Rename		Enter
+layer.setComment	Layer Comment		
+layer.setBlendMode	Blending Mode		
+layer.setTrackMatte	Track Matte		
+layer.setParent	Parent		
+layer.timing	Layer Timing		
+layer.slip	Slip Edit		
+layer.slipBack	Slip Edit 1 Frame Earlier		Alt+PageUp
+layer.slipForward	Slip Edit 1 Frame Later		Alt+PageDown
+layer.arrange	Arrange	Layer > Arrange	
+layer.precompose	Pre-compose...	Layer	Cmd+Shift+C
+layer.addMask	New Mask	Layer > Mask	Cmd+Shift+N
+layer.setMask	Mask Mode		
+layer.addShapeItem	Add (Shape)		
+layer.setText	Edit Text		
+layer.transform	Transform	Layer > Transform	
+layer.style.convertToEditable	Convert to Editable Styles	Layer > Layer Styles	
+layer.style.showAll	Show All	Layer > Layer Styles	
+layer.style.removeAll	Remove All	Layer > Layer Styles	
+layer.style.dropShadow	Drop Shadow	Layer > Layer Styles	
+layer.style.innerShadow	Inner Shadow	Layer > Layer Styles	
+layer.style.outerGlow	Outer Glow	Layer > Layer Styles	
+layer.style.innerGlow	Inner Glow	Layer > Layer Styles	
+layer.style.bevelEmboss	Bevel and Emboss	Layer > Layer Styles	
+layer.style.satin	Satin	Layer > Layer Styles	
+layer.style.colorOverlay	Color Overlay	Layer > Layer Styles	
+layer.style.gradientOverlay	Gradient Overlay	Layer > Layer Styles	
+layer.style.stroke	Stroke	Layer > Layer Styles	
+layer.style.add	Add Layer Style		
+layer.style.remove	Remove Layer Style		
+layer.style.toggle	Toggle Layer Style		
+layer.style.globalLight	Global Light		
+layer.style.list	List Layer Styles		
+layer.autoOrient	Auto-Orient...	Layer > Transform	Cmd+Alt+O
+layer.newLight	Light...	Layer > New	Cmd+Alt+Shift+L
+layer.newCamera	Camera...	Layer > New	Cmd+Alt+Shift+C
+layer.cameraSettings	Camera Settings...	Layer > Camera	
+layer.lightSettings	Light Settings...		
+view.set3DView	Switch 3D View		
+view.3d.activeCamera	Active Camera	View > Switch 3D View	F12
+view.3d.default	Default	View > Switch 3D View	
+view.3d.front	Front	View > Switch 3D View	F10
+view.3d.left	Left	View > Switch 3D View	
+view.3d.top	Top	View > Switch 3D View	
+view.3d.back	Back	View > Switch 3D View	
+view.3d.right	Right	View > Switch 3D View	
+view.3d.bottom	Bottom	View > Switch 3D View	
+view.3d.custom1	Custom View 1	View > Switch 3D View	F11
+view.3d.custom2	Custom View 2	View > Switch 3D View	
+view.3d.custom3	Custom View 3	View > Switch 3D View	
+view.3d.last	Switch to Last 3D View	View	
+view.lookAtSelected	Look at Selected Layers	View	Cmd+Alt+Shift+\
+view.lookAtAll	Look at All Layers	View	
+camera.fromView	Create Camera from 3D View	Layer > Camera	
+view.reset3DView	Reset 3D View	View	
+view.set3DViewCamera	Set 3D View Camera		
+camera.orbit	Orbit Camera		
+camera.pan	Pan Camera		
+camera.dolly	Dolly Camera		
+view.get3D	3D View State		
+layer.newModel	3D Model Layer		
+layer.new3dPrimitive	3D Primitive		
+layer.newPrimitive	New 3D Primitive		
+comp.renderer	Renderer		
+layer.environment	Environment Layer	Layer	
+material.set	Material Options		
+material.revealSource	Reveal Material Source in Project	Layer > Material	
+material.reset	Reset Material	Layer > Material	
+material.duplicateAssign	Duplicate and Assign Material	Layer > Material	
+camera.stereoRig	Create Stereo 3D Rig	Layer > Camera	
+camera.orbitNull	Create Orbit Null	Layer > Camera	
+camera.fromModel	Create Cameras from 3D Model	Layer > Camera	
+light.fromModel	Create Lights from 3D Model	Layer > Light	
+light.controlWithCamera	Control Light with Camera	Layer > Light	
+light.environmentBackground	Create Environment Light Background Layer	Layer > Light	
+layer.addTextAnimator	Animate Text		
+layer.addTextAnimatorProperty	Add Property		
+layer.addTextSelector	Add Text Selector		
+layer.enablePerChar3D	Enable Per-character 3D		
+layer.applyTextPreset	Apply Text Animation Preset		
+text.animatorFontAxes	Variable Font Axes	Animation > Animate Text	
+text.presets	Text Animation Presets		
+text.animatorProperties	Text Animator Properties		
+text.edit	Edit Text		
+text.endEdit	Exit Text Editing		
+text.fontFeatures	OpenType Features		
+text.setSelection	Set Text Selection		
+text.moveCaret	Move Text Caret		
+text.insert	Type Text		
+text.delete	Delete Text		
+edit.pasteTextMatchFormatting	Paste Text and Match Formatting	Edit	
+edit.pasteTextFormattingOnly	Paste Text Formatting Only	Edit	
+layer.timeStretch	Time Stretch...	Layer > Time	
+layer.timeReverse	Time-Reverse Layer	Layer > Time	Cmd+Alt+R
+layer.enableTimeRemap	Enable Time Remapping	Layer > Time	Cmd+Alt+T
+layer.freezeFrame	Freeze Frame	Layer > Time	
+layer.freezeOnLastFrame	Freeze On Last Frame	Layer > Time	
+prop.get	Get Property		
+prop.set	Set Property Value		
+prop.toggleAnimation	Toggle Stopwatch		
+prop.addKey	Add Keyframe		
+prop.toggleKey	Add or Remove Keyframe at Current Time		
+keys.toggleTransform	Add or Remove Transform Keyframe		
+prop.setExpression	Add Expression	Animation	Alt+Shift+=
+prop.reset	Reset Property		
+prop.select	Select Property		
+prop.convertExpressionToKeyframes	Convert Expression to Keyframes	Animation > Keyframe Assistant	
+keys.select	Select Keyframes		
+keys.move	Move Keyframes		
+keys.delete	Delete Keyframes		
+keys.easyEase	Easy Ease	Animation > Keyframe Assistant	F9
+keys.easyEaseIn	Easy Ease In	Animation > Keyframe Assistant	Shift+F9
+keys.easyEaseOut	Easy Ease Out	Animation > Keyframe Assistant	Cmd+Shift+F9
+keys.toggleHold	Toggle Hold Keyframe	Animation	Cmd+Alt+H
+keys.interpolation	Keyframe Interpolation...	Animation	Cmd+Alt+K
+keys.velocity	Keyframe Velocity...	Animation	Cmd+Shift+K
+prop.renameGroup	Rename Property Group		
+prop.setGroupEnabled	Enable Property Group		
+prop.removeGroup	Delete Property Group		
+prop.duplicateGroup	Duplicate Property Group		
+prop.moveGroup	Reorder Property Group		
+project.select	Select Project Items		
+project.rename	Rename Item		
+project.move	Move to Folder		
+project.setLabel	Item Label		
+project.setComment	Item Comment		
+project.delete	Delete Project Items		
+project.usage	Project Item Usage		
+project.duplicate	Duplicate Project Items		
+keys.copy	Copy Keyframes		
+keys.paste	Paste Keyframes		
+keys.selectAll	Select All Keyframes		Cmd+Alt+A
+keys.nudge	Nudge Keyframes		
+keys.nudgeForward	Move Keyframes 1 Frame Later		Alt+ArrowRight
+keys.nudgeBackward	Move Keyframes 1 Frame Earlier		Alt+ArrowLeft
+keys.nudgeForward10	Move Keyframes 10 Frames Later		Alt+Shift+ArrowRight
+keys.nudgeBackward10	Move Keyframes 10 Frames Earlier		Alt+Shift+ArrowLeft
+keys.set	Edit Keyframe		
+keys.selectEqual	Select Equal Keyframes		
+keys.selectPrevious	Select Previous Keyframes		
+keys.selectFollowing	Select Following Keyframes		
+keys.setEase	Set Keyframe Ease		
+keys.timeReverse	Time-Reverse Keyframes	Animation > Keyframe Assistant	
+keys.info	Keyframe Info		
+keys.wiggle	Wiggler		
+keys.smooth	Smoother		
+motion.sketch	Motion Sketch		
+prop.separateDimensions	Separate Dimensions	Animation	
+prop.pickWhip	Pick Whip (Link Property)		
+markers.list	List Markers		
+markers.nested	Nested Comp Markers		
+markers.set	Marker Settings		
+markers.delete	Delete Marker		
+markers.convert	Convert Marker		
+layer.updateMarkersFromSource	Update Markers From Source	Layer > Markers	
+mask.new	New Mask from Points		
+mask.addVertex	Add Mask Vertex		
+mask.setVertex	Set Mask Vertex		
+mask.setClosed	Closed	Layer > Mask and Shape Path	
+mask.selectVertices	Select Mask Vertices		
+mask.moveVertices	Move Mask Vertices		
+mask.deleteVertices	Delete Mask Vertices		
+mask.convertVertex	Convert Vertex		
+mask.insertVertex	Add Vertex		
+mask.featherPoint.add	Add Mask Feather Point		
+mask.featherPoint.set	Move Mask Feather Point		
+mask.featherPoint.remove	Delete Mask Feather Point		
+mask.featherPoint.list	Mask Feather Points		
+mask.remove	Remove Mask		
+mask.removeAll	Remove All Masks		
+path.rotoBezier	RotoBezier	Layer > Mask and Shape Path	
+path.convertToBezier	Convert To Bezier Path	Layer > Mask and Shape Path	
+path.groupShapes	Group Shapes	Layer	Cmd+G
+path.ungroupShapes	Ungroup Shapes	Layer	Cmd+Shift+G
+path.setFirstVertex	Set First Vertex	Layer > Mask and Shape Path	
+path.freeTransform	Free Transform Points	Layer > Mask and Shape Path	
+layer.mask.motionBlur	Motion Blur		
+layer.mask.featherFalloff	Feather Falloff		
+layer.mask.hideLocked	Hide Locked Masks	Layer > Mask	
+effect.apply	Apply Effect		
+effect.pickColor	Pick Effect Colour		
+effect.applyLast	Last Effect	Effect	Cmd+Alt+Shift+E
+effect.removeAll	Remove All	Effect	Cmd+Shift+E
+effect.remove	Remove Effect		
+effect.toggle	Toggle Effect		
+effect.reorder	Reorder Effect		
+effect.duplicate	Duplicate Effect		
+effect.copy	Copy Effects		
+effect.paste	Paste Effects		
+effect.reset	Reset Effect		
+effect.list	List Effects		
+effect.plugins.list	List Effect Plug-ins		
+effect.plugins.load	Load Effect Plug-in...		
+time.set	Go to Time...	View	Alt+Shift+J
+time.nextFrame	Next Frame		PageDown
+time.previousFrame	Previous Frame		PageUp
+time.forward10	Forward 10 Frames		Shift+PageDown
+time.back10	Back 10 Frames		Shift+PageUp
+time.step	Step Frames		
+time.start	Go to Start		Home
+time.end	Go to End		End
+time.layerIn	Go to Layer In Point		I
+time.layerOut	Go to Layer Out Point		O
+time.nextKey	Go to Next Keyframe or Marker		K
+time.previousKey	Go to Previous Keyframe or Marker		J
+time.go	Go To		
+renderQueue.add	Add to Render Queue	Composition	Cmd+M
+renderQueue.remove	Remove from Render Queue		
+renderQueue.setRender	Render Queue: Render Checkbox		
+renderQueue.setRenderSettings	Render Settings...		
+renderQueue.setOutputModule	Output Module Settings...		
+renderQueue.setOutput	Output To...		
+render.addOutputModule	Add Output Module	Composition	
+render.preRender	Pre-render...	Composition	
+render.saveCurrentPreview	Save Current Preview...	Composition	
+renderQueue.move	Move in Render Queue		
+renderQueue.duplicate	Duplicate Render Item		
+renderQueue.render	Render		
+renderQueue.stop	Stop Rendering		
+renderQueue.list	Render Queue Items		
+renderQueue.templates	Render Templates		
+renderQueue.saveTemplate	Save Template...		
+renderQueue.deleteTemplate	Delete Template		
+renderQueue.setTemplateDefault	Set Template Default		
+renderQueue.applyTemplate	Apply Template		
+renderQueue.setLog	Render Queue: Log		
+renderQueue.setNotify	Notify When Done		
+renderQueue.setOverflowFolders	Storage Overflow Folders		
+renderQueue.formats	Output Formats		
+help.docs	EffectCraft Help...		F1
+help.discord	Join the ArtCraft Discord...	Help	
+help.website	ArtCraft Website	Help	
+help.appPage	EffectCraft Home Page	Help	
+help.github	EffectCraft on GitHub	Help	
+help.onlineTutorials	Online Tutorials...	Help	
+help.inAppTutorials	In-App Tutorials...	Help	
+help.reportIssue	Provide Feedback...	Help	
+help.sibling	Other ArtCraft Apps		
+command.list	List Commands		
+command.describe	Describe Command		
+app.capabilities	App Capabilities		
+project.summary	Project Summary		
+comp.info	Composition Info		
+layer.tree	Layer Property Tree		
+editor.state	Editor State		
+engine.batch	Run Commands (Batch)		
+layer.quality	Quality		
+layer.sampling	Sampling		
+layer.frameBlending	Frame Blending		
+layer.hideOtherVideo	Hide Other Video	Layer > Switches	Cmd+Alt+Shift+V
+layer.showAllVideo	Show All Video	Layer > Switches	
+layer.unlockAll	Unlock All Layers	Layer > Switches	Cmd+Shift+L
+layer.expressions	Enable/Disable Expressions		
+layer.setTransform	Transform Value		
+layer.centerAnchor	Center Anchor Point in Layer Content	Layer > Transform	Cmd+Alt+Home
+layer.mask.shape	Mask Shape...	Layer > Mask	Cmd+Shift+M
+layer.mask.set	Mask Settings		
+layer.mask.reset	Reset Mask	Layer > Mask	
+layer.mask.remove	Remove Mask	Layer > Mask	
+layer.mask.removeAll	Remove All Masks	Layer > Mask	
+layer.mask.mode	Mask Mode		
+layer.mask.invert	Inverted	Layer > Mask	Cmd+Shift+I
+layer.mask.lock	Locked	Layer > Mask	
+layer.mask.unlockAll	Unlock All Masks	Layer > Mask	
+layer.mask.lockOthers	Lock Other Masks	Layer > Mask	
+layer.addMarker	Add Marker	Layer > Markers	
+layer.markersLock	Lock Markers	Layer > Markers	
+layer.deleteAllMarkers	Delete All Markers	Layer > Markers	
+layer.trackMatte	Track Matte		
+layer.openSource	Open Layer Source	Layer	
+layer.revealInFinder	Reveal in Finder	Layer	
+layer.revealSource	Reveal Layer Source in Project	Layer > Reveal	
+comp.revealInProject	Reveal Composition in Project	Layer > Reveal	
+layer.revealExpressionErrors	Reveal Expression Errors	Layer > Reveal	
+layer.sequence	Sequence Layers...	Animation > Keyframe Assistant	
+layer.create	Create		
+anim.savePreset	Save Animation Preset...	Animation	
+anim.applyPreset	Apply Animation Preset...	Animation	
+anim.addKeyframe	Add Keyframe	Animation	
+keys.exponentialScale	Exponential Scale	Animation > Keyframe Assistant	
+text.addSelector	Add Text Selector		
+text.removeAllAnimators	Remove All Text Animators	Animation	
+anim.reveal	Reveal Properties		
+view.addGuide	Add Guide...	View	
+view.clearGuides	Clear Guides	View	
+view.importGuides	Import Guides...	View	
+view.exportGuides	Export Guides...	View	
+view.layout	Switch View Layout		
+view.shareViewOptions	Share View Options	View > Switch View Layout	
+view.extendedViewer	Extended Viewer		
+view.setRegionOfInterest	Region of Interest		
+view.snapping	Snapping	View	
+view.displayColorManagement	Use Display Color Management	View	
+view.simulateOutput	Simulate Output		
+view.customRgb	My Custom RGB...		
+view.splitLockedViewer	Split with New Locked Viewer	View	
+view.closeLockedViewer	Close Locked Viewer		
+view.displayColor	Viewer Color State		
+view.channel	Show Channel		
+view.exposure	Adjust Exposure		
+view.resetExposure	Reset Exposure		
+view.takeSnapshot	Take Snapshot		Shift+F5
+view.showSnapshot	Show Snapshot		
+view.fastPreviewMode	Fast Previews		
+view.moveGuide	Move Guide		
+view.removeGuide	Remove Guide		
+shape.newPath	Pen Tool (Shape Path)		
+shape.dashes.add	Add Dash or Gap		
+shape.dashes.remove	Remove Dash or Gap		
+shape.stroke.taper	Stroke Taper		
+shape.stroke.wave	Stroke Wave		
+camera.linkFocusToPoi	Link Focus Distance to Point of Interest	Layer > Camera	
+camera.linkFocusToLayer	Link Focus Distance to Layer	Layer > Camera	
+camera.setFocusToLayer	Set Focus Distance to Layer	Layer > Camera	
+keys.setLabel	Keyframe Label		
+keys.selectLabelGroup	Select Keyframe Label Group		
+keys.transform	Transform Keyframes		
+keys.setSpatialTangents	Edit Spatial Tangents		
+project.newFolder	New Folder	File > New	Cmd+Alt+Shift+N
+file.close	Close	File	Cmd+W
+file.closeProject	Close Project	File	
+file.saveCopy	Save a Copy...	File > Save As	
+file.importMultiple	Multiple Files...	File > Import	Cmd+Alt+I
+file.importPlaceholder	Placeholder...	File > Import	
+file.importSolid	Solid...	File > Import	
+file.newCompFromSelection	New Comp from Selection...	File	Cmd+Alt+\
+file.collectFiles	Collect Files...	File > Dependencies	
+file.consolidateFootage	Consolidate All Footage	File > Dependencies	
+file.removeUnusedFootage	Remove Unused Footage	File > Dependencies	
+file.reduceProject	Reduce Project	File > Dependencies	
+file.findMissing	Find Missing		
+footage.check	Check Footage		
+file.runScript	Run Script File...	File > Scripts	
+script.run	Run Script		
+file.interpretFootage	Main...	File > Interpret Footage	Cmd+Alt+G
+file.rememberInterpretation	Remember Interpretation	File > Interpret Footage	
+file.applyInterpretation	Apply Interpretation	File > Interpret Footage	Cmd+Alt+V
+file.replaceFootage	File...	File > Replace Footage	Cmd+H
+file.replaceWithPlaceholder	Placeholder...	File > Replace Footage	
+file.replaceWithSolid	Solid...	File > Replace Footage	
+file.reloadFootage	Reload Footage	File	Cmd+Alt+L
+file.revealInFinder	Reveal in Finder	File	
+file.exportLottie	Lottie JSON...	File > Export	
+file.importLottie	Lottie...	File > Import	
+file.importTimeline	Adobe Premiere Pro Project...	File > Import	
+file.exportTimeline	Adobe Premiere Pro Project...	File > Export	
+file.timelineFormats	Timeline Interchange Formats		
+comp.cropToRegionOfInterest	Crop Comp to Region of Interest	Composition	
+comp.cropToLayerBounds	Crop Comp to Selected Layer(s) Bounds	Composition	
+comp.saveFrameAs	File...	Composition > Save Frame As	Cmd+Alt+S
+comp.responsiveTime	Responsive Design — Time		
+comp.saveFrameAsPsd	Photoshop Layers...	Composition > Save Frame As	
+comp.saveFrameAsExr	ProEXR...	Composition > Save Frame As	
+file.watchFolder	Watch Folder...	File	
+file.watchFolder.poll	Poll Watch Folder		
+file.importVanishingPoint	Vanishing Point (.vpe)...	File > Import	
+paths.pointsFollowNulls	Points Follow Nulls		
+paths.nullsFollowPoints	Nulls Follow Points		
+paths.tracePath	Trace Path		
+comp.vr.environments	VR Environments		
+comp.vr.setView	VR View Orientation		
+app.about	About EffectCraft...		
+layer.style.options	Layer Style Options...	Layer > Layer Styles	
+app.settings	Settings...		
+app.gpuInfo	GPU Information...		
+app.hide	Hide EffectCraft		
+app.hideOthers	Hide Others		
+app.showAll	Show All		
+app.quit	Quit EffectCraft		Cmd+Q
+app.commandPalette	Quick Apply...	Edit	Cmd+Shift+Space
+app.keyboardShortcuts	Keyboard Shortcuts	Edit	Cmd+Alt+'
+app.templates	Templates		
+app.find	Find	File	Cmd+F
+playback.toggle	Play Current Preview	Composition > Preview	Space
+playback.cacheWhenIdle	Cache Frames When Idle	Composition > Preview	
+playback.audio	Audio	Composition > Preview	
+playback.scrubAudio	Scrub Audio		
+view.zoomIn	Zoom In	View	.
+view.zoomOut	Zoom Out	View	,
+view.res.full	Full	View > Resolution	Cmd+J
+view.res.half	Half	View > Resolution	Cmd+Shift+J
+view.res.third	Third	View > Resolution	
+view.res.quarter	Quarter	View > Resolution	Cmd+Alt+Shift+J
+view.res.custom	Custom...	View > Resolution	
+view.rulers	Show Rulers	View	Cmd+R
+view.panelBackground	Panel Background Color		
+view.guides	Show Guides	View	Cmd+;
+view.snapToGuides	Snap to Guides	View	Cmd+Shift+;
+view.lockGuides	Lock Guides	View	Cmd+Alt+Shift+;
+view.grid	Show Grid	View	Cmd+'
+view.snapToGrid	Snap to Grid	View	Cmd+Shift+'
+view.options	View Options...	View	Cmd+Alt+U
+view.layerControls	Show Layer Controls	View	Cmd+Shift+H
+view.fullScreen	Enter Full Screen	View	Ctrl+Cmd+F
+view.newViewer	New Viewer	View	Alt+Shift+N
+window.panel	Show Panel		
+window.workspace	Workspace		
+window.saveWorkspace	Save Changes to this Workspace	Window > Workspace	
+window.saveWorkspaceAs	Save as New Workspace...	Window > Workspace	
+window.editWorkspaces	Edit Workspaces...	Window > Workspace	
+window.resetWorkspace	Reset to Saved Layout	Window > Workspace	
+comp.flowchart	Composition Flowchart	Composition	Cmd+Shift+F11
+comp.miniFlowchart	Composition Mini-Flowchart	Composition	Tab
+layer.openLayer	Open Layer	Layer	
+effect.manage	Manage Effects...	Effect	
+anim.browsePresets	Browse Presets...	Animation	
+track.motion	Track Motion	Animation	
+track.stabilize	Stabilize Motion	Animation	
+track.new	New Tracker		
+track.property	Track this Property	Animation	
+track.select	Current Track		
+track.setType	Track Type		
+track.setTarget	Edit Target		
+track.options	Motion Tracker Options		
+track.setPoint	Move Track Point		
+track.analyze	Analyze		
+track.stop	Stop Analysis		
+track.apply	Apply		
+track.reset	Reset		
+track.delete	Delete Tracker		
+track.editTargetDialog	Edit Target...		
+track.optionsDialog	Options...		
+track.status	Tracker Status		
+track.mask	Track Mask	Animation	
+track.maskMethod	Mask Tracking Method		
+track.extractFaceMeasurements	Extract & Copy Face Measurements		
+mask.interpolate	Apply Mask Interpolation		
+mask.interpolationOptions	Mask Interpolation Options		
+track.warpStabilizer	Warp Stabilizer VFX	Animation	
+warp.analyze	Analyze		
+warp.cancel	Cancel		
+warp.status	Warp Stabilizer Status		
+track.camera	Track Camera	Animation	
+camera.analyze	Analyze		
+camera.cancel	Cancel		
+camera.solveStatus	3D Camera Tracker Status		
+camera.points	3D Camera Tracker Points		
+camera.selectPoints	Select Track Points		
+camera.createFromSolve	Create from Camera Solve		
+camera.create	Create Camera		
+camera.setGroundPlane	Set Ground Plane and Origin		
+camera.deletePoints	Delete Selected Points		
+roto.stroke	Roto Brush Stroke		
+roto.propagate	Propagate Roto Brush		
+roto.span	Set Segmentation Span		
+roto.freeze	Freeze		
+roto.unfreeze	Unfreeze		
+roto.clearStrokes	Remove Roto Brush Strokes		
+roto.cancel	Stop Roto Brush		
+roto.options	Roto Brush Options		
+roto.status	Roto Brush Status		
+paint.stroke	Paint Stroke		
+paint.options	Paint Options		
+paint.brushPreset	Brush Preset		
+paint.setCloneSource	Set Clone Source		
+paint.removeStroke	Delete Paint Stroke		
+paint.presets	Brush Presets		
+puppet.addPin	Add Puppet Pin		
+puppet.movePin	Move Puppet Pin		
+puppet.setPin	Edit Puppet Pin		
+puppet.removePin	Delete Puppet Pin		
+puppet.selectPins	Select Puppet Pins		
+puppet.mesh	Puppet Mesh Options		
+puppet.info	Puppet Mesh Info		
+puppet.recordPin	Record Puppet Pin		
+puppet.follow	Follow-Through...		
+puppet.recordOptions	Record Options...		
+liquify.stroke	Liquify Stroke		
+liquify.clear	Clear Liquify Mesh		
+prefs.get	Get Setting		
+prefs.set	Change Setting		
+prefs.reset	Reset Settings		
+prefs.open	Open Settings		
+prefs.pages	Settings Pages		
+shortcuts.list	List Keyboard Shortcuts		
+shortcuts.set	Set Keyboard Shortcut		
+shortcuts.reset	Reset Keyboard Shortcuts		
+shortcuts.preset	Keyboard Shortcut Preset		
+shortcuts.export	Export Keyboard Shortcuts		
+shortcuts.import	Import Keyboard Shortcuts		
+shortcuts.conflicts	Keyboard Shortcut Conflicts		
+file.openRecent	Open Recent		
+file.clearRecent	Clear Recent Projects	File > Open Recent	
+file.autoSave	Auto-Save Now		
+file.recoveryInfo	Auto-Save Status		
+edit.history	History		
+file.importRecent	Import Recent Footage		
+file.clearRecentFootage	Clear Recent Footage	File > Import Recent Footage	
+anim.applyRecentPreset	Recent Animation Presets		
+anim.clearRecentPresets	Clear Recent Presets	Animation > Recent Animation Presets	
+file.saveCopyAsXml	Save a Copy As XML...	File > Save As	
+file.replaceWithLayeredComp	With Layered Comp	File > Replace Footage	
+file.executeFile	Execute File		
+view.assign3dShortcut	Assign Shortcut to 3D View		
+window.assignWorkspaceShortcut	Assign Shortcut to Workspace		
+help.enableLogging	Enable Logging	Help	
+help.revealLogFile	Reveal Logging File	Help	
+help.systemReport	System Compatibility Report...	Help	
+comp.vr.createEnvironment	Create VR Environment...	Composition > VR	
+comp.vr.extractCubemap	Extract Cubemap...	Composition > VR	
+help.systemInfo	System Information		
+keys.audioToKeyframes	Convert Audio to Keyframes	Animation > Keyframe Assistant	
+keys.rpfCameraImport	RPF Camera Import	Animation > Keyframe Assistant	
+essential.setPrimary	Primary Composition		
+essential.setName	Essential Graphics Name		
+essential.addProperty	Add Property to Essential Graphics	Animation	
+essential.addMirror	Add Mirror		
+essential.linkProperty	Link Property to Control		
+essential.unlinkProperty	Unlink Property		
+essential.addMedia	Add Media Replacement		
+essential.addGroup	Add Group		
+essential.addComment	Add Comment		
+essential.rename	Rename Control		
+essential.remove	Remove Control		
+essential.move	Move Control		
+essential.soloSupported	Solo Supported Properties		
+essential.exportTemplate	Essential Graphics Template...	File > Export	
+essential.importTemplate	Essential Graphics Template...	File > Import	
+essential.set	Set Essential Property		
+essential.pushToComp	Push Override Values to Source		
+essential.revert	Revert		
+effect.editDropdown	Edit Dropdown Menu		
+essential.list	Essential Graphics controls		
+essential.canAdd	Can Add Property to Essential Graphics		
+comp.openInEssentialGraphics	Open in Essential Graphics	Composition	
+essential.instance	Essential Properties of a precomp layer		
+essential.templateInfo	Read a template's manifest		
+expr.errors	Expression errors (the error bar)		
+expr.languageMenu	Expression Language menu		
+file.createProxy	Create Proxy		
+file.setProxy	File...	File > Set Proxy	
+file.setProxyNone	None	File > Set Proxy	
+file.useProxy	Use Proxy		
+file.interpretProxy	Proxy...	File > Interpret Footage	
+file.installScript	Install Script File...	File > Scripts	
+file.installScriptUIPanel	Install ScriptUI Panel...	File > Scripts	
+file.uninstallScript	Uninstall Script		
+file.scripts.list	List Scripts		
+window.scriptPanel	ScriptUI Panel		
+scriptui.list	List Script Windows		
+scriptui.get	Script Window Controls		
+scriptui.click	Click Script Window Control		
+scriptui.set	Set Script Window Control		
+scriptui.close	Close Script Window		
+jobs.list	Background Jobs		
+jobs.cancel	Cancel Job		
+jobs.wait	Wait for Background Jobs		
+mediaBrowser.list	List Folder		
+mediaBrowser.go	Go to Folder		
+mediaBrowser.addFavorite	Add to Favorites		
+mediaBrowser.removeFavorite	Remove from Favorites		
+mediaBrowser.import	Import		
+mediaBrowser.action	Media Browser Action		
+mediaBrowser.fileInfo	File Info		
+item.metadata	Metadata		
+project.setProjectComment	Project Comment		
+scopes.analyze	Lumetri Scopes		
+footage.open	Open in Footage Panel		
+footage.info	Footage Panel State		
+footage.setTime	Footage Panel Time		
+footage.setIn	Set In Point		
+footage.setOut	Set Out Point		
+footage.clearInOut	Clear In and Out		
+footage.overlayEdit	Overlay Edit		
+footage.rippleInsertEdit	Ripple Insert Edit		
+layer.autoTrace	Auto-trace...	Layer	
+layer.sceneEditDetection	Scene Edit Detection...	Layer	
+layer.alignVideoToData	Align Video to Data	Layer > Time	
+layer.align	Align Layers		
+layer.distribute	Distribute Layers		
+contentFill.set	Content-Aware Fill Settings		
+contentFill.generate	Generate Fill Layer		
+layer.newContentAwareFill	Content-Aware Fill Layer...	Layer > New	
+storage.info	Browser Storage		
+storage.persist	Request Persistent Storage		
+storage.clear	Clear Browser Storage		
+learn.list	Learn Tutorials		
+learn.state	Tutorial State		
+learn.start	Start Tutorial		
+learn.step	Tutorial Step		
+learn.stop	Close Tutorial		
+templates.list	Project Templates		
+templates.thumbnail	Template Thumbnail		
+templates.create	New Project from Template		
+templates.saveAs	Save as Template...	File	
+templates.delete	Delete Template		
+file.newFromTemplate	New Project from Template...	File > New	
+playback.settings.get	Preview Settings		
+playback.settings.set	Change Preview Settings		

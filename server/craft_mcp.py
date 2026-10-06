@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """picode-artcraft MCP server (stdio, Python standard library only).
 
-One process per app: `craft_mcp.py photocraft` or `craft_mcp.py vectorcraft`.
+One process per app: `craft_mcp.py <photocraft|vectorcraft|filmcraft|effectcraft>`.
 It lists the app's own MCP tools (server/tools/<app>.json, captured from the
 app's bridge mode) plus `app_status` and `app_open`. The first call that needs
 the app opens it with its control channel on, then starts the app's own CLI
@@ -21,7 +21,7 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.1.1"
+VERSION = "0.2.0"
 STATE_DIR = os.path.join(os.path.expanduser("~"), ".picode-artcraft")
 PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
@@ -40,7 +40,33 @@ APPS = {
         "roots": False,  # takes absolute paths
         "connect": lambda port: ["--connect", f"127.0.0.1:{port}"],
     },
+    "filmcraft": {
+        "title": "FilmCraft",
+        "port": 9876,
+        "token": False,
+        "roots": False,
+        "connect": lambda port: ["--bridge", f"127.0.0.1:{port}"],
+    },
+    "effectcraft": {
+        "title": "EffectCraft",
+        "port": 9877,
+        "token": False,
+        "roots": False,
+        "connect": lambda port: ["--bridge", str(port)],
+    },
 }
+
+for _name, _spec in APPS.items():  # PICODE_<APP>_PORT moves an app off its default port
+    _p = os.environ.get(f"PICODE_{_name.upper()}_PORT", "")
+    if _p.isdigit():
+        _spec["port"] = int(_p)
+
+# Argument keys that may carry a file path. Only absolute POSIX values are
+# translated here: a relative value under `path` can be something else (an
+# EffectCraft property path such as `transform/position`).
+FILE_KEYS = {"path", "paths", "file", "files", "out", "output", "dir", "folder"}
+# FilmCraft's media_import takes absolute paths, one per line, in `text`.
+TEXT_PATHS = {("filmcraft", "media_import")}
 
 
 class ToolError(Exception):
@@ -276,6 +302,20 @@ class App:
         full = value if os.path.isabs(value) else os.path.join(self.root, value)
         return to_app_path(os.path.normpath(full))
 
+    def translate_abs(self, value, key=None, keys=FILE_KEYS):
+        """Turn absolute POSIX paths anywhere in a tool's arguments into the app's paths."""
+        if self.spec["roots"] or not WSL:
+            return value
+        if isinstance(value, dict):
+            return {k: self.translate_abs(v, k, keys) for k, v in value.items()}
+        if isinstance(value, list):
+            return [self.translate_abs(v, key, keys) for v in value]
+        if isinstance(value, str) and key in keys:
+            lines = value.split("\n")
+            if any(l.strip().startswith("/") for l in lines):
+                return "\n".join(to_app_path(l.strip()) if l.strip().startswith("/") else l for l in lines)
+        return value
+
 
 # ---------- the app's own MCP server, bridged ----------
 
@@ -340,13 +380,26 @@ OWN_TOOLS = [
         "inputSchema": {"type": "object", "properties": {
             "file": {"type": "string", "description": "A file to open, absolute or relative to the workspace."}}},
     },
+    {
+        "name": "app_path",
+        "description": "Turn a workspace path into the path to give the app inside command params (import, export, "
+                       "open). Absolute paths in path-like params are translated on their own; use this for "
+                       "relative ones or to check.",
+        "inputSchema": {"type": "object", "required": ["path"], "properties": {
+            "path": {"type": "string", "description": "Absolute, or relative to the workspace."}}},
+    },
 ]
 
 PATH_KEYS = {
     "photocraft": {"doc_open": ["path"], "doc_save": ["path"], "doc_export": ["path"]},
     "vectorcraft": {"open_file": ["path"], "save_file": ["path"], "export": ["path"], "screenshot": ["path"]},
+    "filmcraft": {},
+    "effectcraft": {"open_project": ["path"], "save_project": ["path"], "render_frame": ["path"],
+                    "screenshot": ["path"]},
 }
-OPEN_TOOL = {"photocraft": "doc_open", "vectorcraft": "open_file"}
+# app_open {file}: the tool and argument that open a file in each app.
+OPEN_TOOL = {"photocraft": ("doc_open", {}), "vectorcraft": ("open_file", {}),
+             "filmcraft": ("command_run", {"id": "file.open"}), "effectcraft": ("open_project", {})}
 
 
 def text_result(obj, error=False):
@@ -356,7 +409,7 @@ def text_result(obj, error=False):
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in APPS:
-        sys.exit("usage: craft_mcp.py photocraft|vectorcraft")
+        sys.exit("usage: craft_mcp.py " + "|".join(APPS))
     name = sys.argv[1]
     app = App(name)
     bridge = Bridge(app)
@@ -394,17 +447,26 @@ def main():
                 launched = app.ensure_open()
                 out = {"opened": launched, "already_open": not launched}
                 if args.get("file"):
-                    res = bridge.call(OPEN_TOOL[name], {"path": app.path_arg(args["file"])})
+                    tool_name, base = OPEN_TOOL[name]
+                    call = dict(base)
+                    if tool_name == "command_run":
+                        call["params"] = {"path": app.path_arg(args["file"])}
+                    else:
+                        call["path"] = app.path_arg(args["file"])
+                    res = bridge.call(tool_name, call)
                     if "error" in res or (res.get("result") or {}).get("isError"):
                         return res.get("result") or text_result(res.get("error"), True)
                     out["file"] = res["result"].get("content")
                 out.update(app.window_hint())
                 return text_result(out)
+            if tool == "app_path":
+                return text_result({"path": app.path_arg(args.get("path", ""))})
             if tool not in known:
                 return text_result(f"unknown tool {tool}", True)
             for key in PATH_KEYS[name].get(tool, []):
                 if key in args:
                     args[key] = app.path_arg(args[key])
+            args = app.translate_abs(args, keys=FILE_KEYS | ({"text"} if (name, tool) in TEXT_PATHS else set()))
             app.ensure_open()
             res = bridge.call(tool, args)
             if "error" in res:

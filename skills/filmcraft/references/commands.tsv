@@ -1,0 +1,669 @@
+# filmcraft 0.2.1 command index (id, label, menu, shortcut)
+# Generated from `filmcraft-cli commands --json`; ask the app's command list for parameters and what is enabled now.
+
+file.newProject	Project…	File > New	Cmd+Alt+N
+file.openDemoProject	Demo Project	File > New	
+file.newSequence	Sequence…	File > New	Cmd+N
+file.newSequenceFromClip	Sequence From Clip	File > New	
+file.newBin	Bin	File > New	Cmd+B
+file.newBinFromSelection	Bin From Selection	File > New	Shift+B
+file.newSearchBin	Search Bin	File > New	
+file.newOfflineFile	Offline File…	File > New	
+file.newAdjustmentLayer	Adjustment Layer…	File > New	
+file.newBarsAndTone	Bars and Tone…	File > New	
+file.newBlackVideo	Black Video…	File > New	
+file.newColorMatte	Color Matte…	File > New	
+file.newCountingLeader	Universal Counting Leader…	File > New	
+file.newTransparentVideo	Transparent Video…	File > New	
+file.importDemoFootage	Demo Footage	File > Import From	
+file.exportInterchange	Export Interchange		
+file.exportEdl	EDL…	File > Export	
+file.exportSelectionProject	Selection as FilmCraft Project…	File > Export	
+file.exportAle	Avid Log Exchange…	File > Export	
+file.exportOtio	OpenTimelineIO…	File > Export	
+file.exportFcp7Xml	Final Cut Pro XML…	File > Export	
+file.exportFcpxml	FCPXML…	File > Export	
+file.exportAaf	AAF…	File > Export	
+file.exportOmf	OMF…	File > Export	
+file.importAaf	Import AAF…		
+file.open	Open Project…	File	Cmd+O
+file.close	Close	File	Cmd+W
+file.closeProject	Close Project	File	Cmd+Shift+W
+file.closeAllProjects	Close All Projects	File	
+file.closeAllOtherProjects	Close All Other Projects	File	
+file.save	Save	File	Cmd+S
+file.saveAs	Save As…	File	Cmd+Shift+S
+file.saveCopy	Save a Copy…	File	Cmd+Alt+S
+file.saveAsTemplate	Save as Template…	File	
+file.saveAll	Save All	File	
+file.revert	Revert	File	
+file.recover	Recover Unsaved Changes…	File	
+file.discardRecovery	Discard Unsaved Changes		
+file.recoveryList	List Recoverable Sessions		
+file.autoSaveNow	Auto Save Now		
+file.autoSaveStatus	Auto Save Status		
+file.listAutoSaves	Browse Auto-Saves		
+prefs.get	Get Preferences		
+prefs.set	Set Preferences		
+prefs.reset	Reset Preferences		
+file.exportMedia	Media…	File > Export	
+jobs.list	List Jobs		
+perf.stats	Performance Statistics		
+jobs.cancel	Cancel Job		
+edit.undo	Undo	Edit	Cmd+Z
+edit.redo	Redo	Edit	Cmd+Shift+Z
+edit.cut	Cut	Edit	Cmd+X
+edit.copy	Copy	Edit	Cmd+C
+edit.paste	Paste	Edit	Cmd+V
+edit.pasteInsert	Paste Insert	Edit	Cmd+Shift+V
+edit.pasteAttributes	Paste Attributes…	Edit	Cmd+Alt+V
+edit.removeAttributes	Remove Attributes…	Edit	
+edit.clear	Clear	Edit	Backspace
+edit.rippleDelete	Ripple Delete	Edit	Shift+Delete
+edit.selectAll	Select All	Edit	Cmd+A
+edit.selectAllMatching	Select All Matching	Edit	
+edit.deselectAll	Deselect All	Edit	Cmd+Shift+A
+edit.find	Find…	Edit	Cmd+F
+edit.findNext	Find Next	Edit	
+edit.duplicate	Duplicate	Edit	Cmd+Shift+/
+edit.selectLabelGroup	Select Label Group	Edit > Label	
+edit.label.violet	Violet	Edit > Label	
+edit.label.iris	Iris	Edit > Label	
+edit.label.caribbean	Caribbean	Edit > Label	
+edit.label.lavender	Lavender	Edit > Label	
+edit.label.cerulean	Cerulean	Edit > Label	
+edit.label.forest	Forest	Edit > Label	
+edit.label.rose	Rose	Edit > Label	
+edit.label.mango	Mango	Edit > Label	
+edit.label.purple	Purple	Edit > Label	
+edit.label.blue	Blue	Edit > Label	
+edit.label.teal	Teal	Edit > Label	
+edit.label.magenta	Magenta	Edit > Label	
+edit.label.tan	Tan	Edit > Label	
+edit.label.green	Green	Edit > Label	
+edit.label.brown	Brown	Edit > Label	
+edit.label.yellow	Yellow	Edit > Label	
+edit.removeUnused	Remove Unused	Edit	
+edit.consolidateDuplicates	Consolidate Duplicates	Edit	
+edit.editOriginal	Edit Original	Edit	Cmd+E
+edit.label	Label		
+clip.rename	Rename…	Clip	
+clip.makeSubclip	Make Subclip…	Clip	Cmd+U
+clip.editSubclip	Edit Subclip…	Clip	
+clip.editOffline	Edit Offline…	Clip	
+clip.sourceSettings	Source Settings…	Clip	
+clip.audioChannels	Audio Channels…	Clip > Modify	Shift+G
+clip.interpretFootage	Interpret Footage…	Clip > Modify	
+clip.modifyTimecode	Timecode…	Clip > Modify	
+clip.frameHoldOptions	Frame Hold Options…	Clip > Video Options	
+clip.frameHold	Add Frame Hold	Clip > Video Options	
+clip.insertFrameHoldSegment	Insert Frame Hold Segment	Clip > Video Options	
+clip.fieldOptions	Field Options…	Clip > Video Options	
+clip.timeInterpolation.frameSampling	Frame Sampling	Clip > Video Options > Time Interpolation	
+clip.timeInterpolation.frameBlending	Frame Blending	Clip > Video Options > Time Interpolation	
+clip.timeInterpolation.opticalFlow	Optical Flow	Clip > Video Options > Time Interpolation	
+clip.scaleToFrameSize	Scale to Frame Size	Clip > Video Options	
+clip.fitToFrame	Fit to frame	Clip > Video Options	
+clip.fillFrame	Fill frame	Clip > Video Options	
+clip.audioGain	Audio Gain…	Clip > Audio Options	G
+clip.breakoutToMono	Breakout to Mono	Clip > Audio Options	
+clip.extractAudio	Extract Audio	Clip > Audio Options	
+clip.speedDuration	Speed/Duration…	Clip	Cmd+R
+clip.sceneEditDetection	Scene Edit Detection…	Clip	
+clip.enable	Enable	Clip	Shift+E
+clip.link	Link	Clip	Cmd+L
+clip.group	Group	Clip	Cmd+G
+clip.ungroup	Ungroup	Clip	Cmd+Shift+G
+clip.audioPeak	Audio Clip Peak Amplitude		
+clip.nest	Nest…	Clip	
+sequence.open	Open in Timeline		
+sequence.close	Close Sequence		
+sequence.settings	Sequence Settings…	Sequence	
+sequence.renderEffectsInToOut	Render Effects In to Out	Sequence	Enter
+sequence.renderInToOut	Render In to Out	Sequence	
+sequence.renderSelection	Render Selection	Sequence	
+sequence.renderAudio	Render Audio	Sequence	
+sequence.deleteRenderFiles	Delete Render Files	Sequence	
+sequence.deleteRenderFilesInToOut	Delete Render Files In to Out	Sequence	
+sequence.matchFrame	Match Frame	Sequence	F
+sequence.reverseMatchFrame	Reverse Match Frame	Sequence	Shift+R
+sequence.addEdit	Add Edit	Sequence	Cmd+K
+sequence.addEditAllTracks	Add Edit to All Tracks	Sequence	Cmd+Shift+K
+trim.edit	Trim Edit	Sequence	Shift+T
+sequence.applyVideoTransition	Apply Video Transition	Sequence	Cmd+D
+sequence.applyAudioTransition	Apply Audio Transition	Sequence	Cmd+Shift+D
+trim.applyDefaultTransition	Apply Default Transitions to Selection	Sequence	Shift+D
+sequence.lift	Lift	Sequence	;
+sequence.extract	Extract	Sequence	'
+sequence.closeGap	Close Gap	Sequence	
+sequence.goToNextGap	Next in Sequence	Sequence > Go to Gap	Shift+;
+sequence.goToPrevGap	Previous in Sequence	Sequence > Go to Gap	Cmd+Shift+;
+sequence.goToNextGapInTrack	Next in Track	Sequence > Go to Gap	
+sequence.goToPrevGapInTrack	Previous in Track	Sequence > Go to Gap	
+sequence.snap	Snap in Timeline	Sequence	S
+sequence.linkedSelection	Linked Selection	Sequence	
+sequence.selectionFollowsPlayhead	Selection Follows Playhead	Sequence	
+sequence.showThroughEdits	Show Through Edits	Sequence	
+sequence.normalizeMixTrack	Normalize Mix Track…	Sequence	
+sequence.makeSubsequence	Make Subsequence	Sequence	Shift+U
+sequence.transcribe	Transcribe Sequence…	Sequence	
+sequence.simplify	Simplify Sequence…	Sequence	
+sequence.addTracks	Add Tracks…	Sequence	
+sequence.deleteTracks	Delete Tracks…	Sequence	
+sequence.colorSettings	Color Management…	Sequence	
+mixer.addSubmix	Add Audio Submix Track	Sequence	
+sequence.setTransition	Edit Transition Settings		
+sequence.joinThroughEdits	Join Through Edits		
+sequence.throughEdits	List Through Edits		
+sequence.deleteTrack	Delete Track		
+sequence.renderBar	Render Bar		
+markers.markIn	Mark In	Markers	I
+markers.markOut	Mark Out	Markers	O
+markers.markClip	Mark Clip	Markers	X
+markers.markSelection	Mark Selection	Markers	/
+markers.markSplitVideoIn	Video In	Markers > Mark Split	
+markers.markSplitVideoOut	Video Out	Markers > Mark Split	
+markers.markSplitAudioIn	Audio In	Markers > Mark Split	
+markers.markSplitAudioOut	Audio Out	Markers > Mark Split	
+markers.goToIn	Go to In	Markers	Shift+I
+markers.goToOut	Go to Out	Markers	Shift+O
+markers.goToSplitVideoIn	Video In	Markers > Go to Split	
+markers.goToSplitVideoOut	Video Out	Markers > Go to Split	
+markers.goToSplitAudioIn	Audio In	Markers > Go to Split	
+markers.goToSplitAudioOut	Audio Out	Markers > Go to Split	
+markers.clearIn	Clear In	Markers	Cmd+Shift+I
+markers.clearOut	Clear Out	Markers	Cmd+Shift+O
+markers.clearInOut	Clear In and Out	Markers	Cmd+Shift+X
+markers.add	Add Marker	Markers	M
+markers.addRange	Add Range Marker	Markers	Ctrl+Shift+M
+markers.addRangeInOut	Add Range Marker to In and Out	Markers	Ctrl+M
+markers.goNext	Go to Next Marker	Markers	Shift+M
+markers.goPrev	Go to Previous Marker	Markers	Cmd+Shift+M
+markers.clearCurrent	Clear Selected Marker	Markers	Cmd+Alt+M
+markers.clearAll	Clear Markers	Markers	Cmd+Alt+Shift+M
+markers.showAllMarkerColors	Show All Marker Colors	Markers	
+markers.filterColors	Marker Colour Filter		
+markers.edit	Edit Marker…		
+markers.addChapter	Add Chapter Marker…	Markers	
+markers.addFlashCue	Add Flash Cue Marker…	Markers	
+markers.rippleSequenceMarkers	Ripple Sequence Markers	Markers	
+markers.copyPasteIncludesSequenceMarkers	Copy Paste Includes Sequence Markers	Markers	
+playhead.set	Set Playhead		
+playhead.step	Step Frames		
+playhead.stepForward	Step Forward One Frame		Right
+playhead.stepBack	Step Back One Frame		Left
+playhead.stepForward5	Step Forward Five Frames		Shift+Right
+playhead.stepBack5	Step Back Five Frames		Shift+Left
+playhead.nextEdit	Go to Next Edit Point		Down
+playhead.prevEdit	Go to Previous Edit Point		Up
+playhead.start	Go to Sequence Start		Home
+playhead.end	Go to Sequence End		End
+source.open	Open in Source Monitor		
+source.setPlayhead	Set Source Playhead		
+source.inspect	Inspect Source Monitor		
+source.insert	Insert	Clip	,
+source.overwrite	Overwrite	Clip	.
+clip.replaceFromSource	From Source Monitor	Clip > Replace With Clip	
+clip.replaceFromSourceMatchFrame	From Source Monitor, Match Frame	Clip > Replace With Clip	
+clip.replaceFromBin	From Bin	Clip > Replace With Clip	
+clip.restoreCaptionsFromSource	Restore Captions from Source Clip	Clip	
+clip.updateMetadata	Update Metadata…	Clip	
+clip.generateAudioWaveform	Generate Audio Waveform	Clip	
+clip.automateToSequence	Automate to Sequence…	Clip	
+timeline.place	Place Clip		
+timeline.select	Select Clips		
+timeline.move	Move Clips		
+timeline.trim	Trim Edit		
+trim.selectEditPoint	Select Edit Point		
+trim.selectNearest	Select Nearest Edit Point		
+trim.clear	Clear Edit Point Selection		
+trim.toggleType	Toggle Trim Type		Ctrl+T
+trim.backward	Trim Backward		Alt+Left
+trim.forward	Trim Forward		Alt+Right
+trim.backwardMany	Trim Backward Many		Alt+Shift+Left
+trim.forwardMany	Trim Forward Many		Alt+Shift+Right
+trim.shuttle	Dynamic Trim (Shuttle)		
+trim.shuttleStop	Dynamic Trim Stop		
+trim.cancelDynamic	Cancel Dynamic Trim		
+trim.playAround	Play Around Edit		
+trim.tick	Advance Trim Playback		
+trim.monitor	Trim Monitor State		
+trim.nudge	Trim by Frames		
+trim.extendToPlayhead	Extend Selected Edit to Playhead		E
+trim.ripplePrevious	Ripple Trim Previous Edit to Playhead		Q
+trim.rippleNext	Ripple Trim Next Edit to Playhead		W
+trim.previous	Trim Previous Edit to Playhead		Alt+Q
+trim.next	Trim Next Edit to Playhead		Alt+W
+timeline.roll	Rolling Edit		
+timeline.slip	Slip		
+timeline.slide	Slide		
+timeline.rateStretch	Rate Stretch		
+timeline.razor	Razor		
+timeline.setTrack	Track Settings		
+timeline.setTargeting	Track Targeting		
+effects.apply	Apply Effect		
+effects.remove	Remove Effect		
+effects.setParam	Set Effect Parameter		
+effects.toggleAnimation	Toggle Animation		
+effects.toggleEnabled	Toggle Effect		
+effects.reset	Reset Effect		
+effects.addKeyframe	Add/Remove Keyframe		
+effects.deleteKeyframe	Delete Keyframe		
+effects.moveKeyframe	Move Keyframe		
+effects.setInterpolation	Keyframe Interpolation		
+effects.setKeyframe	Edit Keyframe		
+project.select	Select Project Items		
+project.delete	Clear		Delete
+project.moveToBin	Move to Bin		
+project.setMarks	Set Source In/Out		
+command.list	List Commands		
+project.inspect	Inspect Project		
+sequence.inspect	Inspect Sequence		
+state.inspect	Inspect Editor State		
+effects.list	List Effects		
+history.list	List History		
+captions.newTrack	Add New Caption Track…	Sequence > Captions	Cmd+Alt+A
+captions.deleteTrack	Delete Caption Track		
+captions.setTrack	Caption Track Settings		
+captions.setStyle	Caption Track Style		
+captions.add	Add Caption at Playhead	Sequence > Captions	Cmd+Alt+C
+captions.split	Split Caption		
+captions.merge	Merge Captions		
+captions.setText	Edit Caption Text		
+captions.setTimes	Set Caption In/Out		
+captions.trim	Trim Caption		
+captions.move	Move Captions		
+captions.delete	Delete Captions		
+captions.select	Select Captions		
+captions.goTo	Go to Caption		
+captions.next	Go to Next Caption Segment	Sequence > Captions	Cmd+Alt+Down
+captions.previous	Go to Previous Caption Segment	Sequence > Captions	Cmd+Alt+Up
+captions.showAll	Show All Caption Tracks	Sequence > Captions	
+captions.showActiveOnly	Show Active Caption Tracks Only	Sequence > Captions	
+captions.hideAll	Hide All Caption Tracks	Sequence > Captions	
+captions.import	Import Captions…		
+captions.export	Captions…	File > Export	
+captions.list	List Captions		
+prefs.schema	Settings Schema		
+mediaCache.info	Media Cache Info		
+mediaCache.clean	Delete Media Cache Files		
+mixer.inspect	Inspect Audio Track Mixer		
+mixer.setStrip	Track Mixer Settings		
+mixer.setValue	Set Mixer Control		
+mixer.touch	Touch Mixer Control		
+mixer.release	Release Mixer Control		
+mixer.recordStart	Start Automation Pass		
+mixer.recordStop	Write Automation		
+clipMixer.set	Audio Clip Mixer Adjust		
+clipMixer.setMode	Audio Clip Mixer Automation Mode		
+clipMixer.touch	Touch Clip Mixer Control		
+clipMixer.release	Release Clip Mixer Control		
+effects.setDefaultTransition	Set Selected as Default Transition		
+mixer.deleteSubmix	Delete Submix Track		
+mixer.addInsert	Add Track Effect		
+mixer.removeInsert	Remove Track Effect		
+mixer.setInsert	Track Effect Settings		
+mixer.addSend	Add Send		
+mixer.setSend	Send Settings		
+mixer.removeSend	Remove Send		
+mixer.setKeyframe	Add Track Keyframe		
+mixer.deleteKeyframe	Delete Track Keyframe		
+mixer.moveKeyframe	Move Track Keyframe		
+mixer.clearLane	Clear Track Keyframes		
+mixer.writeAutomation	Write Automation Points		
+clip.synchronize	Synchronize…	Clip	
+clip.mergeClips	Merge Clips…	Clip	
+clip.createMulticam	Create Multi-Camera Source Sequence…	Clip	
+clip.multicamEnable	Enable	Clip > Multi-Camera	
+clip.multicamFlatten	Flatten	Clip > Multi-Camera	
+multicam.switchAngle	Switch Multi-Camera Angle		
+multicam.recordStart	Start Multi-Camera Recording		
+multicam.cut	Cut to Camera		
+multicam.recordStop	Stop Multi-Camera Recording		
+multicam.audioFollowsVideo	Multi-Camera Audio Follows Video		
+multicam.editCameras	Edit Cameras…		
+multicam.cutToCamera	Cut to Camera		
+multicam.gridLayout	Multi-Camera Layout		
+multicam.page	Multi-Camera Page		
+multicam.nextPage	Next Multi-Camera Page		
+multicam.prevPage	Previous Multi-Camera Page		
+multicam.selectionTopDown	Multi-Camera Selection Top Down		
+multicam.showPreviewMonitor	Show Multi-Camera Preview Monitor		
+multicam.autoAdjustQuality	Auto-Adjust Multi-Camera Playback Quality		
+multicam.transmitView	Transmit Multi-Camera View		
+multicam.grid	Multi-Camera Grid		
+multicam.inspect	Inspect Multi-Camera		
+multicam.selectCamera1	Select Camera 1		1
+multicam.cutToCamera1	Cut to Camera 1		Ctrl+1
+multicam.selectCamera2	Select Camera 2		2
+multicam.cutToCamera2	Cut to Camera 2		Ctrl+2
+multicam.selectCamera3	Select Camera 3		3
+multicam.cutToCamera3	Cut to Camera 3		Ctrl+3
+multicam.selectCamera4	Select Camera 4		4
+multicam.cutToCamera4	Cut to Camera 4		Ctrl+4
+multicam.selectCamera5	Select Camera 5		5
+multicam.cutToCamera5	Cut to Camera 5		Ctrl+5
+multicam.selectCamera6	Select Camera 6		6
+multicam.cutToCamera6	Cut to Camera 6		Ctrl+6
+multicam.selectCamera7	Select Camera 7		7
+multicam.cutToCamera7	Cut to Camera 7		Ctrl+7
+multicam.selectCamera8	Select Camera 8		8
+multicam.cutToCamera8	Cut to Camera 8		Ctrl+8
+multicam.selectCamera9	Select Camera 9		9
+multicam.cutToCamera9	Cut to Camera 9		Ctrl+9
+essentialSound.inspect	Inspect Essential Sound		
+essentialSound.setType	Set Audio Type		
+essentialSound.clearType	Clear Audio Type		
+essentialSound.set	Essential Sound Setting		
+essentialSound.applyPreset	Apply Sound Preset		
+essentialSound.savePreset	Save Sound Preset		
+essentialSound.deletePreset	Delete Sound Preset		
+essentialSound.autoMatch	Auto-Match Loudness		
+essentialSound.generateDucking	Generate Ducking Keyframes		
+color.spaces	List Colour Spaces		
+lumetri.presets	List Lumetri Presets		
+lumetri.applyPreset	Apply Lumetri Preset		
+lumetri.presetThumbnails	Lumetri Preset Thumbnails		
+media.colorInfo	Media Colour Info		
+lut.import	Import LUT…		
+lut.list	List LUTs		
+lut.remove	Remove LUT		
+lut.export	Export LUT		
+lumetri.setInputLut	Set Input LUT		
+lumetri.setLook	Set Creative Look		
+lumetri.applyMatch	Apply Match		
+lumetri.setSection	Toggle Lumetri Section		
+graphics.newText	Text	Graphics and Titles > New Layer	Cmd+T
+graphics.newShape	Shape		
+graphics.setText	Edit Text		
+graphics.set	Set Graphic Properties		
+graphics.selectLayer	Select Graphic Layer		
+graphics.deleteLayer	Delete Graphic Layer		
+graphics.arrangeLayer	Arrange Graphic Layer		
+graphics.align	Align Layers		
+graphics.distribute	Distribute Layers		
+graphics.list	List Graphic Layers		
+fonts.list	List Fonts		
+graphics.newVerticalText	Vertical Text	Graphics and Titles > New Layer	
+graphics.newRectangle	Rectangle	Graphics and Titles > New Layer	Cmd+Alt+R
+graphics.newEllipse	Ellipse	Graphics and Titles > New Layer	Cmd+Alt+E
+graphics.newPolygon	Polygon	Graphics and Titles > New Layer	
+graphics.newFromFile	From file…	Graphics and Titles > New Layer	
+graphics.alignFrame.left	Left	Graphics and Titles > Align to Video Frame	
+graphics.alignFrame.hcenter	Center Horizontally	Graphics and Titles > Align to Video Frame	
+graphics.alignFrame.right	Right	Graphics and Titles > Align to Video Frame	
+graphics.alignFrame.top	Top	Graphics and Titles > Align to Video Frame	
+graphics.alignFrame.vcenter	Center Vertically	Graphics and Titles > Align to Video Frame	
+graphics.alignFrame.bottom	Bottom	Graphics and Titles > Align to Video Frame	
+graphics.alignGroup.left	Left	Graphics and Titles > Align to Video Frame as Group	
+graphics.alignGroup.hcenter	Center Horizontally	Graphics and Titles > Align to Video Frame as Group	
+graphics.alignGroup.right	Right	Graphics and Titles > Align to Video Frame as Group	
+graphics.alignGroup.top	Top	Graphics and Titles > Align to Video Frame as Group	
+graphics.alignGroup.vcenter	Center Vertically	Graphics and Titles > Align to Video Frame as Group	
+graphics.alignGroup.bottom	Bottom	Graphics and Titles > Align to Video Frame as Group	
+graphics.alignSelection.left	Left	Graphics and Titles > Align to Selection	
+graphics.alignSelection.hcenter	Center Horizontally	Graphics and Titles > Align to Selection	
+graphics.alignSelection.right	Right	Graphics and Titles > Align to Selection	
+graphics.alignSelection.top	Top	Graphics and Titles > Align to Selection	
+graphics.alignSelection.vcenter	Center Vertically	Graphics and Titles > Align to Selection	
+graphics.alignSelection.bottom	Bottom	Graphics and Titles > Align to Selection	
+graphics.distributeVertically	Distribute Vertically	Graphics and Titles > Distribute	
+graphics.distributeSpaceVertically	Distribute Space Vertically	Graphics and Titles > Distribute	
+graphics.distributeHorizontally	Distribute Horizontally	Graphics and Titles > Distribute	
+graphics.distributeSpaceHorizontally	Distribute Space Horizontally	Graphics and Titles > Distribute	
+graphics.bringToFront	Bring to Front	Graphics and Titles > Arrange	Cmd+Shift+]
+graphics.bringForward	Bring Forward	Graphics and Titles > Arrange	Cmd+]
+graphics.sendBackward	Send Backward	Graphics and Titles > Arrange	Cmd+[
+graphics.sendToBack	Send to Back	Graphics and Titles > Arrange	Cmd+Shift+[
+graphics.selectNextGraphic	Select Next Graphic	Graphics and Titles > Select	
+graphics.selectPreviousGraphic	Select Previous Graphic	Graphics and Titles > Select	
+graphics.selectNextLayer	Select Next Layer	Graphics and Titles > Select	Cmd+Alt+]
+graphics.selectPreviousLayer	Select Previous Layer	Graphics and Titles > Select	Cmd+Alt+[
+graphics.resetAllParameters	Reset All Parameters	Graphics and Titles	
+graphics.resetDuration	Reset Duration	Graphics and Titles	
+graphics.template.list	List Graphics Templates		
+graphics.template.apply	Apply Graphics Template		
+graphics.template.export	Export As Motion Graphics Template…	Graphics and Titles	
+file.exportGraphicsTemplate	Motion Graphics Template…	File > Export	
+graphics.template.install	Install Motion Graphics Template…	Graphics and Titles	
+graphics.template.remove	Remove Graphics Template		
+graphics.template.set	Set Template Property		
+graphics.template.controls	List Template Properties		
+graphics.template.thumbnail	Graphics Template Thumbnail		
+graphics.setRoll	Roll/Crawl Options		
+graphics.setResponsiveTime	Responsive Design - Time		
+graphics.pin	Responsive Design - Position		
+graphics.setCharStyle	Character Style		
+graphics.upgradeCaption	Upgrade Caption to Graphic	Graphics and Titles	
+graphics.upgradeToSourceGraphic	Upgrade to Source Graphic	Graphics and Titles	
+file.replaceFonts	Replace Fonts in Projects…	Graphics and Titles	
+graphics.fonts.used	List Fonts Used		
+shortcuts.list	List Keyboard Shortcuts		
+shortcuts.get	Get Shortcuts of a Command		
+shortcuts.set	Assign Shortcut		
+shortcuts.clear	Clear Shortcut		
+shortcuts.undo	Undo Shortcut Change		
+shortcuts.redo	Redo Shortcut Change		
+shortcuts.conflicts	Shortcut Conflicts		
+shortcuts.forKey	Shortcuts on a Key		
+shortcuts.resolve	Resolve Shortcut		
+shortcuts.presets	Keyboard Shortcut Presets		
+shortcuts.loadPreset	Load Shortcut Preset		
+shortcuts.savePreset	Save Shortcut Preset As		
+shortcuts.deletePreset	Delete Shortcut Preset		
+shortcuts.export	Export Keyboard Shortcuts		
+shortcuts.import	Import Keyboard Shortcuts		
+shortcuts.audit	Shortcut Audit		
+media.findMissing	Find Missing Media		
+media.status	Media Status		
+media.linkMedia	Link Media…	File	
+media.relink	Relink Media		
+media.replaceFootage	Replace Footage…		
+media.autoRelink	Relink Moved Media		
+media.search	Search for Media		
+media.makeOffline	Make Offline…	File	
+file.importFromMediaBrowser	Import from Media Browser	File	Cmd+Alt+I
+file.import	Import…	File	Cmd+I
+file.importImageSequence	Import Image Sequence…	File	
+media.offlineAll	Offline All		
+media.createProxies	Create Proxies…	Clip > Proxy	
+media.attachProxies	Attach Proxies…	Clip > Proxy	
+media.detachProxies	Detach Proxies	Clip > Proxy	
+media.reconnectFullRes	Reconnect Full Resolution Media…	Clip > Proxy	
+media.toggleProxies	Toggle Proxies	View	
+media.proxyPresets	Proxy Presets		
+file.mediaPropertiesFile	File…	File > Get Media File Properties for	
+file.mediaProperties	Selection…	File > Get Media File Properties for	Cmd+Shift+H
+file.projectSettings.general	General…	File > Project Settings	
+file.projectSettings.scratchDisks	Scratch Disks…	File > Project Settings	
+project.ingestSettings	Ingest Settings…	File > Project Settings	
+file.projectManager	Project Manager…	File	
+masks.add	Create Mask		
+masks.remove	Delete Mask		
+masks.set	Change Mask		
+masks.moveVertex	Move Mask Vertex		
+masks.translate	Move Mask		
+masks.addVertex	Add Mask Vertex		
+masks.removeVertex	Delete Mask Vertex		
+masks.track	Track Selected Mask		
+masks.toggleVertexSmooth	Convert Mask Vertex		
+masks.select	Select Mask		
+masks.list	List Masks		
+presets.list	List Effect Presets		
+presets.save	Save Preset		
+presets.apply	Apply Preset		
+presets.delete	Delete Preset		
+presets.rename	Rename Preset		
+presets.export	Export Presets		
+presets.import	Import Presets		
+export.presets.list	List Export Presets		
+export.presets.get	Get Export Preset		
+export.presets.save	Save Export Preset		
+export.presets.delete	Delete Export Preset		
+export.presets.favorite	Favorite Export Preset		
+export.presets.import	Import Export Presets		
+export.presets.export	Export Export Presets		
+export.formats	List Export Formats		
+export.resolve	Resolve Export Settings		
+export.queue.add	Send to Export Queue		Alt+Shift+M
+export.queue.list	List Export Queue		
+export.queue.start	Start Export Queue		
+export.queue.stop	Stop Export Queue		
+export.queue.cancel	Cancel Queued Export		
+export.queue.retry	Retry Queued Export		
+export.queue.remove	Remove Queued Export		
+export.queue.move	Reorder Queued Export		
+export.queue.clear	Clear Finished Exports		
+export.quick	Quick Export		
+transcript.generate	Transcribe…	Sequence > Transcript	
+transcript.set	Import Transcript		
+transcript.delete	Delete Transcript	Sequence > Transcript	
+transcript.inspect	Inspect Transcript		
+transcript.search	Search Transcript		
+transcript.models	List Speech Models		
+transcript.downloadModel	Download Speech Model		
+transcript.select	Mark Selected Text		
+transcript.extract	Extract Selected Text		
+transcript.lift	Lift Selected Text		
+transcript.renameSpeaker	Rename Speaker…		
+transcript.removePauses	Remove Pauses	Sequence > Transcript	
+transcript.removeFillers	Remove Filler Words	Sequence > Transcript	
+transcript.createCaptions	Create Captions from Transcript…	Sequence > Transcript	
+events.list	List Events		
+events.clear	Clear All Events		
+metadata.get	Get Metadata		
+metadata.set	Edit Metadata		
+scopes.read	Read Lumetri Scopes		
+clip.remix.enable	Enable Remix	Clip > Remix	
+clip.remix.properties	Remix Properties…	Clip > Remix	
+clip.remix.revert	Revert Remix	Clip > Remix	
+clip.remix	Remix		
+audio.voiceover.settings	Voice-Over Record Settings		
+audio.voiceover.start	Start Voice-over Recording		
+audio.voiceover.sync	Sync Voice-over Capture		
+audio.voiceover.stop	Stop Voice-over Recording		
+playhead.nextEditAnyTrack	Go to Next Edit Point on Any Track		Shift+Down
+playhead.prevEditAnyTrack	Go to Previous Edit Point on Any Track		Shift+Up
+playhead.selectedClipStart	Go to Selected Clip Start		Shift+Home
+playhead.selectedClipEnd	Go to Selected Clip End		Shift+End
+sequence.revealNested	Reveal Nested Sequence		Cmd+Alt+F
+timeline.selectClipAtPlayhead	Select Clip at Playhead		D
+timeline.selectNextClip	Select Next Clip		Cmd+Down
+timeline.selectPrevClip	Select Previous Clip		Cmd+Up
+trim.extendPreviousEdit	Extend Previous Edit To Playhead		Shift+Q
+trim.extendNextEdit	Extend Next Edit To Playhead		Shift+W
+timeline.nudgeLeft	Nudge Clip Selection Left One Frame		
+timeline.nudgeRight	Nudge Clip Selection Right One Frame		
+timeline.nudgeLeft5	Nudge Clip Selection Left Five Frames		
+timeline.nudgeRight5	Nudge Clip Selection Right Five Frames		
+timeline.nudgeUp	Nudge Clip Selection Up		
+timeline.nudgeDown	Nudge Clip Selection Down		
+timeline.slipLeft	Slip Clip Selection Left One Frame		
+timeline.slipRight	Slip Clip Selection Right One Frame		
+timeline.slipLeft5	Slip Clip Selection Left Five Frames		
+timeline.slipRight5	Slip Clip Selection Right Five Frames		
+timeline.slideLeft	Slide Clip Selection Left One Frame		
+timeline.slideRight	Slide Clip Selection Right One Frame		
+timeline.slideLeft5	Slide Clip Selection Left Five Frames		
+timeline.slideRight5	Slide Clip Selection Right Five Frames		
+timeline.toggleAllVideoTargets	Toggle All Video Targets		Cmd+0
+timeline.toggleAllAudioTargets	Toggle All Audio Targets		Cmd+9
+timeline.toggleAllSourceVideo	Toggle All Source Video		Cmd+Alt+0
+timeline.toggleAllSourceAudio	Toggle All Source Audio		Cmd+Alt+9
+timeline.moveVideoTargetsUp	Move All Video Targets Up		
+timeline.moveVideoTargetsDown	Move All Video Targets Down		
+timeline.moveAudioTargetsUp	Move All Audio Targets Up		
+timeline.moveAudioTargetsDown	Move All Audio Targets Down		
+timeline.toggleMuteTargetedAudio	Toggle Mute for All Targeted Audio Tracks		
+timeline.toggleSoloTargetedAudio	Toggle Solo for All Targeted Audio Tracks		
+timeline.toggleOutputTargetedVideo	Toggle Track Output for All Targeted Video Tracks		
+clip.volumeUp	Increase Clip Volume		]
+clip.volumeDown	Decrease Clip Volume		[
+clip.volumeUpMany	Increase Clip Volume Many		Shift+]
+clip.volumeDownMany	Decrease Clip Volume Many		Shift+[
+clip.nudgeVolumeUp1	Nudge Volume +1dB		
+clip.nudgeVolumeUp3	Nudge Volume +3dB		
+clip.nudgeVolumeDown1	Nudge Volume -1dB		
+clip.nudgeVolumeDown3	Nudge Volume -3dB		
+audio.toggleScrubbing	Toggle Audio During Scrubbing		Shift+S
+graphics.fontSizeUp	Increase Font Size by One Unit		Cmd+Alt+Right
+graphics.fontSizeDown	Decrease Font Size by One Unit		Cmd+Alt+Left
+graphics.fontSizeUp5	Increase Font Size by Five Units		Cmd+Alt+Shift+Right
+graphics.fontSizeDown5	Decrease Font Size by Five Units		Cmd+Alt+Shift+Left
+graphics.leadingUp	Increase Leading by One Unit		Alt+Up
+graphics.leadingDown	Decrease Leading by One Unit		Alt+Down
+graphics.leadingUp5	Increase Leading by Five Units		Alt+Shift+Up
+graphics.leadingDown5	Decrease Leading by Five Units		Alt+Shift+Down
+graphics.alignTextLeft	Left align text		Cmd+Shift+L
+graphics.alignTextCenter	Center align text		Cmd+Shift+C
+graphics.alignTextRight	Right align text		Cmd+Shift+R
+graphics.nudgeLeft	Nudge Selected Object to left by one		
+graphics.nudgeRight	Nudge Selected Object to right by one		
+graphics.nudgeUp	Nudge Selected Object up by one		
+graphics.nudgeDown	Nudge Selected Object down by one		
+graphics.nudgeLeft5	Nudge Selected Object to left by five		
+graphics.nudgeRight5	Nudge Selected Object to right by five		
+graphics.nudgeUp5	Nudge Selected Object up by five		
+graphics.nudgeDown5	Nudge Selected Object down by five		
+file.exportFrame	Export Frame		
+clip.setPosterFrame	Set Poster Frame		Cmd+P
+clip.clearPosterFrame	Clear Poster Frame		Alt+P
+timeline.toggleTargetV1	Toggle Target Video 1		
+timeline.toggleTargetV2	Toggle Target Video 2		
+timeline.toggleTargetV3	Toggle Target Video 3		
+timeline.toggleTargetV4	Toggle Target Video 4		
+timeline.toggleTargetV5	Toggle Target Video 5		
+timeline.toggleTargetV6	Toggle Target Video 6		
+timeline.toggleTargetV7	Toggle Target Video 7		
+timeline.toggleTargetV8	Toggle Target Video 8		
+timeline.toggleTargetA1	Toggle Target Audio 1		
+timeline.toggleTargetA2	Toggle Target Audio 2		
+timeline.toggleTargetA3	Toggle Target Audio 3		
+timeline.toggleTargetA4	Toggle Target Audio 4		
+timeline.toggleTargetA5	Toggle Target Audio 5		
+timeline.toggleTargetA6	Toggle Target Audio 6		
+timeline.toggleTargetA7	Toggle Target Audio 7		
+timeline.toggleTargetA8	Toggle Target Audio 8		
+project.view.get	Project Panel View		
+project.view.set	Set Project Panel View		
+project.columns.list	List Project Columns		
+project.columns.set	Metadata Display		
+project.columns.resize	Resize Column		
+project.sort	Sort Project Items		
+project.items	List Project Panel Rows		
+project.viewPreset.list	List View Presets		
+project.viewPreset.save	Save Current View Preset		
+project.viewPreset.saveAs	Save As New View Preset		
+project.viewPreset.restore	Restore View Preset		
+project.viewPreset.rename	Rename View Preset		
+project.viewPreset.delete	Delete View Preset		
+project.freeform.layout	Freeform Layout		
+project.freeform.move	Move Clip Cards		
+project.freeform.resize	Clip Size		
+project.freeform.alignToGrid	Align to Grid		
+project.freeform.reset	Reset to Grid		
+project.freeform.stack	Stack Clips		
+project.freeform.unstack	Unstack Clips		
+project.freeform.saveArrangement	Save Arrangement		
+project.freeform.restoreArrangement	Restore Arrangement		
+project.freeform.deleteArrangement	Delete Arrangement		
+project.freeform.arrangements	List Arrangements		
+project.freeform.options	Freeform View Options…		
+project.renameBin	Rename Bin		
+mediaBrowser.roots	Media Browser Locations		
+mediaBrowser.list	List Directory		
+mediaBrowser.navigate	Go to Directory		
+mediaBrowser.select	Select Files		
+mediaBrowser.favorite	Add to Favorites		
+mediaBrowser.clearRecent	Clear Recent Directories		
+mediaBrowser.settings	Media Browser Settings		
+mediaBrowser.import	Import		
+mediaBrowser.openInSource	Open In Source Monitor		
+mediaBrowser.probe	Media File Properties		
+clip.setTimeInterpolation	Set Time Interpolation		
+project.searchBinItems	Search Bin Contents		
+project.editSearchBin	Edit Search Bin		
+project.deleteSearchBin	Delete Search Bin		
+file.templates	List Project Templates		
+file.newProjectFromTemplate	New Project from Template		
+help.systemReport	System Compatibility Report		

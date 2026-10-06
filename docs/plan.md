@@ -40,10 +40,25 @@ are vendored as their references.
   not follow. A direct "follow this window" door for extensions would be an
   ADR-0230 amendment in PiCode.
 
+## v0.2.0
+
+- EffectCraft 0.3.1 and FilmCraft 0.2.1: their MCP servers (bridge to
+  `--control 9877` / `9876`, no token), skills and vendored `agents.md` /
+  `control-protocol.md`.
+- `app_path` converts a workspace path for command params; absolute POSIX
+  paths in path-like keys (`path`, `paths`, `file`, `out`…) are translated on
+  their own for apps without a files root. Relative values are left alone:
+  in EffectCraft `path` is also a property path (`transform/position`).
+  FilmCraft's `media_import` takes paths one per line in `text`.
+- `PICODE_<APP>_PORT` overrides a control port. Verified live (2026-10-06):
+  FilmCraft `media_import` of a workspace PNG; EffectCraft `comp.new`,
+  `save_project` and `render_frame` into the workspace.
+
 ## Next
 
-- The other apps as they mature: FilmCraft, LightCraft, PrintCraft,
-  EffectCraft, DesignCraft (same shape: one server per app).
+- The other apps as they mature: LightCraft, PrintCraft, DesignCraft (same
+  shape: one server per app). DesignCraft's default control port is 7979,
+  VectorCraft's too — give it another default when it joins.
 - A page (Apps → Crafting Apps) showing which apps are installed and open,
   with a window snapshot, and *Open with* for `.pcraft`, `.psd`,
   `.vectorcraft`, `.svg`.
