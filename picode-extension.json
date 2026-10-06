@@ -1,0 +1,37 @@
+{
+  "id": "artcraft",
+  "name": "Crafting Apps",
+  "version": "0.1.0",
+  "apiVersion": 1,
+  "publisher": "PiCode",
+  "description": "Let your agents work in PhotoCraft and VectorCraft while you watch: they edit images and draw vector art in the real app windows and save into the workspace.",
+  "icon": "icons/craft.svg",
+  "agent": {
+    "mcpServers": {
+      "photocraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "photocraft"
+        ]
+      },
+      "vectorcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "vectorcraft"
+        ]
+      }
+    },
+    "skills": [
+      "skills/photocraft",
+      "skills/vectorcraft"
+    ]
+  },
+  "activation": {
+    "files": [
+      "*.pcraft",
+      "*.vectorcraft"
+    ]
+  }
+}

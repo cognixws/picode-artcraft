@@ -1,0 +1,662 @@
+# vectorcraft 0.3.1 command index (id, label, menu, shortcut)
+# Generated from `vectorcraft-cli commands`; call the list tool for parameters and what is enabled now.
+
+file.new	New…	File	
+file.close	Close	File	Cmd+W
+document.activate	Activate Document		
+document.inspect	Inspect Document		
+document.node	Inspect Object		
+document.json	Document JSON		
+document.setUnits	Units	File > Document Setup	
+edit.undo	Undo	Edit	Cmd+Z
+edit.redo	Redo	Edit	Cmd+Shift+Z
+edit.cut	Cut	Edit	Cmd+X
+edit.copy	Copy	Edit	Cmd+C
+edit.paste	Paste	Edit	Cmd+V
+edit.pasteInFront	Paste in Front	Edit	Cmd+F
+edit.pasteInBack	Paste in Back	Edit	Cmd+B
+edit.pasteInPlace	Paste in Place	Edit	Cmd+Shift+V
+edit.pasteOnAllArtboards	Paste on All Artboards	Edit	Cmd+Alt+Shift+V
+edit.clear	Clear	Edit	Delete
+edit.duplicate	Duplicate		
+clipboard.exportSvg	Clipboard as SVG		
+clipboard.importSvg	Load SVG into Clipboard		
+clipboard.conflicts	Swatch Conflicts		
+clipboard.exportPng	Clipboard as PNG		
+clipboard.exportPdf	Clipboard as PDF		
+clipboard.exportText	Clipboard as Text		
+clipboard.flavours	Clipboard Formats		
+clipboard.importImage	Load Image into Clipboard		
+clipboard.importText	Load Text into Clipboard		
+clipboard.importPdf	Load PDF into Clipboard		
+clipboard.importEmf	Load Metafile into Clipboard		
+recolor.colors	Artwork Colors		
+recolor.apply	Recolor Artwork	Edit > Edit Colors	
+recolor.reduce	Reduce Colors		
+recolor.randomize	Randomize Colors		
+document.open	Open Document		
+document.serialize	Serialize Document		
+document.export	Export Document		
+document.exportSelection	Export Selection…	File	
+document.exportForScreens	Export for Screens	File > Export	
+command.batch	Batch		
+document.formats	File Formats		
+document.pdfInfo	PDF Info		
+document.exportForOffice	Save for Office Documents…	File	
+document.exportSettings	Export for Screens Settings		
+document.save	Save Document		
+file.saveAs	Save As…	File	Cmd+Shift+S
+file.saveCopy	Save a Copy…	File	Cmd+Alt+S
+file.saveAsTemplate	Save as Template…	File	
+file.newFromTemplate	New from Template…	File	Cmd+Shift+N
+file.revert	Revert	File	F12
+file.formatOptions	Format Options		
+shape.rectangle	Rectangle		
+shape.ellipse	Ellipse		
+shape.polygon	Polygon		
+shape.star	Star		
+shape.flare	Flare		
+shape.line	Line Segment		
+shape.spiral	Spiral		
+shape.arc	Arc		
+shape.rectangularGrid	Rectangular Grid		
+shape.polarGrid	Polar Grid		
+path.create	Create Path		
+view.drawMode	Drawing Mode		Shift+D
+text.create	Create Text		
+object.transform	Transform		
+object.move	Move…	Object > Transform	Cmd+Shift+M
+object.rotate	Rotate…	Object > Transform	
+object.scale	Scale…	Object > Transform	
+object.reflect	Reflect…	Object > Transform	
+object.shear	Shear…	Object > Transform	
+object.transformAgain	Transform Again	Object > Transform	Cmd+D
+object.nudge	Nudge		
+object.arrange.bringToFront	Bring to Front	Object > Arrange	Cmd+Shift+]
+object.arrange.bringForward	Bring Forward	Object > Arrange	Cmd+]
+object.arrange.sendBackward	Send Backward	Object > Arrange	Cmd+[
+object.arrange.sendToBack	Send to Back	Object > Arrange	Cmd+Shift+[
+object.arrange.sendToCurrentLayer	Send to Current Layer	Object > Arrange	
+object.group	Group	Object	Cmd+G
+object.ungroup	Ungroup	Object	Cmd+Shift+G
+object.lock	Selection	Object > Lock	Cmd+2
+object.unlockAll	Unlock All	Object	Cmd+Alt+2
+object.hide	Selection	Object > Hide	Cmd+3
+object.showAll	Show All	Object	Cmd+Alt+3
+object.compoundPath.make	Make	Object > Compound Path	Cmd+8
+object.compoundPath.release	Release	Object > Compound Path	Cmd+Alt+Shift+8
+object.clippingMask.make	Make	Object > Clipping Mask	Cmd+7
+object.clippingMask.release	Release	Object > Clipping Mask	Cmd+Alt+7
+object.clippingMask.editContents	Edit Contents	Object > Clipping Mask	
+object.clippingMask.editMask	Edit Clipping Path	Object > Clipping Mask	
+object.isolate	Enter Isolation Mode		
+object.exitIsolation	Exit Isolation Mode		
+object.setProps	Object Properties		
+object.align	Align	Window > Align	
+object.distribute	Distribute	Window > Align	
+object.distributeSpacing	Distribute Spacing	Window > Align	
+object.setBounds	Set Bounds		
+object.expandShape	Expand Shape	Object > Shape	
+object.setLiveShape	Live Shape Properties		
+path.appendAnchor	Add Anchor (Pen)		
+path.close	Close Path		
+path.moveAnchors	Move Anchors		
+path.setHandle	Move Direction Handle		
+path.setAnchors	Set Anchors		
+path.reverse	Reverse Path Direction	Object > Path	
+path.join	Join	Object > Path	Cmd+J
+path.average	Average…	Object > Path	Cmd+Alt+J
+path.convertAnchors	Convert Anchor Points		
+path.deleteAnchors	Remove Anchor Points	Object > Path	
+path.reshape	Reshape		
+path.insertAnchor	Add Anchor Point		
+path.cutAtAnchors	Cut Path at Selected Anchor Points		
+select.all	All	Select	Cmd+A
+select.allOnArtboard	All on Active Artboard	Select	Cmd+Alt+A
+select.none	Deselect	Select	Cmd+Shift+A
+select.reselect	Reselect	Select	Cmd+6
+select.inverse	Inverse	Select	
+select.nextAbove	Next Object Above	Select	Cmd+Alt+]
+select.nextBelow	Next Object Below	Select	Cmd+Alt+[
+select.set	Select Objects		
+select.add	Add to Selection		
+select.toggle	Toggle Selection		
+select.key	Set Key Object		
+select.anchors	Select Anchors		
+select.anchorsMany	Select Anchors		
+select.same.fillColor	Fill Color	Select > Same	
+select.same.strokeColor	Stroke Color	Select > Same	
+select.same.strokeWeight	Stroke Weight	Select > Same	
+select.same.fillAndStroke	Fill & Stroke	Select > Same	
+select.same.opacity	Opacity	Select > Same	
+select.same.blendingMode	Blending Mode	Select > Same	
+select.same.appearance	Appearance	Select > Same	
+select.same.shapeType	Shape	Select > Same	
+select.object.allOnSameLayers	All on Same Layers	Select > Object	
+select.object.clippingMasks	Clipping Masks	Select > Object	
+select.object.textObjects	All Text Objects	Select > Object	
+select.object.strayPoints	Stray Points	Select > Object	
+select.object.openPaths	Open Paths	Select > Object	
+select.same.graphicStyle	Graphic Style	Select > Same	
+select.same.appearanceAttribute	Appearance Attribute	Select > Same	
+select.magicWand	Magic Wand		
+magicWand.set	Magic Wand Options	Window > Magic Wand	
+magicWand.options	Magic Wand Settings		
+paint.setFill	Fill		
+paint.setStroke	Stroke		
+paint.swap	Swap Fill and Stroke		Shift+X
+paint.default	Default Fill and Stroke		D
+paint.toggleActive	Toggle Fill/Stroke Focus		X
+paint.none	None		/
+transparency.set	Transparency	Window > Transparency	
+stroke.set	Stroke Options	Window > Stroke	
+stroke.setAdvanced	Stroke Options		
+stroke.widthProfile.add	Add to Profiles		
+stroke.widthProfile.delete	Delete Profile		
+stroke.widthProfile.reset	Reset Profiles		
+stroke.widthProfile.list	Width Profiles		
+appearance.addFill	Add New Fill	Window > Appearance	
+appearance.addStroke	Add New Stroke	Window > Appearance	
+appearance.clear	Clear Appearance	Window > Appearance	
+appearance.reduceToBasic	Reduce to Basic Appearance	Window > Appearance	
+appearance.setItem	Appearance Item		
+appearance.removeItem	Remove Item		
+appearance.addEffect	Add Effect		
+appearance.duplicateItem	Duplicate Item	Window > Appearance	
+appearance.moveItem	Reorder Appearance Item		
+appearance.copyFrom	Eyedropper		
+appearance.setActiveItem	Select Appearance Item		
+appearance.showAllHidden	Show All Hidden Attributes	Window > Appearance	
+appearance.targetContents	Target Contents		
+appearance.transfer	Move Appearance		
+graphicStyle.apply	Apply Graphic Style	Window > Graphic Styles	
+graphicStyle.new	New Graphic Style	Window > Graphic Styles	
+graphicStyle.delete	Delete Graphic Style	Window > Graphic Styles	
+graphicStyle.duplicate	Duplicate Graphic Style	Window > Graphic Styles	
+graphicStyle.list	List Graphic Styles		
+graphicStyle.redefine	Redefine Graphic Style	Window > Appearance	
+graphicStyle.breakLink	Break Link to Graphic Style	Window > Graphic Styles	
+graphicStyle.rename	Rename Graphic Style	Window > Graphic Styles	
+graphicStyle.unused	Select All Unused	Window > Graphic Styles	
+graphicStyle.sortByName	Sort by Name	Window > Graphic Styles	
+graphicStyle.merge	Merge Graphic Styles	Window > Graphic Styles	
+graphicStyle.move	Move Graphic Style		
+graphicStyle.setOptions	Graphic Styles Options		
+swatch.new	New Swatch	Window > Swatches	
+swatch.delete	Delete Swatch	Window > Swatches	
+swatch.newGroup	New Color Group	Window > Swatches	
+swatch.duplicate	Duplicate Swatch	Window > Swatches	
+swatch.sortByName	Sort by Name	Window > Swatches	
+swatch.edit	Swatch Options	Window > Swatches	
+swatch.list	Swatches		
+swatch.move	Move Swatch	Window > Swatches	
+swatch.addUsedColors	Add Used Colors	Window > Swatches	
+swatch.unused	Select All Unused	Window > Swatches	
+swatch.merge	Merge Swatches	Window > Swatches	
+swatch.ungroup	Ungroup Color Group	Window > Swatches	
+swatch.sortByKind	Sort by Kind	Window > Swatches	
+swatch.spotOptions	Spot Colors	Window > Swatches	
+swatch.editGroup	Edit Color Group	Window > Swatches	
+paint.editGradient	Gradient	Window > Gradient	
+paint.setGradientGeom	Gradient Vector		
+gradient.selectStop	Select Gradient Stop		
+transparency.makeOpacityMask	Make Opacity Mask	Window > Transparency	
+transparency.releaseOpacityMask	Release Opacity Mask	Window > Transparency	
+transparency.disableOpacityMask	Disable Opacity Mask	Window > Transparency	
+transparency.enableOpacityMask	Enable Opacity Mask	Window > Transparency	
+transparency.unlinkOpacityMask	Unlink Opacity Mask	Window > Transparency	
+transparency.linkOpacityMask	Link Opacity Mask	Window > Transparency	
+transparency.setOpacityMask	Opacity Mask Options		
+transparency.toggleNewMasksClipping	New Opacity Masks Are Clipping	Window > Transparency	
+transparency.toggleNewMasksInverted	New Opacity Masks Are Inverted	Window > Transparency	
+transparency.opacityMaskInfo	Opacity Mask Info		
+transparency.info	Transparency Info		
+transparency.togglePageIsolatedBlending	Page Isolated Blending	Window > Transparency	
+transparency.togglePageKnockoutGroup	Page Knockout Group	Window > Transparency	
+layer.new	New Layer…	Window > Layers	Cmd+L
+layer.newSublayer	New Sublayer…	Window > Layers	
+layer.delete	Delete Layer	Window > Layers	
+layer.duplicate	Duplicate Layer	Window > Layers	
+layer.setCurrent	Set Current Layer		
+layer.setProps	Layer Options…	Window > Layers	
+layer.collectInNew	Collect in New Layer	Window > Layers	
+layer.selectAll	Select All Art on Layer		
+node.move	Reorder		
+artboard.new	New Artboard	Window > Artboards	
+artboard.delete	Delete Artboard	Window > Artboards	
+artboard.setProps	Artboard Options…	Window > Artboards	
+artboard.fitToArt	Fit to Artwork Bounds	Object > Artboards	
+artboard.fitToSelection	Fit to Selected Art	Object > Artboards	
+layer.clippingMask.toggle	Make/Release Clipping Mask	Window > Layers	
+layer.target	Target		
+layer.pasteRemembersLayers	Paste Remembers Layers	Window > Layers	
+path.freehand	Pencil		
+path.curvature	Curvature		
+path.removeAnchor	Delete Anchor Point		
+path.convertAnchor	Convert Anchor Point		
+path.reshapeSegment	Reshape Segment		
+path.split	Split Path		
+path.knife	Knife		
+path.eraseRegion	Eraser		
+path.eraseSegments	Path Eraser		
+path.smoothRegion	Smooth		
+path.joinScrub	Join		
+path.blob	Blob Brush		
+object.distort	Free Distort		
+paint.sampleColor	Sample Color		
+eyedropper.setOptions	Eyedropper Options		
+artboard.move	Move Artboard		
+effect.apply	Apply Effect		
+effect.list	Effects		
+effect.remove	Remove Effect		
+effect.setParams	Effect Options		
+effect.expandAppearance	Expand Appearance	Object	
+effect.duplicate	Duplicate Effect		
+effect.move	Move Effect		
+object.pathfinder.unite	Unite	Window > Pathfinder	
+object.pathfinder.minusFront	Minus Front	Window > Pathfinder	
+object.pathfinder.intersect	Intersect	Window > Pathfinder	
+object.pathfinder.exclude	Exclude	Window > Pathfinder	
+object.pathfinder.divide	Divide	Window > Pathfinder	
+object.pathfinder.trim	Trim	Window > Pathfinder	
+object.pathfinder.merge	Merge	Window > Pathfinder	
+object.pathfinder.crop	Crop	Window > Pathfinder	
+object.pathfinder.outline	Outline	Window > Pathfinder	
+object.pathfinder.minusBack	Minus Back	Window > Pathfinder	
+object.path.outlineStroke	Outline Stroke	Object > Path	
+object.path.offsetPath	Offset Path…	Object > Path	
+object.path.simplify	Simplify…	Object > Path	
+object.path.addAnchorPoints	Add Anchor Points	Object > Path	
+object.path.divideObjectsBelow	Divide Objects Below	Object > Path	
+object.path.splitIntoGrid	Split Into Grid…	Object > Path	
+object.path.cleanUp	Clean Up…	Object > Path	
+type.orientation.vertical	Vertical	Type > Orientation	
+type.orientation.horizontal	Horizontal	Type > Orientation	
+type.createOutlines	Create Outlines	Type	Cmd+Shift+O
+text.setText	Set Text		
+text.areaOptions	Area Type Options…	Type	
+text.fitHeadline	Fit Headline	Type	
+text.setStyle	Character		
+object.lock.above	All Artwork Above	Object > Lock	
+object.lock.otherLayers	Other Layers	Object > Lock	
+object.hide.above	All Artwork Above	Object > Hide	
+object.hide.otherLayers	Other Layers	Object > Hide	
+object.transformEach	Transform Each…	Object > Transform	Cmd+Alt+Shift+D
+object.resetBoundingBox	Reset Bounding Box	Object > Transform	
+object.rasterize	Rasterize…	Object	
+object.createObjectMosaic	Create Object Mosaic…	Object	
+object.cropImage	Crop Image	Object	
+object.createTrimMarks	Create Trim Marks	Object	
+object.shape.convertToShape	Convert to Shape	Object > Shape	
+artboard.convertToArtboards	Convert to Artboards	Object > Artboards	
+artboard.rearrange	Rearrange All Artboards…	Object > Artboards	
+object.blend.make	Make	Object > Blend	Cmd+Alt+B
+object.blend.release	Release	Object > Blend	Cmd+Alt+Shift+B
+object.blend.options	Blend Options…	Object > Blend	
+object.blend.expand	Expand	Object > Blend	
+object.blend.replaceSpine	Replace Spine	Object > Blend	
+object.blend.reverseSpine	Reverse Spine	Object > Blend	
+object.blend.info	Blend Info		
+object.blend.spine.moveAnchor	Move Spine Point		
+object.blend.spine.addAnchor	Add Spine Point		
+object.blend.spine.removeAnchor	Delete Spine Point		
+object.blend.reverseFrontToBack	Reverse Front to Back	Object > Blend	
+object.envelope.makeWithWarp	Make with Warp…	Object > Envelope Distort	Cmd+Alt+Shift+W
+object.envelope.makeWithMesh	Make with Mesh…	Object > Envelope Distort	Cmd+Alt+M
+object.envelope.makeWithTopObject	Make with Top Object	Object > Envelope Distort	Cmd+Alt+C
+object.envelope.resetWithWarp	Reset with Warp…	Object > Envelope Distort	
+object.envelope.resetWithMesh	Reset with Mesh…	Object > Envelope Distort	
+object.envelope.info	Envelope Info		
+object.envelope.release	Release	Object > Envelope Distort	
+object.envelope.options	Envelope Options…	Object > Envelope Distort	
+object.envelope.expand	Expand	Object > Envelope Distort	
+object.envelope.editContents	Edit Contents	Object > Envelope Distort	
+object.envelope.setMeshPoint	Move Envelope Mesh Point		
+object.mesh.create	Create Gradient Mesh…	Object	
+object.mesh.setPointColor	Set Mesh Point Color		
+object.mesh.movePoint	Move Mesh Point		
+object.mesh.addLine	Add Mesh Line		
+object.mesh.deletePoint	Delete Mesh Point		
+object.mesh.expand	Expand Gradient Mesh	Object	
+edit.colors.invert	Invert Colors	Edit > Edit Colors	
+edit.colors.toCMYK	Convert to CMYK	Edit > Edit Colors	
+edit.colors.toGrayscale	Convert to Grayscale	Edit > Edit Colors	
+edit.colors.toRGB	Convert to RGB	Edit > Edit Colors	
+edit.colors.saturate	Saturate…	Edit > Edit Colors	
+edit.colors.adjustBalance	Adjust Color Balance…	Edit > Edit Colors	
+edit.colors.blendFrontToBack	Blend Front to Back	Edit > Edit Colors	
+edit.colors.blendHorizontally	Blend Horizontally	Edit > Edit Colors	
+edit.colors.blendVertically	Blend Vertically	Edit > Edit Colors	
+color.harmony	Color Guide		
+edit.colorSettings	Color Settings…	Edit	Cmd+Shift+K
+color.loadProfile	Load Color Profile…		
+edit.assignProfile	Assign Profile…	Edit	
+object.convertDocumentColorMode	Convert Document Color Mode		
+color.convert	Convert Color		
+color.gamutCheck	Gamut Warning		
+view.proofSetup	Proof Setup	View > Proof Setup	
+view.proofColors	Proof Colors	View	
+view.overprintPreview	Overprint Preview	View	Cmd+Alt+Shift+Y
+view.separationsPreview	Separations Preview		
+color.plates	Plates		
+edit.colors.overprintBlack	Overprint Black…	Edit > Edit Colors	
+swatch.setSpot	Spot Color		
+type.changeCase	Change Case	Type > Change Case	
+type.smartPunctuation	Smart Punctuation…	Type	
+type.convertToAreaType	Convert To Area Type	Type	
+type.convertToPointType	Convert To Point Type	Type	
+type.pathOptions	Type on a Path Options…	Type > Type on a Path	
+type.fillPlaceholder	Fill with Placeholder Text	Type	
+type.insert	Insert Character	Type	
+edit.findReplace	Find and Replace…	Edit	
+edit.findNext	Find Next	Edit	
+edit.pasteWithoutFormatting	Paste without Formatting	Edit	Cmd+Alt+V
+text.editRange	Edit Text		
+text.setRangeStyle	Character		
+text.getRange	Get Text Range		
+text.createInPath	Area / Path Type		
+type.fitHeadline	Fit Headline	Type	
+text.discardEmpty	Discard Empty Type		
+charStyle.list	Character Styles		
+charStyle.new	New Character Style	Window > Type > Character Styles	
+charStyle.apply	Apply Character Style		
+charStyle.redefine	Redefine Character Style	Window > Type > Character Styles	
+charStyle.setAttrs	Character Style Options		
+charStyle.duplicate	Duplicate Character Style	Window > Type > Character Styles	
+charStyle.rename	Rename Character Style		
+charStyle.delete	Delete Character Style	Window > Type > Character Styles	
+paraStyle.list	Paragraph Styles		
+paraStyle.new	New Paragraph Style	Window > Type > Paragraph Styles	
+paraStyle.apply	Apply Paragraph Style		
+paraStyle.redefine	Redefine Paragraph Style	Window > Type > Paragraph Styles	
+paraStyle.setAttrs	Paragraph Style Options		
+paraStyle.duplicate	Duplicate Paragraph Style	Window > Type > Paragraph Styles	
+paraStyle.rename	Rename Paragraph Style		
+paraStyle.delete	Delete Paragraph Style	Window > Type > Paragraph Styles	
+text.fonts	Fonts in Document		
+text.replaceFont	Replace Font		
+select.font	Select Text by Font		
+text.fontList	Font List		
+text.rescanFonts	Refresh Font List		
+help.discord	Join Our Discord	Help	
+help.website	ArtCraft Website	Help	
+help.appPage	VectorCraft on getartcraft.com	Help	
+help.github	VectorCraft on GitHub	Help	
+help.links	Links		
+text.thread.create	Create	Type > Threaded Text	
+text.thread.releaseSelection	Release Selection	Type > Threaded Text	
+text.thread.remove	Remove Threading	Type > Threaded Text	
+text.thread.info	Threads		
+object.textWrap.make	Make	Object > Text Wrap	
+object.textWrap.release	Release	Object > Text Wrap	
+object.textWrap.options	Text Wrap Options…	Object > Text Wrap	
+graph.create	Create Graph		
+graph.setData	Data…	Object > Graph	
+graph.setType	Type…	Object > Graph	
+document.rasterEffectsSettings	Document Raster Effects Settings…	Effect	
+view.saved.new	New View…	View	
+view.saved.edit	Edit Views…	View	
+view.saved.list	Saved Views		
+view.transparencyGrid	Show Transparency Grid	View	Cmd+Shift+D
+transparency.editOpacityMask	Edit Opacity Mask	Window > Transparency	
+transparency.stopEditingOpacityMask	Stop Editing Opacity Mask	Window > Transparency	
+transparency.viewOpacityMask	View Opacity Mask	Window > Transparency	
+text.tabs.set	Set Tab Stops	Window > Tabs	
+text.tabs.get	Tab Stops		
+text.tabs.clear	Clear All Tabs	Window > Tabs	
+select.same.symbolInstance	Symbol Instance	Select > Same	
+select.same.fontFamily	Font Family	Select > Same	
+select.same.fontFamilyStyle	Font Family & Style	Select > Same	
+select.same.fontFamilyStyleSize	Font Family, Style & Size	Select > Same	
+select.same.fontSize	Font Size	Select > Same	
+select.same.textFillColor	Text Fill Color	Select > Same	
+select.same.textStrokeColor	Text Stroke Color	Select > Same	
+select.object.directionHandles	Direction Handles	Select > Object	
+select.object.pointText	Point Text Objects	Select > Object	
+select.object.areaText	Area Text Objects	Select > Object	
+select.object.brushStrokes	Brush Strokes	Select > Object	
+select.object.bristleBrushStrokes	Bristle Brush Strokes	Select > Object	
+select.save	Save Selection…	Select	
+select.recall	Recall Selection	Select	
+select.editSaved	Edit Selection…	Select	
+select.savedList	Saved Selections		
+view.guides.make	Make Guides	View > Guides	Cmd+5
+view.guides.release	Release Guides	View > Guides	Cmd+Alt+5
+view.guides.lock	Lock Guides	View > Guides	Cmd+Alt+;
+view.guides.clear	Clear Guides	View > Guides	
+guide.add	Add Guide		
+guide.remove	Remove Guide		
+guide.move	Move Guide		
+file.closeAll	Close All	File	Cmd+Alt+W
+file.documentColorMode	Document Color Mode	File > Document Color Mode	
+file.info	File Info…	File	Cmd+Alt+Shift+I
+document.info	Document Info	Window > Document Info	
+object.makePixelPerfect	Make Pixel Perfect	Object	
+artboard.reorder	Move Artboard Up/Down		
+artboard.duplicate	Duplicate Artboard	Window > Artboards	
+text.setFormat	Character / Paragraph		
+shapeBuilder.merge	Shape Builder		
+shapeBuilder.regions	Shape Builder Regions		
+livePaint.make	Make	Object > Live Paint	Cmd+Alt+X
+livePaint.merge	Merge	Object > Live Paint	
+livePaint.release	Release	Object > Live Paint	
+livePaint.expand	Expand	Object > Live Paint	
+livePaint.fill	Live Paint Bucket		
+livePaint.strokeEdge	Live Paint Bucket (Stroke)		
+livePaint.info	Live Paint Info		
+imageTrace.make	Make	Object > Image Trace	
+imageTrace.makeAndExpand	Make and Expand	Object > Image Trace	
+imageTrace.release	Release	Object > Image Trace	
+imageTrace.expand	Expand	Object > Image Trace	
+imageTrace.presets	Image Trace Presets		
+brush.list	Brushes		
+brush.get	Brush Definition		
+brush.apply	Apply Brush		
+brush.remove	Remove Brush Stroke		
+brush.setCurrent	Current Brush		
+brush.new	New Brush…		
+brush.delete	Delete Brush		
+brush.duplicate	Duplicate Brush		
+brush.options	Brush Options…		
+object.expandBrush	Expand Brush Strokes		
+brush.freehand	Paintbrush		
+symbol.list	Symbols		
+symbol.new	New Symbol…		
+symbol.place	Place Symbol Instance		
+symbol.breakLink	Break Link to Symbol		
+symbol.edit	Edit Symbol		
+symbol.update	Redefine Symbol		
+symbol.delete	Delete Symbol		
+symbol.duplicate	Duplicate Symbol		
+symbol.replace	Replace Symbol		
+symbol.setCurrent	Current Symbol		
+symbol.selectInstances	Select All Instances		
+symbol.spray	Symbol Sprayer		
+symbol.adjust	Symbolism Tool		
+object.pattern.make	Make	Object > Pattern	
+object.pattern.edit	Edit Pattern	Object > Pattern	Cmd+Shift+F8
+object.pattern.done	Done		
+object.pattern.cancel	Cancel		
+object.pattern.saveCopy	Save a Copy		
+pattern.options	Pattern Options	Window > Pattern Options	
+pattern.delete	Delete Pattern		
+pattern.list	List Patterns		
+pattern.transform	Transform Patterns		
+object.repeat.radial	Radial	Object > Repeat	
+object.repeat.grid	Grid	Object > Repeat	
+object.repeat.mirror	Mirror	Object > Repeat	
+object.repeat.release	Release	Object > Repeat	
+object.repeat.options	Options…	Object > Repeat	
+object.repeat.expand	Expand Repeat		
+prefs.get	Get Preferences		
+prefs.set	Set Preference		
+prefs.reset	Reset Preferences		
+prefs.list	List Preferences		
+stroke.widthPoint.set	Width Point		
+stroke.widthPoint.remove	Delete Width Point		
+stroke.widthPoint.copy	Copy Width Point		
+stroke.widthProfile.set	Width Profile		
+object.liquify	Liquify		
+object.puppetWarp	Puppet Warp		
+object.puppetWarp.pins	Puppet Warp Pins		
+perspective.grid.set	Define Perspective Grid		
+perspective.grid.preset	Perspective Grid Preset		
+perspective.grid.show	Show Perspective Grid		Cmd+Shift+I
+perspective.plane.set	Active Perspective Plane		
+perspective.attach	Attach to Active Plane		
+perspective.release	Release with Perspective		
+perspective.move	Move in Perspective		
+perspective.draw	Draw in Perspective		
+perspective.transform	Transform in Perspective		
+perspective.nudge	Nudge in Perspective		
+perspective.plane.move	Move Plane		
+perspective.plane.matchObject	Move Plane to Match Object		
+perspective.editText	Edit Text		
+paint.invert	Invert		
+paint.complement	Complement		
+paint.lastColor	Apply Last Color		,
+paint.lastGradient	Apply Last Gradient		.
+paint.recent	Recent Colors		
+paint.proxies	Fill and Stroke		
+object.setOverprint	Overprint		
+attributes.info	Attributes		
+swatch.library.list	Swatch Libraries		
+swatch.library.get	Swatch Library		
+swatch.library.add	Add to Swatches	Window > Swatch Libraries	
+swatch.resetDefaults	Default Swatches	Window > Swatch Libraries	
+swatch.library.save	Save Swatch Library…	Window > Swatches	
+swatch.library.load	Other Library…	Window > Swatch Libraries	
+paint.freeform.addPoint	Add Freeform Point		
+paint.freeform.setPoint	Edit Freeform Point		
+paint.freeform.deletePoint	Delete Freeform Point		
+paint.freeform.addLine	Add Freeform Line		
+paint.freeform.splitLine	Split Freeform Line		
+paint.freeform.selectPoint	Select Freeform Point		
+paint.freeform.get	Freeform Gradient		
+object.flattenTransparency	Flatten Transparency…	Object	
+flattener.presets.list	Transparency Flattener Presets		
+flattener.presets.save	Save Transparency Flattener Preset		
+flattener.presets.delete	Delete Transparency Flattener Preset		
+flattener.presets.import	Import Transparency Flattener Presets		
+flattener.presets.export	Export Transparency Flattener Presets		
+flattener.preview	Flattener Preview		
+graphicStyle.libraries	Graphic Style Libraries		
+graphicStyle.library	Graphic Style Library		
+graphicStyle.addFromLibrary	Add to Graphic Styles	Window > Graphic Style Libraries	
+graphicStyle.saveLibrary	Save Graphic Style Library…	Window > Graphic Styles	
+graphicStyle.loadLibrary	Other Library…	Window > Graphic Style Libraries	
+object.expand	Expand…	Object	
+object.expand.info	Expand Options		
+attributes.set	Attributes		
+path.setFillRule	Fill Rule		
+appearance.setNewArtBasic	New Art Has Basic Appearance	Window > Appearance	
+appearance.newArt	New Art Appearance		
+colorTheme.list	Color Themes		
+colorTheme.save	Save Theme	Window > Color Themes	
+colorTheme.delete	Delete Theme	Window > Color Themes	
+colorTheme.addToSwatches	Add to Swatches	Window > Color Themes	
+document.exportPdf	Export PDF		
+document.pdfSettings	PDF Settings		
+document.setup	Document Setup		
+file.newPresets	New Document Presets		
+file.newPresets.save	Save Preset		
+file.newPresets.delete	Delete Preset		
+file.place	Place…	File	Cmd+Shift+P
+file.place.info	Placed File Info		
+image.info	Image Info		
+file.place.queue	Load Place Cursor		
+links.check	Check Links		
+links.update	Update Links		
+links.relink	Relink		
+links.list	Links		
+links.goTo	Go To Link		
+links.embed	Embed Image		
+links.unembed	Unembed		
+links.info	Link Info		
+links.placementOptions	Placement Options		
+pdf.preset.list	PDF Presets		
+pdf.preset.save	Save PDF Preset		
+pdf.preset.delete	Delete PDF Preset		
+pdf.preset.export	Export PDF Presets		
+pdf.preset.import	Import PDF Presets		
+document.exportDxf	Export DXF		
+document.exportEps	Export EPS		
+file.package	Package		
+object.slice.make	Make	Object > Slice	
+object.slice.release	Release	Object > Slice	
+object.slice.fromGuides	Create from Guides	Object > Slice	
+object.slice.fromSelection	Create from Selection	Object > Slice	
+object.slice.duplicate	Duplicate Slice	Object > Slice	
+object.slice.combine	Combine Slices	Object > Slice	
+object.slice.divide	Divide Slices…	Object > Slice	
+object.slice.deleteAll	Delete All	Object > Slice	
+object.slice.options	Slice Options…	Object > Slice	
+object.slice.clipToArtboard	Clip to Artboard	Object > Slice	
+view.slices.hide	Hide Slices	View	
+view.slices.lock	Lock Slices	View	
+slice.list	List Slices		
+select.object.slices	Slices	Select > Object	
+object.slice.create	Create Slice		
+object.slice.setRect	Set Slice Rectangle		
+object.slice.move	Move Slices		
+object.slice.delete	Delete Slices		
+object.slice.select	Select Slices		
+print.setup	Print Setup		
+print.preview	Print Preview		
+file.print	Print		Cmd+P
+file.recovery.save	Save Recovery Data		
+file.recovery.list	Recovery Data		
+file.recovery.restore	Restore Recovered Documents		
+file.recovery.discard	Discard Recovered Documents		
+document.dxfInfo	DXF Info		
+document.exportForWeb	Save for Web		
+document.exportForWeb.preview	Save for Web Preview		
+webExport.settings	Save for Web Settings		
+webExport.presets.list	Save for Web Presets		
+webExport.presets.save	Save Save for Web Preset		
+webExport.presets.delete	Delete Save for Web Preset		
+assets.add	Collect for Export	Object > Collect for Export	
+assets.remove	Remove Asset		
+assets.rename	Rename Asset		
+assets.list	Assets		
+assets.export	Export Assets		
+assets.settings.set	Asset Export Settings		
+css.selection	CSS Properties		
+css.generate	Generate CSS		
+css.export	Export CSS		
+print.presets.list	Print Presets		
+print.presets.save	Save Print Preset		
+print.presets.delete	Delete Print Preset		
+print.presets.export	Export Print Presets		
+print.presets.import	Import Print Presets		
+view.printTiling	Show Print Tiling	View	
+print.tiling.set	Print Tiling		
+print.tiling	Print Tiling Pages		
+plugin.list	List Plug-ins		
+plugin.info	Plug-in Info		
+plugin.run	Run Plug-in		
+plugin.install	Install Plug-in		
+plugin.remove	Remove Plug-in		
+plugin.reload	Reload Plug-ins	Object > Plug-ins	
+path.mirrorCut	Mirror & Cut		
+path.lineCut	Line Cut		
+path.rectCut	Rectangle Cut		
+object.vectorHalftone	Vector Halftone…	Object	
+perspective.grid.get	Perspective Grid		
+perspective.grid.define	Define Perspective Grid		
+perspective.presets.list	Perspective Grid Presets		
+perspective.presets.save	Save Perspective Grid Preset		
+perspective.presets.delete	Delete Perspective Grid Preset		
+perspective.presets.export	Export Perspective Grid Presets		
+perspective.presets.import	Import Perspective Grid Presets		
+perspective.widget.options	Perspective Grid Options		
+perspective.grid.lock	Lock Grid		
+perspective.grid.lockStation	Lock Station Point		
+perspective.grid.snap	Snap to Grid		
+perspective.grid.rulers	Show Rulers		
+file.open	Open…		
+file.save	Save		
+file.export	Export…		
+file.exportForScreens	Export for Screens…		
+tool.select	Select Tool		
+tool.setOption	Tool Option		
