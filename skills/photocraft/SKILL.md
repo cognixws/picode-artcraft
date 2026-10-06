@@ -11,8 +11,12 @@ not by pointing and clicking.
 
 ## Loop
 
-1. `app_status` if unsure; `app_open` (optionally with `file`) to start where
-   the human can watch. Any other tool also opens the app on first use.
+1. `app_open` (optionally with `file`) to start where the human can watch;
+   any other tool also opens the app on first use. It returns the app's
+   `window`: if you have PiCode's `computer` tool, call it once with
+   `action: screenshot, window: <that id>` — the human's Agent screen
+   panel follows the window an agent last used there, and the app is
+   driven over its own channel, not through `computer`.
 2. `doc_open {path}` or `doc_new {width, height}`. `session_list` shows what
    is already open — the human may have their own documents there: never
    close or overwrite one you did not open.

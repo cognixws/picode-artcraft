@@ -29,6 +29,17 @@ are vendored as their references.
   path outside it; VectorCraft `file.new`, `draw_shape` star, `export` to
   SVG and PNG and `save_file` into the workspace.
 
+## v0.1.1
+
+- PiCode's Agent screen panel follows the window an agent last used through
+  the `computer` tool. The apps are driven over their own channel, so the
+  panel stayed empty on the first live run (2026-10-06). `app_open` and
+  `app_status` now return the app's `window` (its Windows handle, the id the
+  computer tool uses) and the skills tell the agent to take one screenshot
+  of it. Agents without the computer tool still work; the panel just does
+  not follow. A direct "follow this window" door for extensions would be an
+  ADR-0230 amendment in PiCode.
+
 ## Next
 
 - The other apps as they mature: FilmCraft, LightCraft, PrintCraft,

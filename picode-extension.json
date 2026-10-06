@@ -1,7 +1,7 @@
 {
   "id": "artcraft",
   "name": "Crafting Apps",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "apiVersion": 1,
   "publisher": "PiCode",
   "description": "Let your agents work in PhotoCraft and VectorCraft while you watch: they edit images and draw vector art in the real app windows and save into the workspace.",

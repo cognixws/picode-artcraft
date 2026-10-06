@@ -21,7 +21,7 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 STATE_DIR = os.path.join(os.path.expanduser("~"), ".picode-artcraft")
 PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
@@ -164,6 +164,29 @@ class App:
         except OSError:
             return None
 
+    def window(self):
+        """The app window's handle (the id PiCode's computer tool uses), or None."""
+        if not WSL:
+            return None
+        port = self.spec["port"]
+        hwnd = powershell(
+            f"$c = Get-NetTCPConnection -LocalPort {port} -State Listen -ErrorAction SilentlyContinue"
+            " | Select-Object -First 1; if ($c) { (Get-Process -Id $c.OwningProcess).MainWindowHandle }")
+        return int(hwnd) if hwnd.isdigit() and hwnd != "0" else None
+
+    def window_hint(self):
+        hwnd = None
+        for _ in range(10):  # the window can appear a moment after the channel
+            hwnd = self.window()
+            if hwnd:
+                break
+            time.sleep(0.5)
+        if not hwnd:
+            return {}
+        return {"window": hwnd,
+                "watch": f"If you have PiCode's computer tool, call it with action screenshot and window {hwnd} "
+                         "now: the human's Agent screen panel follows the window you use there."}
+
     def read_state(self):
         try:
             with open(self.state_file) as f:
@@ -185,6 +208,8 @@ class App:
         }
         if self.spec["roots"] and pid:
             st["files_root"] = state.get("root")
+        if pid:
+            st.update(self.window_hint())
         if not found:
             st["hint"] = f"Install {self.spec['title']} (github.com/storytold/{self.name}/releases)."
         return st
@@ -343,7 +368,9 @@ def main():
                   if APPS[name]["roots"] else "paths may be absolute or relative to the workspace")
     instructions = (vendored.get("instructions") or "") + (
         f"\n\nThrough PiCode: the app runs on the human's desktop and they watch it. The first call opens it "
-        f"(app_open does so explicitly); {paths_note}.")
+        f"(app_open does so explicitly); {paths_note}. app_open and app_status return the app's `window`: if you "
+        f"have PiCode's computer tool, take one screenshot of that window right away so the human's Agent "
+        f"screen panel follows the app.")
 
     def handle(msg):
         method, params = msg.get("method"), msg.get("params") or {}
@@ -368,7 +395,10 @@ def main():
                 out = {"opened": launched, "already_open": not launched}
                 if args.get("file"):
                     res = bridge.call(OPEN_TOOL[name], {"path": app.path_arg(args["file"])})
-                    return res.get("result") or text_result(res.get("error"), True)
+                    if "error" in res or (res.get("result") or {}).get("isError"):
+                        return res.get("result") or text_result(res.get("error"), True)
+                    out["file"] = res["result"].get("content")
+                out.update(app.window_hint())
                 return text_result(out)
             if tool not in known:
                 return text_result(f"unknown tool {tool}", True)
