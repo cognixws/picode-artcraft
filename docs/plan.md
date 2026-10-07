@@ -128,17 +128,29 @@ are vendored as their references.
   `photocraft-cli serve`).
 - A tool list refreshed from the installed app at start instead of the
   vendored snapshot, when the installed version differs.
+- **Test the three newest skills with a real agent** (LightCraft, DesignCraft,
+  PrintCraft): the tools are verified one by one, but no agent has worked from
+  the skills alone yet. A short run like the Mona Lisa one, to find unclear
+  instructions. It opens the apps on the owner's PC.
+- **PrintCraft advertises 135 tools (about 135 KB of schemas).** Free in Claude
+  Code (deferred), possibly heavy in CLIs that load every tool. Measure in one
+  of those before cutting; if it hurts, advertise a core set and keep the rest
+  callable by name, as LightCraft does with its `cmd_*` tools.
+- Page polish: an empty gap in the grid when snapshots are shown (cards of
+  different heights), and the DesignCraft picture's text is small at 1440 px.
+- PiCode core, not this repo: no extension uses the v2 `picode/screen` result
+  key yet (`docs/handoff/open/extensions.md`).
 
 ## Updating
 
-After updating the extension in PiCode, **restart its process** (Extensions →
-Crafting Apps → Restart, or `POST /api/extensions/artcraft/process/restart`):
-PiCode restarts a running process only when its declaration (`command`, `args`,
-`env`) changes, not when the code on disk does, so the old one keeps serving the
-page from memory — and from a deleted working directory, where `wslpath` fails.
-Every child process here therefore runs from `/mnt/c`, never from the package
-folder (`SAFE_CWD`). Also re-select the agent's extension parts (a new digest
-blocks the saved choices).
+On a PiCode with the 2026-10-07 supervisor fix (ADR-0230 amendment) an update
+restarts the extension's process by itself. On an older daemon, press Restart
+(Extensions → Crafting Apps, or `POST /api/extensions/artcraft/process/restart`):
+the old process would keep serving from memory, from a working directory the
+update deleted, where `wslpath` fails. Every child process runs from `/mnt/c`,
+never from the package folder (`SAFE_CWD`), so either way it survives. After an
+update re-select the agent's extension parts (a new digest blocks the saved
+choices).
 
 When an app releases a new version: capture its `tools/list` in bridge mode
 (PrintCraft: `printcraft-cli mcp --root <dir>`) into `server/tools/<app>.json`, regenerate `references/commands.tsv`, vendor
