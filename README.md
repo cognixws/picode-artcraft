@@ -36,6 +36,13 @@ extension adds what PiCode needs around them:
   `computer` tool to take one screenshot of it.
 - **One skill per app** with the working loop, and the app's own agent and
   control-protocol docs plus a command index as references.
+- **A page** (Apps → Crafting Apps, or *Open Crafting Apps* in the workspace
+  menu): which apps are installed and open, an **Open** button, and a
+  **Snapshot** of an app's window taken without bringing it to the front.
+  **Open with** on `.pcraft`, `.psd`, `.vectorcraft`, `.svg`, `.ecproj` and
+  `.fcproj` files opens the file in its app. A small background program
+  (`server/craft_page.py`, standard library only) answers the page; it uses
+  `workspaces:read` to find the workspace's folder, PhotoCraft's files root.
 - **Turns itself on** in a workspace with a `.pcraft`, `.vectorcraft`,
   `.ecproj` or `.fcproj` file.
 
@@ -75,7 +82,8 @@ mirrored networking is needed.
   2026-10-06); an older PiCode refuses the install — use v0.2.1 there.
 - Any of PhotoCraft 0.2, VectorCraft 0.3, EffectCraft 0.3, FilmCraft 0.2
   (tested on Windows 11: 0.2.0, 0.3.1, 0.3.1, 0.2.1).
-- Python 3.10+ on the machine running PiCode.
+- Python 3.10+ on the machine running PiCode. `ffmpeg` (optional) shrinks a
+  large window snapshot for the page.
 
 ## License
 

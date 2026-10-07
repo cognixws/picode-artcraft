@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crafting Apps</title>
+<link rel="stylesheet" href="../__picode/tokens.css">
+<style>
+  .stack { display: grid; gap: 12px; max-width: 1100px; }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; align-items: start; }
+  .app { display: grid; gap: 8px; align-content: start; }
+  .state { display: flex; align-items: center; gap: 6px; min-height: 18px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pc-text-muted); flex: none; }
+  .dot.on { background: var(--pc-ok); }
+  .shot { width: 100%; border-radius: var(--pc-radius); border: 1px solid var(--pc-border); display: block; background: var(--pc-bg); }
+  .skeleton { height: 14px; width: 60%; border-radius: 4px; background: var(--pc-hover); }
+  .note { margin: 0; }
+  .pc-button { white-space: nowrap; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body class="pc-page">
+<div class="stack">
+  <div class="pc-card head">
+    <div>
+      <h2 class="pc-title">Crafting Apps</h2>
+      <div class="pc-muted">PhotoCraft, VectorCraft, EffectCraft and FilmCraft on this computer — what your agents drive.</div>
+    </div>
+    <div class="pc-row">
+      <label class="pc-muted" for="ws" id="ws-label" hidden>Workspace</label>
+      <select class="pc-select" id="ws" hidden></select>
+      <button class="pc-button" id="refresh" type="button">Refresh</button>
+    </div>
+  </div>
+
+  <div class="pc-card head" id="file-card" hidden>
+    <div>
+      <h2 class="pc-title" id="file-name"></h2>
+      <div class="pc-muted pc-code" id="file-path"></div>
+      <p class="pc-muted note" id="file-note" role="status"></p>
+    </div>
+    <button class="pc-button primary" id="open-file" type="button"></button>
+  </div>
+
+  <p class="pc-warn note" id="problem" role="status" hidden></p>
+  <div class="grid" id="apps"></div>
+</div>
+<script>
+(async () => {
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+  await picode.use("theme");
+  const proc = await picode.use("process");
+  const ctx = await picode.use("context");
+  if (!proc) { $("problem").hidden = false; $("problem").textContent = "Turn Crafting Apps on in a workspace to use this page."; return; }
+
+  const APPS = [
+    ["photocraft", "PhotoCraft", "Images"], ["vectorcraft", "VectorCraft", "Vector art"],
+    ["effectcraft", "EffectCraft", "Motion"], ["filmcraft", "FilmCraft", "Video"],
+  ];
+  const EXT = {
+    photocraft: /\.(pcraft|psd|psb|png|jpe?g|tiff?|webp)$/i, vectorcraft: /\.(vectorcraft|svgz?|ai|eps|pdf)$/i,
+    effectcraft: /\.ecproj$/i, filmcraft: /\.fcproj$/i,
+  };
+  const TITLE = Object.fromEntries(APPS.map(([id, t]) => [id, t]));
+
+  async function call(path, body) {
+    const r = await proc.request(path, body === undefined ? { method: "GET" } : { method: "POST", body: JSON.stringify(body), contentType: "application/json" });
+    let data = {};
+    try { data = JSON.parse(r.body || "{}"); } catch { data = { message: r.body }; }
+    if (r.status >= 400) throw new Error(data.message || "The extension's program answered " + r.status);
+    return data;
+  }
+
+  // One card per app, built once; refresh only updates them (no flicker).
+  const cards = {};
+  for (const [id, title, kind] of APPS) {
+    const card = el("div", "pc-card app");
+    const head = el("div", "head");
+    const name = el("div");
+    name.append(el("h2", "pc-title", title), el("div", "pc-muted", kind));
+    const actions = el("div", "pc-row");
+    const open = el("button", "pc-button primary", "Open"); open.type = "button"; open.hidden = true;
+    const snap = el("button", "pc-button", "Snapshot"); snap.type = "button"; snap.hidden = true;
+    actions.append(open, snap);
+    head.append(name, actions);
+    const state = el("div", "state");
+    const dot = el("span", "dot"); const line = el("span", "pc-muted");
+    line.append(el("span", "skeleton"));
+    state.append(dot, line);
+    const note = el("p", "pc-muted note"); note.setAttribute("role", "status"); note.hidden = true;
+    const img = el("img", "shot"); img.alt = title + "'s window"; img.hidden = true;
+    card.append(head, state, note, img);
+    $("apps").append(card);
+    cards[id] = { open, snap, dot, line, note, img };
+    open.onclick = () => act(id, open, "Opening…", async () => (await call("/open", { app: id, workspace: workspace() })).message);
+    snap.onclick = () => act(id, snap, "Taking…", async () => {
+      const s = await call("/snapshot", { app: id });
+      img.src = "data:" + (s.mime || "image/png") + ";base64," + s.image;
+      img.hidden = false;
+      return "";
+    });
+  }
+
+  async function act(id, button, busy, fn) {
+    const c = cards[id], label = button.textContent;
+    button.disabled = true; button.textContent = busy;
+    try {
+      const msg = await fn();
+      c.note.textContent = msg; c.note.hidden = !msg;
+      await refresh();
+    } catch (e) {
+      c.note.textContent = e.message; c.note.hidden = false;
+    } finally {
+      button.textContent = label; button.disabled = false;
+    }
+  }
+
+  // The workspace an app opens for (PhotoCraft reads and writes only there).
+  let workspaces = [];
+  function workspace() { return $("ws").value || (ctx && ctx.current() && ctx.current().workspaceId) || ""; }
+  async function loadWorkspaces() {
+    try { workspaces = (await call("/workspaces")).workspaces || []; } catch { workspaces = []; }
+    const sel = $("ws"); sel.innerHTML = "";
+    for (const w of workspaces) { const o = el("option", "", w.name); o.value = w.id; sel.append(o); }
+    const want = ctx && ctx.current() && ctx.current().workspaceId;
+    if (want && workspaces.some((w) => w.id === want)) sel.value = want;
+    const many = workspaces.length > 1;
+    sel.hidden = !many; $("ws-label").hidden = !many;
+  }
+
+  async function refresh() {
+    $("refresh").disabled = true;
+    try {
+      const s = await call("/status");
+      $("problem").hidden = true;
+      for (const a of s.apps || []) {
+        const c = cards[a.app]; if (!c) continue;
+        c.dot.classList.toggle("on", !!a.open);
+        c.line.textContent = !a.installed
+          ? "Not installed — get it from github.com/storytold/" + a.app + "/releases"
+          : a.open ? "Open, ready for your agents" : "Not open — an agent opens it when it needs it";
+        c.open.hidden = !a.installed || !!a.open;
+        c.snap.hidden = !a.open;
+        if (!a.open) c.img.hidden = true;
+      }
+    } catch (e) {
+      $("problem").hidden = false; $("problem").textContent = e.message;
+    } finally {
+      $("refresh").disabled = false;
+    }
+  }
+  $("refresh").onclick = refresh;
+
+  // Opened with a file (PiCode's Open with): offer to open it in its app.
+  let file = null, fileApp = null;
+  function showFile(c) {
+    file = c && c.path ? c.path : null;
+    fileApp = file ? Object.keys(EXT).find((k) => EXT[k].test(file)) : null;
+    $("file-card").hidden = !fileApp;
+    if (!fileApp) return;
+    $("file-name").textContent = file.split(/[\\/]/).pop();
+    $("file-path").textContent = file;
+    $("file-note").textContent = "";
+    $("open-file").textContent = "Open in " + TITLE[fileApp];
+    if (c.workspaceId && workspaces.some((w) => w.id === c.workspaceId)) $("ws").value = c.workspaceId;
+  }
+  $("open-file").onclick = async () => {
+    if (!fileApp) return;
+    const b = $("open-file"), label = b.textContent;
+    b.disabled = true; b.textContent = "Opening…";
+    try { $("file-note").textContent = (await call("/open-file", { path: file, workspace: workspace() })).message; await refresh(); }
+    catch (e) { $("file-note").textContent = e.message; }
+    finally { b.textContent = label; b.disabled = false; }
+  };
+
+  await loadWorkspaces();
+  if (ctx) { showFile(ctx.current()); ctx.onChange(showFile); }
+  await refresh();
+  setInterval(() => { if (!document.hidden) refresh(); }, 10000);
+})();
+</script>
+</body>
+</html>

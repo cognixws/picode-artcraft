@@ -82,14 +82,30 @@ are vendored as their references.
   and the skills fall back to one `computer` screenshot. `app_status` only
   reports the window; it never points the screen.
 
+## v0.4.0
+
+- The page `ui/apps.html` (Apps → Crafting Apps; command *Open Crafting
+  Apps* in the workspace menu) and its process `server/craft_page.py`,
+  which reuses craft_mcp's `App` and `Bridge`: `GET /status` (one PowerShell
+  call finds every app's control port and window), `GET /workspaces`
+  (Host API, `workspaces:read`), `POST /open`, `POST /open-file`,
+  `POST /snapshot`.
+- Snapshots never bring a window forward (measured: the foreground window
+  is unchanged for all four). PhotoCraft: control `ui.screenshot
+  {focus:false}` — its MCP `ui_screenshot` raises the window, so it is not
+  used. VectorCraft: `screenshot {window:true}` (its `scale` is ignored for a
+  window); a picture wider than ~1080 px is shrunk to 900 px with ffmpeg
+  when present, else VectorCraft falls back to its artboard render.
+  EffectCraft `screenshot`, FilmCraft `ui_screenshot`, both `max_side 900`.
+- Open with: `*.pcraft`, `*.psd`, `*.vectorcraft`, `*.svg`, `*.ecproj`,
+  `*.fcproj` open the page with the file; its button opens the file in its
+  app (PhotoCraft rooted at the workspace's folder).
+
 ## Next
 
 - The other apps as they mature: LightCraft, PrintCraft, DesignCraft (same
   shape: one server per app). DesignCraft's default control port is 7979,
   VectorCraft's too — give it another default when it joins.
-- A page (Apps → Crafting Apps) showing which apps are installed and open,
-  with a window snapshot, and *Open with* for `.pcraft`, `.psd`,
-  `.vectorcraft`, `.svg`.
 - Headless mode for batch work nobody needs to watch (`--headless` /
   `photocraft-cli serve`).
 - A tool list refreshed from the installed app at start instead of the

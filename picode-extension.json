@@ -1,13 +1,14 @@
 {
   "id": "artcraft",
   "name": "Crafting Apps",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "apiVersion": 1,
   "publisher": "PiCode",
   "description": "Let your agents work in PhotoCraft, VectorCraft, EffectCraft and FilmCraft while you watch: they edit images, draw vector art, animate and cut video in the real app windows and save into the workspace.",
   "icon": "icons/craft.svg",
   "permissions": [
-    "screen:follow"
+    "screen:follow",
+    "workspaces:read"
   ],
   "agent": {
     "mcpServers": {
@@ -46,6 +47,67 @@
       "skills/effectcraft",
       "skills/filmcraft"
     ]
+  },
+  "process": {
+    "command": "python3",
+    "args": [
+      "${extensionDir}/server/craft_page.py"
+    ]
+  },
+  "ui": {
+    "pages": [
+      {
+        "id": "apps",
+        "title": "Crafting Apps",
+        "path": "ui/apps.html"
+      }
+    ]
+  },
+  "contributes": {
+    "commands": [
+      {
+        "id": "open-apps",
+        "title": "Open Crafting Apps",
+        "page": "apps"
+      }
+    ],
+    "openWith": [
+      {
+        "pattern": "*.pcraft",
+        "page": "apps",
+        "title": "Open in PhotoCraft"
+      },
+      {
+        "pattern": "*.psd",
+        "page": "apps",
+        "title": "Open in PhotoCraft"
+      },
+      {
+        "pattern": "*.vectorcraft",
+        "page": "apps",
+        "title": "Open in VectorCraft"
+      },
+      {
+        "pattern": "*.svg",
+        "page": "apps",
+        "title": "Open in VectorCraft"
+      },
+      {
+        "pattern": "*.ecproj",
+        "page": "apps",
+        "title": "Open in EffectCraft"
+      },
+      {
+        "pattern": "*.fcproj",
+        "page": "apps",
+        "title": "Open in FilmCraft"
+      }
+    ],
+    "menus": {
+      "workspace": [
+        "open-apps"
+      ]
+    }
   },
   "activation": {
     "files": [
