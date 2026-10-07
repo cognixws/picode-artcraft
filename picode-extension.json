@@ -1,10 +1,10 @@
 {
   "id": "artcraft",
   "name": "Crafting Apps",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "apiVersion": 1,
   "publisher": "PiCode",
-  "description": "Let your agents work in PhotoCraft, VectorCraft, EffectCraft and FilmCraft while you watch: they edit images, draw vector art, animate and cut video in the real app windows and save into the workspace.",
+  "description": "Let your agents work in the Crafting Apps \u2014 PhotoCraft, VectorCraft, EffectCraft, FilmCraft, LightCraft, DesignCraft and PrintCraft \u2014 while you watch: they edit images, draw, animate, cut video, develop photos, lay out pages and work with PDFs in the real app windows and save into the workspace.",
   "icon": "icons/craft.svg",
   "permissions": [
     "screen:follow",
@@ -39,13 +39,37 @@
           "${extensionDir}/server/craft_mcp.py",
           "effectcraft"
         ]
+      },
+      "lightcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "lightcraft"
+        ]
+      },
+      "designcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "designcraft"
+        ]
+      },
+      "printcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "printcraft"
+        ]
       }
     },
     "skills": [
       "skills/photocraft",
       "skills/vectorcraft",
       "skills/effectcraft",
-      "skills/filmcraft"
+      "skills/filmcraft",
+      "skills/lightcraft",
+      "skills/designcraft",
+      "skills/printcraft"
     ]
   },
   "process": {
@@ -101,6 +125,16 @@
         "pattern": "*.fcproj",
         "page": "apps",
         "title": "Open in FilmCraft"
+      },
+      {
+        "pattern": "*.designcraft",
+        "page": "apps",
+        "title": "Open in DesignCraft"
+      },
+      {
+        "pattern": "*.pdf",
+        "page": "apps",
+        "title": "Open in PrintCraft"
       }
     ],
     "menus": {
@@ -114,7 +148,8 @@
       "*.pcraft",
       "*.vectorcraft",
       "*.ecproj",
-      "*.fcproj"
+      "*.fcproj",
+      "*.designcraft"
     ]
   }
 }

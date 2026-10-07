@@ -101,11 +101,29 @@ are vendored as their references.
   `*.fcproj` open the page with the file; its button opens the file in its
   app (PhotoCraft rooted at the workspace's folder).
 
+## v0.5.0
+
+- LightCraft 0.2.1 (port 7980), DesignCraft 0.2.1 (7981: its own default 7979
+  is VectorCraft's) and PrintCraft 0.2.1; skills, vendored docs, command and
+  tool indexes, and cards on the page. Verified live on Windows 11 (2026-10-07).
+- LightCraft: the 359 `cmd_*` tools are hidden from `tools/list` (96 KB of the
+  agent's context) and still forwarded; its library is the app's own
+  (`Pictures\LightCraft Library`, created on first launch) — the skill says
+  never to delete, reject or `import mode: "move"` unasked. No Open with
+  (importing photos into a library is not opening a file).
+- DesignCraft: native `.designcraft`; its `screenshot` raises the window
+  (measured 4/4), so the page uses `render_page` instead; Open with for
+  `.designcraft`.
+- PrintCraft: its MCP (`printcraft-cli mcp --root <workspace>`) is headless —
+  no bridge to the window — so the document tools never open the app, and
+  nine `ui_*` tools wrap `printcraft-cli ui --control FILE` (the control file,
+  with the loopback port and token, lives in `%LOCALAPPDATA%\picode-artcraft`).
+  `ui_open` and `app_open {file}` open a workspace PDF in the window; the
+  window's handle comes from the process (no fixed port). Open with `*.pdf`.
+  No screen-follow on document tools, only on `app_open` / `ui_*`.
+
 ## Next
 
-- The other apps as they mature: LightCraft, PrintCraft, DesignCraft (same
-  shape: one server per app). DesignCraft's default control port is 7979,
-  VectorCraft's too — give it another default when it joins.
 - Headless mode for batch work nobody needs to watch (`--headless` /
   `photocraft-cli serve`).
 - A tool list refreshed from the installed app at start instead of the
@@ -113,6 +131,15 @@ are vendored as their references.
 
 ## Updating
 
+After updating the extension in PiCode, **restart its process** (Extensions →
+Crafting Apps → Restart, or `POST /api/extensions/artcraft/process/restart`):
+PiCode restarts a running process only when its declaration (`command`, `args`,
+`env`) changes, not when the code on disk does, so the old one keeps serving the
+page from memory — and from a deleted working directory, where `wslpath` fails.
+Every child process here therefore runs from `/mnt/c`, never from the package
+folder (`SAFE_CWD`). Also re-select the agent's extension parts (a new digest
+blocks the saved choices).
+
 When an app releases a new version: capture its `tools/list` in bridge mode
-into `server/tools/<app>.json`, regenerate `references/commands.tsv`, vendor
+(PrintCraft: `printcraft-cli mcp --root <dir>`) into `server/tools/<app>.json`, regenerate `references/commands.tsv`, vendor
 the docs at the release tag, and update the versions in `third_party/README.md`.

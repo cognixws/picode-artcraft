@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """picode-artcraft MCP server (stdio, Python standard library only).
 
-One process per app: `craft_mcp.py <photocraft|vectorcraft|filmcraft|effectcraft>`.
+One process per app: `craft_mcp.py <photocraft|vectorcraft|filmcraft|effectcraft|lightcraft|designcraft|printcraft>`.
 It lists the app's own MCP tools (server/tools/<app>.json, captured from the
 app's bridge mode) plus `app_status` and `app_open`. The first call that needs
 the app opens it with its control channel on, then starts the app's own CLI
@@ -13,9 +13,14 @@ CLI reaches the app on Windows' own loopback, so no mirrored networking is
 needed. Paths cross with `wslpath`.
 """
 
+import base64
+import functools
 import json
 import os
+import re
 import ssl
+import struct
+import tempfile
 import urllib.error
 import urllib.request
 import shutil
@@ -24,7 +29,11 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-VERSION = "0.3.0"
+# Every child runs from here, never from the package folder: PiCode replaces that
+# folder on an update, and a process whose cwd was deleted makes wslpath fail
+# ("No such file or directory") for paths that exist.
+SAFE_CWD = "/mnt/c" if os.path.isdir("/mnt/c") else "/"
+VERSION = "0.5.0"
 STATE_DIR = os.path.join(os.path.expanduser("~"), ".picode-artcraft")
 PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
@@ -57,11 +66,37 @@ APPS = {
         "roots": False,
         "connect": lambda port: ["--bridge", str(port)],
     },
+    "lightcraft": {
+        "title": "LightCraft",
+        "port": 7980,
+        "token": False,
+        "roots": False,
+        "connect": lambda port: ["--connect", f"127.0.0.1:{port}"],
+    },
+    "designcraft": {
+        "title": "DesignCraft",
+        "port": 7981,    # its own default (7979) is VectorCraft's
+        "token": False,
+        "roots": False,
+        "connect": lambda port: ["--connect", str(port)],
+    },
+    # PrintCraft's MCP server has no bridge to the window: it edits PDFs
+    # headless, only under --root. The window is driven by `printcraft-cli ui`
+    # over a control file (random loopback port, token inside), which this
+    # server turns into ui_* tools.
+    "printcraft": {
+        "title": "PrintCraft",
+        "port": None,
+        "token": False,
+        "roots": True,
+        "headless": True,
+        "connect": lambda port: [],
+    },
 }
 
 for _name, _spec in APPS.items():  # PICODE_<APP>_PORT moves an app off its default port
     _p = os.environ.get(f"PICODE_{_name.upper()}_PORT", "")
-    if _p.isdigit():
+    if _p.isdigit() and _spec["port"] is not None:
         _spec["port"] = int(_p)
 
 # Argument keys that may carry a file path. Only absolute POSIX values are
@@ -124,11 +159,17 @@ def find_install(app):
     return None
 
 
+@functools.lru_cache(maxsize=512)
 def wslpath(flag, path):
-    out = subprocess.run(["wslpath", flag, path], capture_output=True, text=True, timeout=10)
-    if out.returncode != 0:
-        raise ToolError(f"cannot convert path {path!r}: {out.stderr.strip()}")
-    return out.stdout.strip()
+    """wslpath, cached (a path converts the same way every time) and retried once:
+    under load it has failed once in a while on a path that exists."""
+    for attempt in (1, 2):
+        out = subprocess.run(["wslpath", flag, path], capture_output=True, text=True, timeout=10, cwd=SAFE_CWD)
+        if out.returncode == 0:
+            return out.stdout.strip()
+        if attempt == 1:
+            time.sleep(0.3)
+    raise ToolError(f"cannot convert path {path!r}: {out.stderr.strip()}")
 
 
 def to_app_path(path):
@@ -139,7 +180,7 @@ def to_app_path(path):
 def powershell(script):
     exe = shutil.which("powershell.exe") or "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
     out = subprocess.run([exe, "-NoProfile", "-NonInteractive", "-Command", script],
-                         capture_output=True, text=True, timeout=30, cwd="/mnt/c")
+                         capture_output=True, text=True, timeout=30, cwd=SAFE_CWD)
     return out.stdout.replace("\r", "").strip()
 
 
@@ -163,23 +204,53 @@ class App:
                 f"{self.name}{'.exe' if WSL else ''} and {self.name}-cli.")
         return found
 
-    def token_file(self):
-        """Where the PhotoCraft token lives, as the app's OS spells it."""
-        if self._token_file:
-            return self._token_file
+    def private_file(self, suffix):
+        """A file of the extension's own, as the app's OS spells it (the token, the control file)."""
         if WSL:
             local = powershell("[Environment]::GetFolderPath('LocalApplicationData')")
             if not local:
                 raise ToolError("cannot read %LOCALAPPDATA% from Windows")
             win = local + "\\picode-artcraft"
             os.makedirs(wslpath("-u", win), exist_ok=True)
-            self._token_file = win + f"\\{self.name}-control.token"
-        else:
-            os.makedirs(STATE_DIR, mode=0o700, exist_ok=True)
-            self._token_file = os.path.join(STATE_DIR, f"{self.name}-control.token")
+            return win + f"\\{self.name}-{suffix}"
+        os.makedirs(STATE_DIR, mode=0o700, exist_ok=True)
+        return os.path.join(STATE_DIR, f"{self.name}-{suffix}")
+
+    def token_file(self):
+        """Where the PhotoCraft token lives, as the app's OS spells it."""
+        if not self._token_file:
+            self._token_file = self.private_file("control.token")
         return self._token_file
 
+    def control_file(self):
+        """PrintCraft: the file `--control` writes its loopback port and token to."""
+        return self.private_file("ui.json")
+
+    def ui(self, verb, args=None, out=None, timeout=60):
+        """Run `printcraft-cli ui --control FILE <verb> k=v…` and parse its JSON answer."""
+        cmd = [self.install()[2], "ui", "--control", self.control_file(), verb]
+        for k, v in (args or {}).items():
+            if v is None:
+                continue
+            cmd.append(f"{k}={v if isinstance(v, str) else json.dumps(v)}")
+        if out:
+            cmd += ["--out", out]
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, stdin=subprocess.DEVNULL,
+                           cwd=SAFE_CWD)
+        text = (r.stdout or "").strip()
+        if r.returncode != 0:
+            raise ToolError((r.stderr or text or f"printcraft-cli ui {verb} failed").strip()[:400])
+        try:
+            return json.loads(text) if text else {}
+        except ValueError:
+            return {"text": text}
+
     def listening_pid(self):
+        if self.spec.get("headless"):  # alive = the control file answers
+            try:
+                return -1 if find_install(self.name) and self.ui("state", timeout=8) is not None else None
+            except (ToolError, subprocess.TimeoutExpired, OSError):
+                return None
         port = self.spec["port"]
         if WSL:
             pid = powershell(
@@ -197,6 +268,10 @@ class App:
         """The app window's handle (the id PiCode's computer tool uses), or None."""
         if not WSL:
             return None
+        if self.spec.get("headless"):  # no fixed port: the process' own window
+            hwnd = powershell(f"(Get-Process -Name '{self.name}' -ErrorAction SilentlyContinue"
+                              " | Where-Object { $_.MainWindowHandle -ne 0 } | Select-Object -First 1).MainWindowHandle")
+            return int(hwnd) if hwnd.isdigit() and hwnd != "0" else None
         port = self.spec["port"]
         hwnd = powershell(
             f"$c = Get-NetTCPConnection -LocalPort {port} -State Listen -ErrorAction SilentlyContinue"
@@ -241,7 +316,7 @@ class App:
         if WSL:
             n = powershell(f"@(Get-Process -Name '{self.name}' -ErrorAction SilentlyContinue).Count")
         else:
-            out = subprocess.run(["pgrep", "-x", self.name], capture_output=True, text=True)
+            out = subprocess.run(["pgrep", "-x", self.name], capture_output=True, text=True, cwd=SAFE_CWD)
             n = str(len(out.stdout.split()))
         return n.isdigit() and int(n) > 0 and not self.listening_pid()
 
@@ -261,10 +336,13 @@ class App:
             "installed": bool(found),
             "folder": (to_app_path(found[0]) if found else None),
             "open_with_control": bool(pid),
-            "port": self.spec["port"],
             "workspace_root": self.root,
         }
-        if self.spec["roots"] and pid:
+        if self.spec["port"] is not None:
+            st["port"] = self.spec["port"]
+        if self.spec.get("headless"):
+            st["document_tools"] = "work on files under the workspace without the window; ui_* drive the window"
+        elif self.spec["roots"] and pid:
             st["files_root"] = state.get("root")
         if pid:
             hwnd = self.window()
@@ -282,7 +360,7 @@ class App:
         """Open the app with control on, unless it already listens. Returns True if launched now."""
         _, gui, _ = self.install()
         if self.listening_pid():
-            if self.spec["roots"]:
+            if self.spec["roots"] and not self.spec.get("headless"):
                 root = self.read_state().get("root")
                 if root and root != self.root:
                     raise ToolError(
@@ -295,10 +373,13 @@ class App:
                 f"{self.spec['title']} is already open without its control channel, so the extension cannot "
                 f"drive it, and opening a second copy would confuse the human. Ask them to save their work and "
                 f"close {self.spec['title']}; the next call opens it with control on.")
-        args = [gui, "--control", str(self.spec["port"])]
+        if self.spec.get("headless"):
+            args = [gui, "--control", self.control_file()]
+        else:
+            args = [gui, "--control", str(self.spec["port"])]
         if self.spec["token"]:
             args += ["--control-token-file", self.token_file()]
-        if self.spec["roots"]:
+        if self.spec["roots"] and not self.spec.get("headless"):
             r = to_app_path(self.root)
             args += ["--automation-read-root", r, "--automation-write-root", r]
         os.makedirs(STATE_DIR, exist_ok=True)
@@ -317,10 +398,14 @@ class App:
                         return True
             except OSError:
                 pass
+            if self.spec.get("headless") and self.listening_pid():
+                return True
         raise ToolError(f"{self.spec['title']} did not open its control channel in 45 s; see {log_path}")
 
     def bridge_cmd(self):
         _, _, cli = self.install()
+        if self.spec.get("headless"):  # edits files, no window; confined to the workspace
+            return [cli, "mcp", "--root", to_app_path(self.root)]
         cmd = [cli, "mcp"] + self.spec["connect"](self.spec["port"])
         if self.spec["token"]:
             cmd += ["--control-token-file", self.token_file()]
@@ -420,7 +505,7 @@ class Bridge:
                 return msg
 
     def start(self):
-        self.proc = subprocess.Popen(self.app.bridge_cmd(), stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+        self.proc = subprocess.Popen(self.app.bridge_cmd(), cwd=SAFE_CWD, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=subprocess.DEVNULL, text=True, encoding="utf-8")
         init = self._rpc("initialize", {"protocolVersion": PROTOCOLS[0], "capabilities": {},
                                         "clientInfo": {"name": "picode-artcraft", "version": VERSION}})
@@ -474,10 +559,144 @@ PATH_KEYS = {
     "filmcraft": {},
     "effectcraft": {"open_project": ["path"], "save_project": ["path"], "render_frame": ["path"],
                     "screenshot": ["path"]},
+    "lightcraft": {"import": ["paths"], "render_photo": ["path"], "export": ["path", "dir"],
+                   "screenshot": ["path"]},
+    "designcraft": {"open_document": ["path"], "save_document": ["path"], "place_image": ["path"],
+                    "render_page": ["path"], "export_png": ["path"], "screenshot": ["path"]},
+    "printcraft": {},  # roots: see rootify
 }
-# app_open {file}: the tool and argument that open a file in each app.
-OPEN_TOOL = {"photocraft": ("doc_open", {}), "vectorcraft": ("open_file", {}),
-             "filmcraft": ("command_run", {"id": "file.open"}), "effectcraft": ("open_project", {})}
+# app_open {file}: the tool, its fixed arguments and where the path goes.
+OPEN_TOOL = {"photocraft": ("doc_open", {}, "path"), "vectorcraft": ("open_file", {}, "path"),
+             "filmcraft": ("command_run", {"id": "file.open"}, "params.path"),
+             "effectcraft": ("open_project", {}, "path"),
+             "lightcraft": ("import", {}, "paths"), "designcraft": ("open_document", {}, "path")}
+
+# Tools that duplicate another (LightCraft's 359 cmd_* are run_command with a
+# fixed id): hidden from the list the agent loads, still forwarded if called.
+HIDDEN = {"lightcraft": lambda n: n.startswith("cmd_")}
+
+SNAP_SIDE = 900  # a window picture is shrunk to this width; PiCode's relay is 1 MiB
+
+
+def png_width(raw):
+    return struct.unpack(">I", raw[16:20])[0] if raw[:8] == b"\x89PNG\r\n\x1a\n" else 0
+
+
+def shrink(b64):
+    """Scale a large PNG down to SNAP_SIDE wide with ffmpeg, when it is installed."""
+    raw = base64.b64decode(b64)
+    if png_width(raw) <= SNAP_SIDE * 1.2 or not shutil.which("ffmpeg"):
+        return b64, len(raw)
+    with tempfile.TemporaryDirectory() as d:
+        src, dst = os.path.join(d, "in.png"), os.path.join(d, "out.png")
+        with open(src, "wb") as f:
+            f.write(raw)
+        r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-vf", "scale=%d:-1" % SNAP_SIDE, dst],
+                           capture_output=True, timeout=30, cwd=SAFE_CWD)
+        if r.returncode != 0 or not os.path.exists(dst):
+            return b64, len(raw)
+        with open(dst, "rb") as f:
+            small = f.read()
+    return base64.b64encode(small).decode(), len(small)
+
+
+def abs_looking(v):
+    return isinstance(v, str) and (os.path.isabs(v) or bool(re.match(r"^[A-Za-z]:[\\/]", v)) or v.startswith("\\\\"))
+
+
+def rootify(app, value, key=None):
+    """PrintCraft reads and writes only under --root: an absolute POSIX path in a file
+    argument becomes relative to the workspace (or is refused when outside it).
+    Other values — a bookmark path, a Windows path — pass through; PrintCraft judges them."""
+    if isinstance(value, dict):
+        return {k: rootify(app, v, k) for k, v in value.items()}
+    if isinstance(value, list):
+        return [rootify(app, v, key) for v in value]
+    if isinstance(value, str) and key in {"path", "paths", "out", "out_dir", "file"} and abs_looking(value):
+        if os.path.isabs(value):
+            return app.path_arg(value)
+    return value
+
+
+def open_file_in(app, name, file, bridge):
+    """Open a workspace file in the app; returns what the app said. Raises ToolError."""
+    if name == "printcraft":  # the window, through its control file (the MCP has none)
+        rel = app.path_arg(file)
+        full = os.path.realpath(os.path.join(app.root, rel))
+        if os.path.commonpath([full, app.root]) != app.root:
+            raise ToolError(f"{file} is outside the workspace ({app.root}).")
+        return app.ui("open", {"path": to_app_path(full)})
+    tool, base, kind = OPEN_TOOL[name]
+    path = app.path_arg(file)
+    call = dict(base)
+    if kind == "params.path":
+        call["params"] = {"path": path}
+    elif kind == "paths":
+        call["paths"] = [path]
+    else:
+        call["path"] = path
+    res = bridge.call(tool, call)
+    if "error" in res or (res.get("result") or {}).get("isError"):
+        raise ToolError(str((res.get("result") and content_value(res["result"])) or (res.get("error") or {}).get("message")
+                            or f"{app.spec['title']} refused the file"))
+    return content_value(res["result"])
+
+
+# PrintCraft's window tools: `printcraft-cli ui --control FILE <verb>` as MCP tools.
+def _s(desc):
+    return {"type": "string", "description": desc}
+
+
+UI_TOOLS = {
+    "ui_state": ("state", "What the live window shows: the document, page, tool and open dialogs.", {}),
+    "ui_inspect": ("inspect", "The window's widget tree (role, label, rect, id); narrow it with `query`.",
+                   {"query": _s("Only widgets whose label contains this text.")}),
+    "ui_click": ("click", "Click a widget by its label or id (from ui_inspect).",
+                 {"label": _s("The widget's label."), "id": _s("The widget's id.")}),
+    "ui_type": ("type", "Type text into the focused field.", {"text": _s("The text.")}),
+    "ui_key": ("key", "Press a key, with modifiers such as [\"command\"] for Ctrl.",
+               {"key": _s("The key, e.g. K, Enter, Escape."),
+                "modifiers": {"type": "array", "items": {"type": "string"}}}),
+    "ui_command": ("command", "Run a menu/tool command by id (list them with ui_commands).",
+                   {"id": _s("The command id, e.g. comment.square.")}),
+    "ui_commands": ("commands", "Every command of the live window: id, label, menu, shortcut, enabled.", {}),
+    "ui_open": ("open", "Open a PDF from the workspace in the live window (opens PrintCraft if needed).",
+                {"path": _s("A PDF in the workspace, absolute or relative."), "password": _s("If it is encrypted.")}),
+    "ui_screenshot": (None, "A picture of the live window (does not bring it forward).", {}),
+}
+UI_TOOL_DEFS = [{"name": n, "description": d,
+                 "inputSchema": {"type": "object", "properties": props}} for n, (_, d, props) in UI_TOOLS.items()]
+
+
+def printcraft_screenshot(app):
+    """The live window as base64 PNG, shrunk. Raises ToolError."""
+    out_dir = os.path.join(STATE_DIR, "out")
+    os.makedirs(out_dir, exist_ok=True)
+    f = os.path.join(out_dir, f"printcraft-{os.getpid()}.png")
+    try:
+        app.ui("screenshot", out=to_app_path(f))
+        with open(f, "rb") as fh:
+            raw = fh.read()
+    except OSError as e:
+        raise ToolError(f"no picture of the PrintCraft window: {e}")
+    finally:
+        if os.path.exists(f):
+            os.remove(f)
+    return shrink(base64.b64encode(raw).decode())[0]
+
+
+def run_ui_tool(app, tool, args):
+    verb, _, _ = UI_TOOLS[tool]
+    if tool == "ui_screenshot":
+        return {"content": [{"type": "image", "data": printcraft_screenshot(app), "mimeType": "image/png"}]}
+    if tool == "ui_open":
+        args = dict(args)
+        rel = app.path_arg(args.get("path", ""))
+        full = os.path.realpath(os.path.join(app.root, rel))
+        if os.path.commonpath([full, app.root]) != app.root:
+            raise ToolError(f"{args.get('path')} is outside the workspace ({app.root}).")
+        args["path"] = to_app_path(full)
+    return text_result(app.ui(verb, args))
 
 
 # Apps whose window can come back tiny or minimized; app_open gives it a usable size.
@@ -521,15 +740,24 @@ def main():
     bridge = Bridge(app)
     with open(os.path.join(HERE, "tools", f"{name}.json")) as f:
         vendored = json.load(f)
-    tools = OWN_TOOLS + vendored["tools"]
+    hidden = HIDDEN.get(name, lambda n: False)
+    headless = bool(APPS[name].get("headless"))
+    tools = OWN_TOOLS + [t for t in vendored["tools"] if not hidden(t["name"])] + (UI_TOOL_DEFS if headless else [])
     known = {t["name"] for t in vendored["tools"]}
     paths_note = ("paths are relative to the workspace (absolute paths inside it are accepted)"
                   if APPS[name]["roots"] else "paths may be absolute or relative to the workspace")
-    instructions = (vendored.get("instructions") or "") + (
-        f"\n\nThrough PiCode: the app runs on the human's desktop and they watch it. The first call opens it "
-        f"(app_open does so explicitly); {paths_note}. app_open points the human's Agent screen at the app "
-        f"itself (`screen: following this window`); only when it answers `screen: not followed` and you have "
-        f"PiCode's computer tool, take one screenshot of the returned `window` so the panel follows the app.")
+    if headless:
+        through = (f"\n\nThrough PiCode: the document tools edit PDFs in the workspace without a window "
+                   f"({paths_note}); nothing is shown to the human until you save and open the file. app_open opens "
+                   f"the real window (optionally with a PDF) and points the human's Agent screen at it; ui_* operate "
+                   f"that window. If app_open answers `screen: not followed` and you have PiCode's computer tool, take "
+                   f"one screenshot of the returned `window`.")
+    else:
+        through = (f"\n\nThrough PiCode: the app runs on the human's desktop and they watch it. The first call opens it "
+                   f"(app_open does so explicitly); {paths_note}. app_open points the human's Agent screen at the app "
+                   f"itself (`screen: following this window`); only when it answers `screen: not followed` and you have "
+                   f"PiCode's computer tool, take one screenshot of the returned `window` so the panel follows the app.")
+    instructions = (vendored.get("instructions") or "") + through
 
     def handle(msg):
         method, params = msg.get("method"), msg.get("params") or {}
@@ -553,30 +781,29 @@ def main():
                 launched = app.ensure_open()
                 out = {"opened": launched, "already_open": not launched}
                 if args.get("file"):
-                    tool_name, base = OPEN_TOOL[name]
-                    call = dict(base)
-                    if tool_name == "command_run":
-                        call["params"] = {"path": app.path_arg(args["file"])}
-                    else:
-                        call["path"] = app.path_arg(args["file"])
-                    res = bridge.call(tool_name, call)
-                    if "error" in res or (res.get("result") or {}).get("isError"):
-                        return res.get("result") or text_result(res.get("error"), True)
-                    out["file"] = content_value(res["result"])
+                    out["file"] = open_file_in(app, name, args["file"], bridge)
                 if name in RESTORE_WINDOW:
                     out.update(restore_window(bridge))
                 out.update(app.window_hint())
                 return text_result(out)
             if tool == "app_path":
                 return text_result({"path": app.path_arg(args.get("path", ""))})
+            if headless and tool in UI_TOOLS:
+                app.ensure_open()
+                app.follow_once()
+                return run_ui_tool(app, tool, args)
             if tool not in known:
                 return text_result(f"unknown tool {tool}", True)
             for key in PATH_KEYS[name].get(tool, []):
                 if key in args:
-                    args[key] = app.path_arg(args[key])
-            args = app.translate_abs(args, keys=FILE_KEYS | ({"text"} if (name, tool) in TEXT_PATHS else set()))
-            app.ensure_open()
-            app.follow_once()
+                    v = args[key]
+                    args[key] = [app.path_arg(x) for x in v] if isinstance(v, list) else app.path_arg(v)
+            if name == "printcraft":
+                args = rootify(app, args)
+            else:
+                args = app.translate_abs(args, keys=FILE_KEYS | ({"text"} if (name, tool) in TEXT_PATHS else set()))
+                app.ensure_open()
+                app.follow_once()
             res = bridge.call(tool, args)
             if "error" in res:
                 return text_result(res["error"].get("message") or res["error"], True)

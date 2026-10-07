@@ -1,0 +1,234 @@
+# lightcraft 0.2.1 command index (id, label, menu, shortcut)
+# Generated from `lightcraft-cli commands`; the app's list_commands gives parameters and what is enabled now.
+
+edit.undo	Undo	Edit	Cmd+Z
+edit.redo	Redo	Edit	Cmd+Shift+Z
+library.source	Show Source		
+library.filter	Filter		
+library.clearFilter	Clear Filters	View	
+library.sort	Sort	View > Sort	
+library.groups	Date Groups		
+library.select	Select Photos		
+library.selectAll	Select All	Edit	Cmd+A
+library.devices	Cameras and Cards		
+photo.copyMetadata	Copy Metadata	Photo	
+photo.pasteMetadata	Paste Metadata	Photo	
+library.selectBy	Select by Flag, Rating or Label		
+library.selectNone	Deselect All	Edit	Cmd+Shift+A
+library.next	Next Photo		Right
+library.previous	Previous Photo		Left
+photo.rate	Set Rating	Photo > Set Rating	
+photo.flag	Set Flag	Photo > Set Flag	
+photo.pick	Flag as Pick	Photo > Set Flag	P
+photo.reject	Flag as Reject	Photo > Set Flag	X
+photo.unflag	Unflag	Photo > Set Flag	U
+photo.label	Set Color Label	Photo > Set Color Label	
+photo.rotateLeft	Rotate Left	Photo	Cmd+[
+photo.rotateRight	Rotate Right	Photo	Cmd+]
+photo.flipHorizontal	Flip Horizontal	Photo	
+photo.flipVertical	Flip Vertical	Photo	
+photo.delete	Delete Photo	Photo	Delete
+photo.restore	Restore		
+photo.deletePermanently	Delete Permanently		
+photo.setMeta	Edit Info		
+album.create	New Album	File	
+album.createSmart	New Smart Album…		
+album.ruleFields	Smart Album Rule Fields		
+album.setRules	Edit Smart Album		
+album.rename	Rename Album		
+album.delete	Delete Album		
+album.move	Move Album		
+album.addPhotos	Add to Album	Photo	
+album.toggleTarget	Add to Target Album		
+album.setTarget	Set as Target Album		
+album.clearQuick	Clear Quick Collection		
+library.autoImport	Auto Import Settings		
+library.autoImportScan	Auto Import Now		
+album.removePhotos	Remove from Album		
+album.setCover	Set as Album Cover		
+library.importPreview	Review Import		
+library.import	Import Photos	File	Cmd+Shift+I
+library.info	Library Info		
+library.compact	Optimize Library	File	
+library.clearPreviews	Clear Preview Cache	File	
+develop.set	Set Develop Values		
+develop.adjust	Nudge Develop Value		
+develop.merge	Apply Settings JSON		
+develop.reset	Reset Edits	Photo	Cmd+Shift+R
+develop.resetSection	Reset Section		
+develop.resetControl	Reset Control		
+develop.sectionEnabled	Toggle Section		
+develop.autoBwMix	Auto B&W Mix		
+develop.auto	Auto Settings	Photo	Shift+A
+develop.wb	White Balance		
+develop.wbPick	White Balance Selector		W
+develop.treatment	Black & White	Photo	V
+develop.profile	Set Profile		
+profile.favorite	Favorite Profile		
+develop.curve	Set Point Curve		
+crop.set	Set Crop		
+crop.straighten	Straighten		
+crop.autoStraighten	Auto Straighten		
+crop.aspect	Crop Aspect		
+crop.rotateAspect	Rotate Crop Aspect		X
+crop.reset	Reset Crop		Cmd+Alt+R
+geometry.upright	Upright		
+geometry.guides	Guided Upright Guides		
+develop.copy	Copy Edit Settings	Edit	Cmd+C
+develop.pastePrevious	Paste Settings from Previous	Edit	Cmd+Alt+V
+develop.paste	Paste Edit Settings	Edit	Cmd+V
+develop.sync	Sync Settings		
+develop.quickAdjust	Quick Develop		
+develop.matchExposure	Match Total Exposures	Photo	
+develop.autoSync	Auto Sync	Edit	Cmd+Alt+Shift+A
+preset.apply	Apply Preset		
+preset.create	Create Preset	Photo	
+preset.delete	Delete Preset		
+preset.favorite	Favorite Preset		
+preset.rename	Rename Preset		
+preset.move	Move Preset to Group		
+preset.update	Update Preset with Current Settings		
+version.create	Create Version	Photo	Cmd+Shift+S
+version.restore	Restore Version		
+version.delete	Delete Version		
+version.rename	Rename Version		
+version.update	Update Version with Current Settings		
+history.clear	Clear History		
+history.restore	Go to History Step		
+develop.beginInteraction	Begin Interaction		
+develop.endInteraction	End Interaction		
+develop.cancelInteraction	Cancel Interaction		
+pointColor.pick	Add Point Color Sample		
+develop.targeted	Targeted Adjustment		
+pointColor.delete	Delete Point Color Sample		
+curve.reset	Reset Tone Curve		
+curve.presets	Point Curve Presets		
+curve.applyPreset	Apply Point Curve Preset		
+curve.savePreset	Save Point Curve Preset		
+curve.deletePreset	Delete Point Curve Preset		
+curve.importPresets	Import Point Curve Presets		
+curve.exportPresets	Export Point Curve Presets		
+mask.add	Create New Mask		
+mask.addComponent	Add/Subtract/Intersect Mask		
+mask.brushStroke	Brush Stroke		
+mask.update	Update Mask Shape		
+mask.sampleColor	Sample Mask Color		
+mask.refine	Refine Mask Edges		
+mask.adjust	Set Mask Adjustments		
+mask.select	Select Mask		
+mask.delete	Delete Mask		
+mask.deleteAll	Delete All Masks		
+mask.rename	Rename Mask		
+mask.invert	Invert Mask		
+mask.visible	Show/Hide Mask		
+mask.duplicate	Duplicate Mask		
+mask.component	Edit Mask Component		
+mask.move	Move Mask		
+spot.findDust	Find Dust Spots		
+spot.add	Add Remove Spot		
+spot.select	Select Spot		
+spot.update	Edit Spot		
+spot.refreshSource	Refresh Source		
+spot.delete	Delete Spot		
+redeye.add	Add Red Eye Correction		
+redeye.catchlight	Pet Eye Catchlight		
+redeye.delete	Delete Red Eye Correction		
+photo.virtualCopy	Create Virtual Copy	Photo	Cmd+'
+stack.group	Group into Stack	Photo > Stack	Cmd+G
+stack.ungroup	Ungroup Stack	Photo > Stack	Cmd+Shift+G
+stack.remove	Remove from Stack	Photo > Stack	
+stack.setTop	Set as Top of Stack	Photo > Stack	Shift+S
+stack.moveUp	Move Up in Stack	Photo > Stack	
+stack.moveDown	Move Down in Stack	Photo > Stack	
+stack.split	Split Stack	Photo > Stack	
+stack.toggle	Expand/Collapse Stack	Photo > Stack	S
+stack.expandAll	Expand All Stacks	View > Stacks	
+stack.collapseAll	Collapse All Stacks	View > Stacks	
+stack.auto	Auto-Stack by Capture Time		
+keyword.sets	Keyword Sets		
+keyword.useSet	Use Keyword Set		
+keyword.saveSet	Save Keyword Set		
+keyword.deleteSet	Delete Keyword Set		
+keyword.toggleFromSet	Toggle Keyword from Set		
+keyword.list	Keywords		
+keyword.suggest	Keyword Suggestions		
+keyword.rename	Rename Keyword		
+keyword.delete	Delete Keyword		
+keyword.merge	Merge Keywords		
+photo.renameTokens	Rename Template Tags		
+photo.renamePreview	Rename Preview		
+photo.rename	Rename Photos		
+photo.setCaptureTime	Edit Capture Time		
+photo.autoTagTracklog	Auto-Tag Photos from Tracklog		
+label.names	Color Label Names		
+label.setNames	Edit Color Label Names		
+label.sets	Color Label Sets		
+label.applySet	Apply Color Label Set		
+label.saveSet	Save Color Label Set		
+label.deleteSet	Delete Color Label Set		
+library.smartPreviews	Build Smart Previews		
+library.smartPreviewsLocation	Smart Previews Location		
+photo.smartPreview	Smart Preview Status		
+library.buildPreviews	Build Previews		
+library.previewProgress	Preview Build Progress		
+library.cancelPreviews	Cancel Preview Build		
+profile.import	Import Profiles		
+profile.deleteImported	Delete Imported Profile		
+library.findSimilar	Find Similar Photos	Photo	
+photo.analyze	Assisted Culling		
+photo.convertToDng	Convert to DNG	Photo	
+photo.duplicate	Duplicate	Photo	
+photo.reload	Reload from Disk		
+photo.editExternal	Edit Copy for External Editor		
+merge.hdr	HDR Merge		
+merge.panorama	Panorama Merge		
+merge.hdrPanorama	HDR Panorama Merge		
+catalog.query	Query Photos		
+catalog.stats	Catalog Statistics		
+library.state	Library State		
+photo.allMetadata	All Metadata		
+albums.list	List Albums		
+photo.inspect	Inspect Photo		
+develop.get	Get Develop Settings		
+develop.controls	List Develop Controls		
+presets.list	List Presets		
+profiles.list	List Profiles		
+profiles.menu	Profile Menu		
+history.list	List History		
+app.gpu	GPU Rendering		
+library.memory	Memory Usage		
+app.memoryBudget	Memory Budget		
+journal.list	Command Journal		
+photo.saveMetadataToFile	Save Metadata to File	Photo	Cmd+S
+photo.readMetadataFromFile	Read Metadata from File	Photo	
+library.xmpPreferences	XMP Sidecar Preferences		
+library.toggleAutoWriteXmp	Automatically Write Changes into XMP	File	
+preset.import	Import Presets		
+preset.export	Export Presets		
+library.preferences	Library Preferences		
+export.presets	Export Presets		
+export.savePreset	Save Export Preset		
+export.deletePreset	Delete Export Preset		
+export.checkTarget	Check Output Path		
+beforeAfter.setBefore	Set Before		
+beforeAfter.copyAfterToBefore	Copy After's Settings to Before	View > Before/After Settings	
+beforeAfter.copyBeforeToAfter	Copy Before's Settings to After	View > Before/After Settings	
+beforeAfter.swap	Swap Before and After Settings	View > Before/After Settings	
+beforeAfter.resetBefore	Reset Before to Import State	View > Before/After Settings	
+folder.rename	Rename Folder		
+folder.move	Move Folder		
+library.browse	Browse Folder		
+library.forgetLocal	Forget Unchanged Local Photos		
+photo.addToLibrary	Add to My Photos	Photo	
+library.missing	Missing Photos		
+photo.relink	Locate Photo		
+library.findMissing	Find Missing Photos		
+metadata.presets	Metadata Presets		
+metadata.savePreset	Save Metadata Preset		
+metadata.deletePreset	Delete Metadata Preset		
+metadata.applyPreset	Apply Metadata Preset		
+filter.presets	Filter Presets		
+filter.savePreset	Save Filter Preset		
+filter.applyPreset	Apply Filter Preset		
+filter.deletePreset	Delete Filter Preset		
+app.export	Export Now		

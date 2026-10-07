@@ -1,0 +1,435 @@
+# designcraft 0.2.1 command index (id, label, menu, shortcut)
+# Generated from `designcraft-cli commands`; the app's list_commands gives parameters and what is enabled now.
+
+file.new	Document…	File > New	Cmd+N
+file.newSample	Sample Document	Help	
+file.presets	Document Presets		
+file.open	Open…	File	Cmd+O
+file.openBytes	Open Bytes		
+file.save	Save	File	Cmd+S
+file.saveAs	Save As…	File	Cmd+Shift+S
+file.saveACopy	Save a Copy…	File	
+file.revert	Revert	File	
+file.recovery.list	Recovery Data		
+file.recovery.save	Save Recovery Data		
+file.recovery.open	Recover Documents		
+file.serialize	Serialize		
+file.close	Close	File	Cmd+W
+file.activate	Activate Document		
+snippet.export	Export Selection as Snippet	File > Export	
+place.styles	Import Options: Styles		
+snippet.place	Place Snippet		
+place.load	Load Place Cursor		
+place.drop	Place Loaded Graphic		
+file.place	Place…	File	Cmd+D
+file.exportIdml	Export IDML…		
+file.openIdml	Open IDML		
+file.exportPdf	Export PDF…	File	
+file.exportEpub	Export EPUB (Reflowable)…	File	
+file.exportFixedEpub	Export EPUB (Fixed Layout)…	File	
+file.printBooklet	Print Booklet…	File	
+file.exportHtml	Export HTML…	File	
+file.exportText	Export Text…	File	
+edit.undo	Undo	Edit	Cmd+Z
+edit.redo	Redo	Edit	Cmd+Shift+Z
+selection.set	Select		
+selection.toggle	Toggle Selection		
+edit.selectAll	Select All	Edit	Cmd+A
+edit.deselectAll	Deselect All	Edit	Cmd+Shift+A
+edit.clear	Clear	Edit	Delete
+edit.copy	Copy	Edit	Cmd+C
+edit.cut	Cut	Edit	Cmd+X
+edit.pasteWithoutFormatting	Paste without Formatting	Edit	Cmd+Shift+V
+edit.paste	Paste	Edit	Cmd+V
+edit.pasteInto	Paste Into	Edit	Cmd+Alt+V
+edit.pasteInPlace	Paste in Place	Edit	Cmd+Alt+Shift+V
+edit.duplicate	Duplicate	Edit	Cmd+Alt+Shift+D
+endnote.insert	Insert Endnote	Type	
+endnote.edit	Edit Endnote		
+endnote.delete	Delete Endnote		
+endnote.list	Endnotes		
+endnote.options	Document Endnote Options…	Type	
+note.new	New Note	Type > Notes	
+note.edit	Edit Note		
+note.delete	Delete Note	Type > Notes	
+note.convertToText	Convert Note to Text	Type > Notes	
+note.list	Notes		
+frame.create	Create Frame		
+line.create	Create Line		
+transform.move	Move	Object > Transform	
+transform.resize	Resize		
+transform.rotate	Rotate	Object > Transform	
+transform.scale	Scale	Object > Transform	
+transform.again	Transform Again	Object > Transform Again	Cmd+Alt+3
+transform.clear	Clear Transformations	Object > Transform	
+transform.shear	Shear	Object > Transform	
+object.matchAttributes	Apply Attributes (Eyedropper)		
+transform.flip	Flip	Object > Transform	
+transform.set	Transform Panel		
+transform.info	Transform Values		
+object.arrange	Arrange	Object > Arrange	
+object.bringToFront	Bring to Front	Object > Arrange	Cmd+Shift+]
+object.bringForward	Bring Forward	Object > Arrange	Cmd+]
+object.sendBackward	Send Backward	Object > Arrange	Cmd+[
+object.sendToBack	Send to Back	Object > Arrange	Cmd+Shift+[
+object.group	Group	Object	Cmd+G
+object.ungroup	Ungroup	Object	Cmd+Shift+G
+object.lock	Lock	Object	Cmd+L
+object.unlockAll	Unlock All on Spread	Object	Cmd+Alt+L
+object.hide	Hide	Object	Cmd+3
+object.showAll	Show All on Spread	Object	Cmd+Alt+3
+object.setFlags	Set Visibility / Lock		
+object.fill	Fill		
+object.stroke	Stroke		
+object.opacity	Opacity		
+object.dropShadow	Drop Shadow	Object > Effects	Cmd+Alt+M
+object.innerShadow	Inner Shadow	Object > Effects	
+object.outerGlow	Outer Glow	Object > Effects	
+object.exportOptions	Object Export Options…	Object	
+object.innerGlow	Inner Glow	Object > Effects	
+object.bevel	Bevel and Emboss	Object > Effects	
+object.satin	Satin	Object > Effects	
+object.directionalFeather	Directional Feather	Object > Effects	
+object.feather	Basic Feather	Object > Effects	
+object.content	Content	Object > Content	
+object.textFrameOptions	Text Frame Options…	Object	Cmd+B
+object.cornerOptions	Corner Options…	Object	
+object.textWrap	Text Wrap	Window	Cmd+Alt+W
+object.fit	Fitting	Object > Fitting	
+object.fittingOptions	Frame Fitting Options…	Object > Fitting	
+object.rename	Rename		
+edit.stepAndRepeat	Step and Repeat…	Edit	Cmd+Alt+U
+path.create	Create Path		
+path.appendAnchor	Add Anchor		
+path.close	Close Path	Object > Paths	
+path.moveAnchors	Move Anchors		
+object.align	Align	Window > Object & Layout > Align	
+object.distribute	Distribute	Window > Object & Layout > Align	
+tool.polygonSettings	Polygon Settings…		
+gap.move	Move Gap		
+frame.grid	Gridify		
+object.clippingPath	Clipping Path…	Object > Clipping Path	
+object.primaryTextFrame	Primary Text Frame	Object	
+object.attributes	Attributes	Window > Output > Attributes	
+object.globalLight	Global Light…	Object > Effects	
+object.label	Script Label	Window > Utilities > Script Label	
+object.altText	Object Export Options	Object	
+object.transparencyGroup	Group Transparency		
+object.findByLabel	Find by Script Label		
+object.setLayer	Move to Layer		
+path.addAnchor	Add Anchor Point		
+path.deleteAnchor	Delete Anchor Point		
+path.convertAnchor	Convert Direction Point		
+path.erase	Erase		
+path.smooth	Smooth		
+article.list	Articles		
+article.new	New Article	Window > Articles	
+article.add	Add Selection to Article		
+article.remove	Remove from Article		
+article.options	Article Options		
+article.delete	Delete Article		
+object.makeCompoundPath	Make Compound Path	Object > Paths	Cmd+8
+object.releaseCompoundPath	Release Compound Path	Object > Paths	Cmd+Alt+Shift+8
+type.createOutlines	Create Outlines	Type	Cmd+Shift+O
+object.pathfinder	Pathfinder	Object > Pathfinder	
+object.gradientFeather	Gradient Feather	Object > Effects	
+path.split	Split Path		
+book.new	New Book	File > New	
+book.open	Open Book		
+book.close	Close Book		
+book.add	Add Document		
+book.remove	Remove Document		
+book.styleSource	Style Source		
+book.list	Book		
+book.paginate	Update Numbering		
+book.syncStyles	Synchronize Book		
+book.exportPdf	Export Book to PDF…		
+button.set	Convert to Button	Object > Interactive	
+button.clear	Convert to Object	Object > Interactive	
+form.set	Convert to Form Field	Object > Interactive	
+form.clear	Convert to Object		
+form.list	Form Fields		
+button.list	Buttons		
+object.caption	Generate Static Caption	Object > Captions	
+color.settings	Color Settings		
+color.loadProfile	Load Profile…		
+color.convert	Convert Color		
+changes.track	Track Changes	Type > Track Changes	
+changes.list	Changes		
+changes.accept	Accept Change		
+changes.reject	Reject Change		
+changes.acceptAll	Accept All Changes	Type > Track Changes	
+changes.rejectAll	Reject All Changes	Type > Track Changes	
+condition.list	Conditions		
+condition.new	New Condition…	Window > Type & Tables > Conditional Text	
+condition.options	Condition Options…		
+condition.delete	Delete Condition		
+condition.apply	Apply Condition		
+library.new	New Library	File > New	
+library.open	Open Library		
+library.list	Library Items		
+library.json	Library Contents		
+library.add	Add Item		
+library.place	Place Item		
+library.remove	Delete Item		
+conveyor.collect	Collect		
+conveyor.place	Place		
+conveyor.list	Conveyor		
+conveyor.clear	Clear Conveyor		
+library.close	Close Library		
+list.define	Define Lists…	Type > Bulleted and Numbered Lists	
+list.delete	Delete List		
+story.placeAndLink	Place and Link	Edit	
+story.links	Linked Stories		
+story.updateLink	Update Link		
+story.unlink	Unlink		
+math.insert	Insert Math Expression…	Type	
+math.svg	Math Expression SVG		
+media.options	Media Options		
+media.get	Media		
+object.pdfLayers	Object Layers		
+object.layerOptions	Object Layer Options…	Object	
+liquid.pageRule	Liquid Page Rule	Layout > Liquid Layout	
+liquid.object	Object Liquid Settings		
+guide.liquid	Convert to Liquid Guide		
+layout.createAlternate	Create Alternate Layout…	Layout	
+xml.tags	Tags		
+xml.newTag	New Tag	Window > Utilities > Tags	
+xml.deleteTag	Delete Tag		
+xml.tagText	Tag Text		
+xml.tag	Tag Frame		
+xml.mapStyle	Map Styles to Tags		
+xml.structure	Structure		
+file.exportXml	Export XML…	File	
+xml.loadDtd	Load DTD…	Window > Utilities > Tags	
+xml.deleteDtd	Delete DTD		
+xml.validate	Validate from Root Element		
+file.importXml	Import XML…	File	
+strokeStyle.list	Stroke Styles		
+strokeStyle.new	New Stroke Style…	Object > Stroke Styles	
+strokeStyle.delete	Delete Stroke Style		
+script.run	Run Script		
+states.create	Convert Selection to Multi-State Object	Window > Interactive > Object States	
+states.list	Object States		
+states.show	Show State		
+states.rename	State Options		
+states.release	Release State to Objects		
+page.transition	Page Transition		
+page.transitions	Page Transitions		
+type.onPath	Type on a Path		
+type.pathOptions	Type on a Path Options…	Type > Type on a Path	
+object.qrCode	Generate QR Code…	Object	
+select.firstAbove	First Object Above	Object > Select	Cmd+Alt+Shift+]
+select.nextAbove	Next Object Above	Object > Select	Cmd+Alt+]
+select.nextBelow	Next Object Below	Object > Select	Cmd+Alt+[
+select.lastBelow	Last Object Below	Object > Select	Cmd+Alt+Shift+[
+select.container	Container	Object > Select	
+select.content	Content	Object > Select	
+select.nextInGroup	Next Object in Group	Object > Select	
+select.previousInGroup	Previous Object in Group	Object > Select	
+object.convertShape	Convert Shape	Object > Convert Shape	
+file.package	Package…	File	
+links.copyTo	Copy Link(s) To…		
+file.printers	Printers		
+file.print	Print…	File	Cmd+P
+text.placeCaret	Place Caret		
+text.release	Release		
+text.extendTo	Extend Text Selection		
+text.selectWord	Select Word		
+text.select	Select Text		
+text.insert	Type		
+text.delete	Delete Text		
+text.move	Move Caret		
+text.exitToFrame	Select Frame		
+story.setText	Set Story Text		
+story.replaceRange	Edit Story		
+story.get	Get Story		
+type.fillWithPlaceholder	Fill with Placeholder Text	Type	
+type.char	Character Formatting		
+type.para	Paragraph Formatting		
+type.align	Align		
+type.alignLeft	Align Left		Cmd+Shift+L
+type.alignCenter	Align Center		Cmd+Shift+C
+type.alignRight	Align Right		Cmd+Shift+R
+type.justify	Justify Left		Cmd+Shift+J
+type.bold	Bold		Cmd+Shift+B
+type.italic	Italic		Cmd+Shift+I
+type.underline	Underline		Cmd+Shift+U
+type.allCaps	All Caps		Cmd+Shift+K
+type.tateChuYoko	Tate-Chu-Yoko		
+type.ruby	Ruby		
+type.kenten	Kenten		
+type.sizeUp	Increase Point Size		Cmd+Shift+.
+type.sizeDown	Decrease Point Size		Cmd+Shift+,
+type.changeCase	Change Case	Type	
+type.openType	OpenType		
+style.breakLink	Break Link to Style		
+type.selectionAttrs	Selection Attributes		
+style.exportTag	Export Tagging		
+style.paragraph.apply	Apply Paragraph Style		
+style.character.apply	Apply Character Style		
+style.paragraph.create	New Paragraph Style…		
+style.paragraph.edit	Paragraph Style Options…		
+style.paragraph.delete	Delete Paragraph Style		
+style.character.create	New Character Style…		
+style.character.edit	Character Style Options…		
+style.list	List Styles		
+style.object.apply	Apply Object Style		
+style.object.create	New Object Style…		
+swatch.create	New Color Swatch…		
+object.gradient	Gradient		
+style.group	Move to Group		
+swatch.load	Load Swatches…		
+swatch.save	Save Swatches for Exchange…		
+object.color	Apply Color		
+swatch.addToSwatches	Add to Swatches		
+swatch.addUnnamed	Add Unnamed Colors		
+swatch.delete	Delete Swatch		
+ink.list	Ink Manager		
+ink.options	Ink Manager		
+swatch.newColorGroup	New Color Group		
+swatch.moveToGroup	Move to Color Group		
+swatch.ungroupColorGroup	Ungroup Color Group		
+swatch.renameColorGroup	Color Group Options		
+style.cell.create	New Cell Style…		
+style.cell.apply	Apply Cell Style		
+style.cell.edit	Cell Style Options…		
+style.table.create	New Table Style…		
+style.table.apply	Apply Table Style		
+style.table.edit	Table Style Options…		
+table.insert	Create Table		Cmd+Alt+Shift+T
+table.convertFromText	Convert Text to Table	Table	
+table.convertToText	Convert Table to Text	Table	
+table.insertRow	Insert Row		
+table.insertRowAbove	Insert Row Above	Table > Insert	
+table.insertRowBelow	Insert Row Below	Table > Insert	
+table.insertColumn	Insert Column		
+table.insertColumnLeft	Insert Column Left	Table > Insert	
+table.insertColumnRight	Insert Column Right	Table > Insert	
+table.deleteRow	Delete Row	Table > Delete	
+table.deleteColumn	Delete Column	Table > Delete	
+table.delete	Delete Table	Table > Delete	
+table.merge	Merge Cells	Table	
+table.dropCells	Drag Rows or Columns		
+table.placeGraphic	Convert Cell to Graphic Cell	Table > Convert Cell Type	
+table.textCell	Convert Cell to Text Cell	Table > Convert Cell Type	
+table.moveRow	Move Row		
+table.moveColumn	Move Column		
+table.sortRows	Sort	Table	
+table.unmerge	Unmerge Cells	Table	
+table.splitHorizontally	Split Cell Horizontally	Table	
+table.splitVertically	Split Cell Vertically	Table	
+table.setCell	Cell Options		
+table.setRowHeight	Row Height		
+table.setColumnWidth	Column Width		
+table.distributeColumns	Distribute Columns Evenly	Table	
+table.options	Table Options		
+table.select	Select Cells		
+table.selectTable	Select Table	Table > Select	
+table.selectRow	Select Row	Table > Select	
+table.selectColumn	Select Column	Table > Select	
+table.nextCell	Next Cell		
+table.prevCell	Previous Cell		
+table.get	Get Table		
+layout.pages.insert	Insert Pages…	Layout > Pages	Cmd+Shift+P
+layout.rotateSpreadView	Rotate Spread		
+layout.pages.delete	Delete Pages	Layout > Pages	
+layout.pages.move	Move Pages…	Layout > Pages	
+layout.pages.duplicateSpread	Duplicate Spread	Layout > Pages	
+layout.pages.applyParent	Apply Parent to Pages…	Layout > Pages	
+layout.parents.new	New Parent…	Layout > Pages	
+layout.parents.edit	Edit Parents		
+layout.marginsAndColumns	Margins and Columns…	Layout	
+layout.documentSetup	Document Setup…	File	Cmd+Alt+P
+layout.pages.toSpread	Add Page to Spread	Layout > Pages	
+layout.spreadShuffle	Allow Selected Spread to Shuffle	Layout > Pages	
+layout.pageSize	Page Size		
+layout.section	Numbering & Section Options…	Layout	
+layer.move	Move Layer		
+layer.selectItems	Select All on Layer		
+layer.new	New Layer…		
+layer.set	Layer Options…		
+layer.delete	Delete Layer		
+layer.merge	Merge Layers		
+layer.deleteUnused	Delete Unused Layers		
+layer.others	Hide/Lock Others		
+layer.activate	Set Active Layer		
+layout.overrideParentItems	Override All Parent Page Items	Layout > Pages	Cmd+Alt+Shift+L
+layout.removeOverrides	Remove All Local Overrides	Layout > Pages	
+layout.detachAll	Detach All Objects from Parent	Layout > Pages	
+edit.transparencyBlendSpace	Transparency Blend Space	Edit > Transparency Blend Space	
+prefs.set	Preferences		
+document.preferences	Document Preferences		
+document.inspect	Inspect Document		
+app.links	Community & Project Links		
+document.list	List Documents		
+tool.select	Select Tool		
+tool.list	List Tools		
+document.history	History		
+find.objects	Find Object		
+find.changeObjects	Change All (Object)		
+find.find	Find	Edit > Find/Change	
+find.change	Change All	Edit > Find/Change	
+find.next	Find Next	Edit	Cmd+Alt+F
+variables.list	Text Variables		
+variables.define	Define Text Variable…	Type > Text Variables	
+variables.delete	Delete Text Variable		
+variables.insert	Insert Variable	Type > Text Variables	
+toc.generate	Table of Contents…	Layout	
+toc.update	Update Table of Contents	Layout	
+toc.entries	Table of Contents Entries		
+footnote.insert	Insert Footnote	Type	
+footnote.options	Document Footnote Options…	Type	
+footnote.list	Footnotes		
+footnote.setText	Set Footnote Text		
+footnote.delete	Delete Footnote		
+footnote.goToReference	Go to Footnote Reference	Type	
+xref.insert	Insert Cross-Reference…	Type > Hyperlinks & Cross-References	
+anchor.create	New Hyperlink Destination…	Type > Hyperlinks & Cross-References	
+xref.list	Cross-References		
+anchor.list	Text Anchors		
+xref.formats	Cross-Reference Formats		
+xref.defineFormat	Define Cross-Reference Format…	Type > Hyperlinks & Cross-References	
+xref.setFormat	Set Cross-Reference Format		
+index.addReference	New Page Reference…	Layout > Index	
+index.list	Index Page References		
+index.generate	Generate Index…	Layout > Index	
+index.update	Update Index	Layout > Index	
+anchored.insert	Insert Anchored Object…	Object > Anchored Object	
+anchored.options	Anchored Object Options…	Object > Anchored Object	
+anchored.release	Release	Object > Anchored Object	
+anchored.list	Anchored Objects		
+guide.add	New Guide		
+guide.move	Move Guide		
+guide.delete	Delete Guide		
+guide.deleteAll	Delete All Guides on Spread	View > Grids & Guides	
+guide.list	Guides		
+layout.createGuides	Create Guides…	Layout	
+links.list	Links		
+links.relink	Relink…	Window > Links	
+links.relinkFolder	Relink to Folder…	Window > Links	
+links.update	Update Link	Window > Links	
+links.embed	Embed Link	Window > Links	
+links.goTo	Go To Link	Window > Links	
+font.list	Fonts in Document		
+font.replace	Find/Replace Font…	Type	
+spelling.check	Check Spelling…	Edit > Spelling	Cmd+I
+hyphenation.addException	Add Hyphenation Exception	Edit > Spelling > User Dictionary	
+hyphenation.removeException	Remove Hyphenation Exception		
+hyphenation.list	Hyphenation Exceptions		
+spelling.setWords	User Dictionary		
+spelling.words	User Dictionary Words		
+spelling.addWord	Add to Dictionary	Edit > Spelling	
+spelling.change	Change		
+data.merge	Create Merged Document…	Window > Utilities > Data Merge	
+data.fields	Data Merge Fields		
+hyperlink.create	New Hyperlink…	Type > Hyperlinks & Cross-References	
+hyperlink.delete	Delete Hyperlink		
+hyperlink.list	Hyperlinks		
+hyperlink.edit	Hyperlink Options…		
+hyperlink.goToSource	Go To Source		
+bookmark.rename	Rename Bookmark		
+bookmark.add	New Bookmark		
+bookmark.delete	Delete Bookmark		
+bookmark.list	Bookmarks		
+preflight.run	Preflight Document	Window > Output > Preflight	

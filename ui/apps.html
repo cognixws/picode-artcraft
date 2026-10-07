@@ -13,7 +13,7 @@
   .state { display: flex; align-items: center; gap: 6px; min-height: 18px; }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pc-text-muted); flex: none; }
   .dot.on { background: var(--pc-ok); }
-  .shot { width: 100%; border-radius: var(--pc-radius); border: 1px solid var(--pc-border); display: block; background: var(--pc-bg); }
+  .shot { max-width: 100%; max-height: 320px; width: auto; height: auto; margin: 0 auto; object-fit: contain; border-radius: var(--pc-radius); border: 1px solid var(--pc-border-strong); display: block; background: var(--pc-bg); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25); }
   .skeleton { height: 14px; width: 60%; border-radius: 4px; background: var(--pc-hover); }
   .note { margin: 0; }
   .pc-button { white-space: nowrap; }
@@ -25,7 +25,7 @@
   <div class="pc-card head">
     <div>
       <h2 class="pc-title">Crafting Apps</h2>
-      <div class="pc-muted">PhotoCraft, VectorCraft, EffectCraft and FilmCraft on this computer — what your agents drive.</div>
+      <div class="pc-muted">The Crafting Apps on this computer — what your agents drive.</div>
     </div>
     <div class="pc-row">
       <label class="pc-muted" for="ws" id="ws-label" hidden>Workspace</label>
@@ -58,10 +58,12 @@
   const APPS = [
     ["photocraft", "PhotoCraft", "Images"], ["vectorcraft", "VectorCraft", "Vector art"],
     ["effectcraft", "EffectCraft", "Motion"], ["filmcraft", "FilmCraft", "Video"],
+    ["lightcraft", "LightCraft", "Photos"], ["designcraft", "DesignCraft", "Page layout"],
+    ["printcraft", "PrintCraft", "PDF"],
   ];
   const EXT = {
-    photocraft: /\.(pcraft|psd|psb|png|jpe?g|tiff?|webp)$/i, vectorcraft: /\.(vectorcraft|svgz?|ai|eps|pdf)$/i,
-    effectcraft: /\.ecproj$/i, filmcraft: /\.fcproj$/i,
+    photocraft: /\.(pcraft|psd|psb|png|jpe?g|tiff?|webp)$/i, vectorcraft: /\.(vectorcraft|svgz?|ai|eps)$/i,
+    effectcraft: /\.ecproj$/i, filmcraft: /\.fcproj$/i, designcraft: /\.designcraft$/i, printcraft: /\.pdf$/i,
   };
   const TITLE = Object.fromEntries(APPS.map(([id, t]) => [id, t]));
 
@@ -91,14 +93,17 @@
     state.append(dot, line);
     const note = el("p", "pc-muted note"); note.setAttribute("role", "status"); note.hidden = true;
     const img = el("img", "shot"); img.alt = title + "'s window"; img.hidden = true;
-    card.append(head, state, note, img);
+    const cap = el("p", "pc-muted note"); cap.hidden = true;
+    card.append(head, state, note, img, cap);
     $("apps").append(card);
-    cards[id] = { open, snap, dot, line, note, img };
+    cards[id] = { open, snap, dot, line, note, img, cap };
     open.onclick = () => act(id, open, "Opening…", async () => (await call("/open", { app: id, workspace: workspace() })).message);
     snap.onclick = () => act(id, snap, "Taking…", async () => {
       const s = await call("/snapshot", { app: id });
       img.src = "data:" + (s.mime || "image/png") + ";base64," + s.image;
       img.hidden = false;
+      cards[id].cap.textContent = s.caption || "";
+      cards[id].cap.hidden = !s.caption;
       return "";
     });
   }
@@ -130,20 +135,21 @@
     sel.hidden = !many; $("ws-label").hidden = !many;
   }
 
-  async function refresh() {
-    $("refresh").disabled = true;
+  async function refresh(manual) {
+    // The button greys only for the owner's own click: the 10 s refresh stays silent.
+    if (manual === true) $("refresh").disabled = true;
     try {
       const s = await call("/status");
       $("problem").hidden = true;
       for (const a of s.apps || []) {
         const c = cards[a.app]; if (!c) continue;
         c.dot.classList.toggle("on", !!a.open);
-        c.line.textContent = !a.installed
+        c.line.textContent = a.error ? a.error : !a.installed
           ? "Not installed — get it from github.com/storytold/" + a.app + "/releases"
           : a.open ? "Open, ready for your agents" : "Not open — an agent opens it when it needs it";
-        c.open.hidden = !a.installed || !!a.open;
-        c.snap.hidden = !a.open;
-        if (!a.open) c.img.hidden = true;
+        c.open.hidden = !!a.error || !a.installed || !!a.open;
+        c.snap.hidden = !!a.error || !a.open;
+        if (!a.open) { c.img.hidden = true; c.cap.hidden = true; }
       }
     } catch (e) {
       $("problem").hidden = false; $("problem").textContent = e.message;
@@ -151,7 +157,7 @@
       $("refresh").disabled = false;
     }
   }
-  $("refresh").onclick = refresh;
+  $("refresh").onclick = () => refresh(true);
 
   // Opened with a file (PiCode's Open with): offer to open it in its app.
   let file = null, fileApp = null;

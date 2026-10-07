@@ -14,15 +14,10 @@ servers do (same ports, token file and files root).
     POST /snapshot {app}                   a picture of the app's window
 """
 
-import base64
 import json
 import os
-import shutil
 import ssl
-import struct
-import subprocess
 import sys
-import tempfile
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
@@ -31,14 +26,17 @@ import craft_mcp as cm  # noqa: E402
 
 SECRET = os.environ.get("PICODE_EXT_PROXY_SECRET", "")
 PORT = int(os.environ.get("PICODE_EXT_PORT", "0"))
-SNAP_SIDE = 900  # keeps a picture well under PiCode's 1 MiB relay
+SNAP_SIDE = cm.SNAP_SIDE  # keeps a picture well under PiCode's 1 MiB relay
 
 # What each app is, in the page's words, and which files it opens.
 KINDS = {
     "photocraft": ("Images", (".pcraft", ".psd", ".psb", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".webp")),
-    "vectorcraft": ("Vector art", (".vectorcraft", ".svg", ".svgz", ".ai", ".eps", ".pdf")),
+    "vectorcraft": ("Vector art", (".vectorcraft", ".svg", ".svgz", ".ai", ".eps")),
     "effectcraft": ("Motion", (".ecproj",)),
     "filmcraft": ("Video", (".fcproj",)),
+    "lightcraft": ("Photos", ()),  # it imports photos into a library; nothing "opens" a file
+    "designcraft": ("Page layout", (".designcraft",)),
+    "printcraft": ("PDF", (".pdf",)),
 }
 
 
@@ -85,13 +83,14 @@ def workspace_path(ws_id):
 
 def listeners():
     """{port: window handle} for every app's control port, in one PowerShell call."""
-    ports = [s["port"] for s in cm.APPS.values()]
+    ports = [s["port"] for s in cm.APPS.values() if s["port"] is not None]
     if not cm.WSL:
         return {}
     script = (
-        "$out=@{}; foreach($p in @(%s)){ $c = Get-NetTCPConnection -LocalPort $p -State Listen "
-        "-ErrorAction SilentlyContinue | Select-Object -First 1; if($c){ $out[\"$p\"] = "
-        "(Get-Process -Id $c.OwningProcess).MainWindowHandle } }; $out | ConvertTo-Json -Compress"
+        "$c = @(Get-NetTCPConnection -State Listen -LocalPort %s -ErrorAction SilentlyContinue); "
+        "$out = @{}; foreach ($x in $c) { if (-not $out.ContainsKey([string]$x.LocalPort)) { "
+        "$out[[string]$x.LocalPort] = (Get-Process -Id $x.OwningProcess -ErrorAction SilentlyContinue).MainWindowHandle } }; "
+        "$out | ConvertTo-Json -Compress"
     ) % ",".join(str(p) for p in ports)
     raw = cm.powershell(script)
     try:
@@ -104,18 +103,33 @@ def status():
     open_ports = listeners()
     apps = []
     for name, spec in cm.APPS.items():
-        found = cm.find_install(name)
-        row = {"app": name, "title": spec["title"], "kind": KINDS[name][0], "installed": bool(found)}
-        if found:
-            row["folder"] = cm.to_app_path(found[0])
-            window = open_ports.get(spec["port"])
-            row["open"] = window is not None
-            if window:
-                row["window"] = window
-            if spec["roots"] and window:
-                row["filesRoot"] = cm.App(name).read_state().get("root")
+        row = {"app": name, "title": spec["title"], "kind": KINDS[name][0], "installed": True}
+        try:
+            row = app_row(name, spec, open_ports, row)
+        except Exception as e:  # noqa: BLE001 — one app must not take the page down
+            print("status of %s failed: %r" % (name, e), file=sys.stderr, flush=True)
+            row["error"] = "Could not check this app — try Refresh."
         apps.append(row)
     return {"apps": apps}
+
+
+def app_row(name, spec, open_ports, row):
+    found = cm.find_install(name)
+    row["installed"] = bool(found)
+    if not found:
+        return row
+    row["folder"] = cm.to_app_path(found[0])
+    if spec.get("headless"):  # no fixed port: its control file answers, its process has the window
+        app = cm.App(name)
+        window = app.window() if app.listening_pid() else None
+    else:
+        window = open_ports.get(spec["port"])
+    row["open"] = window is not None
+    if window:
+        row["window"] = window
+    if spec["roots"] and window and not spec.get("headless"):
+        row["filesRoot"] = cm.App(name).read_state().get("root")
+    return row
 
 
 def app_in(name, ws_id):
@@ -146,19 +160,9 @@ def open_file(path, ws_id):
     app = app_in(name, ws_id)
     try:
         app.ensure_open()
-        tool, base = cm.OPEN_TOOL[name]
-        call = dict(base)
-        if tool == "command_run":
-            call["params"] = {"path": app.path_arg(path)}
-        else:
-            call["path"] = app.path_arg(path)
-        res = cm.Bridge(app).call(tool, call)
+        cm.open_file_in(app, name, path, cm.Bridge(app))
     except cm.ToolError as e:
         raise PageError(str(e))
-    result = res.get("result") or {}
-    if "error" in res or result.get("isError"):
-        msg = cm.content_value(result) or (res.get("error") or {}).get("message") or "the app refused the file"
-        raise PageError(str(msg))
     return {"message": "Opened %s in %s." % (os.path.basename(path), cm.APPS[name]["title"])}
 
 
@@ -168,31 +172,15 @@ SNAP = {
     "vectorcraft": ("screenshot", {"window": True}),
     "effectcraft": ("screenshot", {"max_side": SNAP_SIDE}),
     "filmcraft": ("ui_screenshot", {"max_side": SNAP_SIDE}),
+    "lightcraft": ("screenshot", {"maxSize": SNAP_SIDE}),
+    # Its window screenshot raises the window (measured), so the page shows the
+    # document's current page, rendered headless, instead.
+    "designcraft": ("render_page", {"scale": 0.8}),
+    "printcraft": None,  # its window goes through the control file, not an MCP bridge
 }
 
 
-def png_width(raw):
-    return struct.unpack(">I", raw[16:20])[0] if raw[:8] == b"\x89PNG\r\n\x1a\n" else 0
-
-
-def shrink(b64):
-    """Scale a large PNG down to SNAP_SIDE wide with ffmpeg, when it is installed.
-
-    A window capture at full resolution can exceed PiCode's 1 MiB relay."""
-    raw = base64.b64decode(b64)
-    if png_width(raw) <= SNAP_SIDE * 1.2 or not shutil.which("ffmpeg"):
-        return b64, len(raw)
-    with tempfile.TemporaryDirectory() as d:
-        src, dst = os.path.join(d, "in.png"), os.path.join(d, "out.png")
-        with open(src, "wb") as f:
-            f.write(raw)
-        r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-vf", "scale=%d:-1" % SNAP_SIDE, dst],
-                           capture_output=True, timeout=30)
-        if r.returncode != 0 or not os.path.exists(dst):
-            return b64, len(raw)
-        with open(dst, "rb") as f:
-            small = f.read()
-    return base64.b64encode(small).decode(), len(small)
+shrink = cm.shrink
 
 
 # A picture larger than this is not sent: base64 of it would not fit the relay.
@@ -205,15 +193,22 @@ def snapshot(name):
     app = cm.App(name)
     if not app.listening_pid():
         raise PageError("%s is not open." % cm.APPS[name]["title"])
+    if name == "printcraft":
+        try:
+            b64 = cm.printcraft_screenshot(app)
+        except cm.ToolError as e:
+            raise PageError(str(e))
+        return {"image": b64, "mime": "image/png"}
     tool, args = SNAP[name]
     b64 = take(app, tool, args)
+    caption = "The current page, drawn without touching the window." if name == "designcraft" else ""
     b64, size = shrink(b64)
     if size > MAX_PNG and name == "vectorcraft":
         # No ffmpeg to shrink the window: show the artwork itself, smaller.
         b64, size = shrink(take(app, "screenshot", {"scale": 0.5}))
     if size > MAX_PNG:
         raise PageError("The picture of %s's window is too large to show; install ffmpeg to shrink it." % cm.APPS[name]["title"])
-    return {"image": b64, "mime": "image/png"}
+    return {"image": b64, "mime": "image/png", "caption": caption}
 
 
 def take(app, tool, args):
@@ -261,7 +256,9 @@ class Handler(BaseHTTPRequestHandler):
         except PageError as e:
             return self.reply(409, {"message": str(e)})
         except Exception as e:  # noqa: BLE001 — answer, never crash
-            return self.reply(500, {"message": "%s: %s" % (type(e).__name__, e)})
+            print("request %s failed: %r" % (self.path, e), file=sys.stderr, flush=True)
+            return self.reply(500, {"message": "Something went wrong. Try Refresh; if it keeps happening, restart "
+                                               "the extension from its page in Extensions."})
 
     def do_GET(self):
         if not self.allowed():

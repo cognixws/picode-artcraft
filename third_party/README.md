@@ -10,7 +10,10 @@
 | `skills/effectcraft/references/control-protocol.md` | storytold/effectcraft `docs/control-protocol.md` | v0.3.1 | MIT OR Apache-2.0 |
 | `skills/filmcraft/references/agents.md` | storytold/filmcraft `docs/agents.md` | v0.2.1 | MIT OR Apache-2.0 |
 | `skills/filmcraft/references/control-protocol.md` | storytold/filmcraft `docs/control-protocol.md` | v0.2.1 | MIT OR Apache-2.0 |
-| `skills/*/references/commands.tsv` | generated from each `<app>-cli commands` | the versions above | MIT OR Apache-2.0 |
+| `skills/lightcraft/references/{mcp,control-protocol}.md` | storytold/lightcraft `docs/mcp.md`, `docs/control-protocol.md` | v0.2.1 | MIT OR Apache-2.0 |
+| `skills/designcraft/references/{agents,mcp,control-protocol}.md` | storytold/designcraft `docs/agents.md`, `docs/mcp.md`, `docs/control-protocol.md` | v0.2.1 | MIT OR Apache-2.0 |
+| `skills/printcraft/references/readme.md`, `automation.md` | storytold/printcraft `README.md`, `crates/automation/README.md` | v0.2.1 | MIT OR Apache-2.0 |
+| `skills/*/references/commands.tsv`, `skills/printcraft/references/tools.tsv` | generated from each `<app>-cli commands` (PrintCraft: from its MCP tools/list) | the versions above | MIT OR Apache-2.0 |
 | `server/tools/*.json` | the apps' MCP `tools/list`, captured in bridge mode | the versions above | MIT OR Apache-2.0 |
 
 The files are vendored unchanged; we use them under the MIT license, whose

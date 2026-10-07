@@ -7,10 +7,13 @@ work in the ArtCraft team's open-source **Crafting Apps** —
 Illustrator-style), [EffectCraft](https://github.com/storytold/effectcraft)
 (motion graphics, After Effects-style) and
 [FilmCraft](https://github.com/storytold/filmcraft) (video editing,
-Premiere-style). The agent works in the real app window while you watch, and
+Premiere-style), [LightCraft](https://github.com/storytold/lightcraft)
+(photo development, Lightroom-style), [DesignCraft](https://github.com/storytold/designcraft)
+(page layout, InDesign-style) and [PrintCraft](https://github.com/storytold/printcraft)
+(PDFs, Acrobat-style). The agent works in the real app window while you watch, and
 saves into the workspace.
 
-> v0.2 — four apps. Plan and next apps in [docs/plan.md](docs/plan.md).
+> v0.5 — seven apps and a page. Plan and next steps in [docs/plan.md](docs/plan.md).
 
 ## How it works
 
@@ -20,8 +23,15 @@ that can drive a running window over a loopback control channel. This
 extension adds what PiCode needs around them:
 
 - **One MCP server per app** (`photocraft`, `vectorcraft`, `effectcraft`,
-  `filmcraft`) with the app's own tools plus `app_status`, `app_open` and
-  `app_path`. The first call opens the app on your
+  `filmcraft`, `lightcraft`, `designcraft`, `printcraft`) with the app's own
+  tools plus `app_status`, `app_open` and `app_path`. LightCraft's 359 `cmd_*`
+  shortcut tools (each is `run_command` with a fixed id) are not listed, to
+  keep the agent's tool list small; calling one by name still works.
+- **PrintCraft is different**: its MCP server edits PDFs without a window, only
+  inside the workspace folder; the extension adds `ui_*` tools that drive the
+  real window (open a PDF, inspect, click, key, screenshot) so the human sees the
+  result. The window is opened with a control file that holds a random loopback
+  port and token, in `%LOCALAPPDATA%\picode-artcraft`. The first call opens the app on your
   desktop with its control channel on; every call is then forwarded to the
   app's own MCP server, bridged to that window.
 - **Paths**: PhotoCraft is opened with the workspace as its only file root
@@ -38,9 +48,10 @@ extension adds what PiCode needs around them:
   control-protocol docs plus a command index as references.
 - **A page** (Apps → Crafting Apps, or *Open Crafting Apps* in the workspace
   menu): which apps are installed and open, an **Open** button, and a
-  **Snapshot** of an app's window taken without bringing it to the front.
-  **Open with** on `.pcraft`, `.psd`, `.vectorcraft`, `.svg`, `.ecproj` and
-  `.fcproj` files opens the file in its app. A small background program
+  **Snapshot** of an app's window taken without bringing it to the front
+  (DesignCraft shows its current page instead: its window screenshot raises the
+  window). **Open with** on `.pcraft`, `.psd`, `.vectorcraft`, `.svg`, `.ecproj`,
+  `.fcproj`, `.designcraft` and `.pdf` files opens the file in its app. A small background program
   (`server/craft_page.py`, standard library only) answers the page; it uses
   `workspaces:read` to find the workspace's folder, PhotoCraft's files root.
 - **Turns itself on** in a workspace with a `.pcraft`, `.vectorcraft`,
@@ -55,11 +66,12 @@ mirrored networking is needed.
 1. Install the apps. On Windows the portable zips are enough
    (`<app>-<v>-windows-x64-portable.zip` from each repository's releases),
    unzipped to `<drive>:\Apps\PhotoCraft`, `VectorCraft`, `EffectCraft`,
-   `FilmCraft`. Other places: `Program Files`, `AppData\Local\Programs`, or
+   `FilmCraft`, `LightCraft`, `DesignCraft`, `PrintCraft`. Other places: `Program Files`, `AppData\Local\Programs`, or
    set `PICODE_<APP>_DIR` (e.g. `PICODE_FILMCRAFT_DIR`) to the folder holding
    the app and its `-cli`. `PICODE_<APP>_PORT` moves an app off its default
    control port (PhotoCraft 7878, VectorCraft 7979, FilmCraft 9876,
-   EffectCraft 9877).
+   EffectCraft 9877, LightCraft 7980, DesignCraft 7981 — not its own default
+   7979, which is VectorCraft's; PrintCraft uses a control file, not a port).
 2. In PiCode: **Extensions → Install extension**, paste
    `https://github.com/cognixws/picode-artcraft`, review, **Install**, then
    turn it on in the workspaces where you want it.
@@ -69,9 +81,9 @@ mirrored networking is needed.
 - PhotoCraft's control channel needs a 256-bit token. PhotoCraft creates it
   on first launch in `%LOCALAPPDATA%\picode-artcraft\` (Windows) or
   `~/.picode-artcraft/` (Linux); it never goes into a command line or a log.
-- **VectorCraft's, EffectCraft's and FilmCraft's control channels have no
-  token**: while one runs with `--control`, any program on this machine can
-  drive it over loopback. The extension only opens an app with control when
+- **VectorCraft's, EffectCraft's, FilmCraft's, LightCraft's and DesignCraft's
+  control channels have no token**: while one runs with `--control`, any program
+  on this machine can drive it over loopback. The extension only opens an app with control when
   an agent first uses it. Close the app when you are done if that matters on
   your machine.
 
@@ -80,8 +92,9 @@ mirrored networking is needed.
 - PiCode with extensions (ADR-0230). v0.3 declares `screen:follow`, which
   needs a PiCode with the screen-follow door (ADR-0230 amendment of
   2026-10-06); an older PiCode refuses the install — use v0.2.1 there.
-- Any of PhotoCraft 0.2, VectorCraft 0.3, EffectCraft 0.3, FilmCraft 0.2
-  (tested on Windows 11: 0.2.0, 0.3.1, 0.3.1, 0.2.1).
+- Any of PhotoCraft 0.2, VectorCraft 0.3, EffectCraft 0.3, FilmCraft 0.2,
+  LightCraft 0.2, DesignCraft 0.2, PrintCraft 0.2 (tested on Windows 11:
+  0.2.0, 0.3.1, 0.3.1, 0.2.1, 0.2.1, 0.2.1, 0.2.1).
 - Python 3.10+ on the machine running PiCode. `ffmpeg` (optional) shrinks a
   large window snapshot for the page.
 
