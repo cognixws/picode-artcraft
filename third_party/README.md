@@ -14,7 +14,8 @@
 | `skills/designcraft/references/{agents,mcp,control-protocol}.md` | storytold/designcraft `docs/agents.md`, `docs/mcp.md`, `docs/control-protocol.md` | v0.2.1 | MIT OR Apache-2.0 |
 | `skills/printcraft/references/readme.md`, `automation.md` | storytold/printcraft `README.md`, `crates/automation/README.md` | v0.2.1 | MIT OR Apache-2.0 |
 | `skills/*/references/commands.tsv`, `skills/printcraft/references/tools.tsv` | generated from each `<app>-cli commands` (PrintCraft: from its MCP tools/list) | the versions above | MIT OR Apache-2.0 |
-| `server/tools/*.json` | the apps' MCP `tools/list`, captured in bridge mode | the versions above | MIT OR Apache-2.0 |
+| `server/tools/*.json` (original seven apps) | the apps' MCP `tools/list`, captured in bridge mode | the versions above | MIT OR Apache-2.0 |
+| `skills/{wordcraft,deckcraft,gridcraft}/references/{mcp,control-protocol}.md`, `tools.tsv`, `server/tools/{wordcraft,deckcraft,gridcraft}.json` | storytold WordCraft/DeckCraft/GridCraft release docs and connected MCP tools/list | v0.5.0 | MIT OR Apache-2.0 |
 
 The files are vendored unchanged; we use them under the MIT license, whose
 notices are in `<app>-LICENSE-MIT` beside this file. To

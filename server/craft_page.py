@@ -15,6 +15,7 @@ servers do (same ports, token file and files root).
 """
 
 import json
+import concurrent.futures
 import os
 import ssl
 import sys
@@ -29,15 +30,7 @@ PORT = int(os.environ.get("PICODE_EXT_PORT", "0"))
 SNAP_SIDE = cm.SNAP_SIDE  # keeps a picture well under PiCode's 1 MiB relay
 
 # What each app is, in the page's words, and which files it opens.
-KINDS = {
-    "photocraft": ("Images", (".pcraft", ".psd", ".psb", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".webp")),
-    "vectorcraft": ("Vector art", (".vectorcraft", ".svg", ".svgz", ".ai", ".eps")),
-    "effectcraft": ("Motion", (".ecproj",)),
-    "filmcraft": ("Video", (".fcproj",)),
-    "lightcraft": ("Photos", ()),  # it imports photos into a library; nothing "opens" a file
-    "designcraft": ("Page layout", (".designcraft",)),
-    "printcraft": ("PDF", (".pdf",)),
-}
+KINDS = {name: (spec["kind"], tuple(spec["extensions"])) for name, spec in cm.APPS.items()}
 
 
 class PageError(Exception):
@@ -81,55 +74,35 @@ def workspace_path(ws_id):
     raise PageError("Turn Crafting Apps on in this workspace first.")
 
 
-def listeners():
-    """{port: window handle} for every app's control port, in one PowerShell call."""
-    ports = [s["port"] for s in cm.APPS.values() if s["port"] is not None]
-    if not cm.WSL:
-        return {}
-    script = (
-        "$c = @(Get-NetTCPConnection -State Listen -LocalPort %s -ErrorAction SilentlyContinue); "
-        "$out = @{}; foreach ($x in $c) { if (-not $out.ContainsKey([string]$x.LocalPort)) { "
-        "$out[[string]$x.LocalPort] = (Get-Process -Id $x.OwningProcess -ErrorAction SilentlyContinue).MainWindowHandle } }; "
-        "$out | ConvertTo-Json -Compress"
-    ) % ",".join(str(p) for p in ports)
-    raw = cm.powershell(script)
+def app_row(meta):
+    row = dict(meta)
+    app = cm.App(meta["app"])
     try:
-        return {int(k): int(v) for k, v in json.loads(raw or "{}").items()}
-    except (ValueError, TypeError):
-        return {}
+        st = app.status()
+        row.update(installed=st["installed"], open=st["open_with_control"],
+                   window=st.get("window"), folder=st.get("folder"),
+                   openedForRoot=app.read_state().get("root"))
+        if not st["installed"]:
+            row["state"] = "not-installed"
+        elif st.get("connection") == "unavailable":
+            row["state"] = "connection-error"
+            row["message"] = st.get("hint", "The app connection is unavailable.")
+        elif st["open_with_control"]:
+            row["state"] = "connected"
+        elif st.get("running_without_control"):
+            row["state"] = "uncontrolled"
+        else:
+            row["state"] = "ready"
+        app.install() if st["installed"] else None
+    except (cm.ToolError, OSError, ValueError, RuntimeError) as e:
+        row["state"] = "error"
+        row["message"] = str(e) if isinstance(e, cm.ToolError) else "Could not check this app. Try Refresh."
+    return row
 
 
 def status():
-    open_ports = listeners()
-    apps = []
-    for name, spec in cm.APPS.items():
-        row = {"app": name, "title": spec["title"], "kind": KINDS[name][0], "installed": True}
-        try:
-            row = app_row(name, spec, open_ports, row)
-        except Exception as e:  # noqa: BLE001 — one app must not take the page down
-            print("status of %s failed: %r" % (name, e), file=sys.stderr, flush=True)
-            row["error"] = "Could not check this app — try Refresh."
-        apps.append(row)
-    return {"apps": apps}
-
-
-def app_row(name, spec, open_ports, row):
-    found = cm.find_install(name)
-    row["installed"] = bool(found)
-    if not found:
-        return row
-    row["folder"] = cm.to_app_path(found[0])
-    if spec.get("headless"):  # no fixed port: its control file answers, its process has the window
-        app = cm.App(name)
-        window = app.window() if app.listening_pid() else None
-    else:
-        window = open_ports.get(spec["port"])
-    row["open"] = window is not None
-    if window:
-        row["window"] = window
-    if spec["roots"] and window and not spec.get("headless"):
-        row["filesRoot"] = cm.App(name).read_state().get("root")
-    return row
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        return {"apps": list(pool.map(app_row, cm.public_catalog()))}
 
 
 def app_in(name, ws_id):
@@ -151,16 +124,25 @@ def open_app(name, ws_id):
     return {"opened": launched, "message": ("Opened %s." if launched else "%s is already open.") % title}
 
 
-def open_file(path, ws_id):
-    name = app_for(path)
+def open_file(path, ws_id, name=None):
+    choices = cm.candidates(path)
+    if name and name not in choices:
+        raise PageError("This app does not open this kind of file.")
+    if not name and len(choices) > 1:
+        raise PageError("Choose an app to open this file.")
+    name = name or (choices[0] if choices else None)
     if not name:
         raise PageError("None of the Crafting Apps opens this kind of file.")
+    app = app_in(name, ws_id)
+    path = os.path.realpath(path if os.path.isabs(path) else os.path.join(app.root, path))
+    if os.path.commonpath([path, app.root]) != app.root:
+        raise PageError("Choose a file in this workspace.")
     if not os.path.isfile(path):
         raise PageError("That file is not there any more.")
-    app = app_in(name, ws_id)
     try:
-        app.ensure_open()
-        cm.open_file_in(app, name, path, cm.Bridge(app))
+        with cm.app_lock(name), cm.Bridge(app) as bridge:
+            app.ensure_open()
+            cm.open_file_in(app, name, path, bridge)
     except cm.ToolError as e:
         raise PageError(str(e))
     return {"message": "Opened %s in %s." % (os.path.basename(path), cm.APPS[name]["title"])}
@@ -176,6 +158,9 @@ SNAP = {
     # Its window screenshot raises the window (measured), so the page shows the
     # document's current page, rendered headless, instead.
     "designcraft": ("render_page", {"scale": 0.8}),
+    "wordcraft": ("render_page", {"page": 1, "scale": 0.8}),
+    "deckcraft": ("render_slide", {"scale": 0.8}),
+    "gridcraft": ("screenshot", {}),
     "printcraft": None,  # its window goes through the control file, not an MCP bridge
 }
 
@@ -193,15 +178,31 @@ def snapshot(name):
     app = cm.App(name)
     if not app.listening_pid():
         raise PageError("%s is not open." % cm.APPS[name]["title"])
+    try:
+        app.verify_connection()
+    except cm.ToolError as e:
+        raise PageError(str(e))
     if name == "printcraft":
         try:
             b64 = cm.printcraft_screenshot(app)
         except cm.ToolError as e:
             raise PageError(str(e))
         return {"image": b64, "mime": "image/png"}
+    if name == "gridcraft":
+        # This release's window capture can stall while the app is unfocused.
+        # A small, live cell preview is read-only and does not change focus.
+        try:
+            with cm.Bridge(app) as bridge:
+                res = bridge.call("read_range", {"range": "A1:H12", "formatted": True}, timeout=10)
+            if "error" in res or res.get("result", {}).get("isError"):
+                raise cm.ToolError("Could not read spreadsheet cells.")
+            value = cm.content_value(res.get("result"))
+            return {"table": value, "caption": "Live cells · A1:H12"}
+        except cm.ToolError as e:
+            raise PageError(str(e))
     tool, args = SNAP[name]
     b64 = take(app, tool, args)
-    caption = "The current page, drawn without touching the window." if name == "designcraft" else ""
+    caption = "Rendered document page" if name in {"designcraft", "wordcraft"} else "Rendered slide" if name == "deckcraft" else "Window snapshot"
     b64, size = shrink(b64)
     if size > MAX_PNG and name == "vectorcraft":
         # No ffmpeg to shrink the window: show the artwork itself, smaller.
@@ -213,7 +214,8 @@ def snapshot(name):
 
 def take(app, tool, args):
     try:
-        res = cm.Bridge(app).call(tool, args)
+        with cm.Bridge(app) as bridge:
+            res = bridge.call(tool, args)
     except cm.ToolError as e:
         raise PageError(str(e))
     result = res.get("result") or {}
@@ -263,6 +265,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self.allowed():
             return
+        if self.path == "/catalog":
+            return self.reply(200, {"apps": cm.public_catalog()})
         if self.path == "/status":
             return self.run(status)
         if self.path == "/workspaces":
@@ -278,7 +282,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/open":
             return self.run(lambda: open_app(req.get("app", ""), ws))
         if self.path == "/open-file":
-            return self.run(lambda: open_file(req.get("path") or ctx.get("path", ""), ws))
+            return self.run(lambda: open_file(req.get("path") or ctx.get("path", ""), ws, req.get("app")))
         if self.path == "/snapshot":
             return self.run(lambda: snapshot(req.get("app", "")))
         self.reply(404, {"message": "no such route"})

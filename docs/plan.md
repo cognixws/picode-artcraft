@@ -122,6 +122,12 @@ are vendored as their references.
   window's handle comes from the process (no fixed port). Open with `*.pdf`.
   No screen-follow on document tools, only on `app_open` / `ui_*`.
 
+## v0.6.0
+
+WordCraft, DeckCraft and GridCraft plus the catalog/detail GUI are implemented
+on `feat/office-gui-plan`. Source-of-truth contracts and measured limits live in
+[architecture.md](architecture.md) and [validation-office-gui.md](validation-office-gui.md).
+
 ## Next
 
 - Headless mode for batch work nobody needs to watch (`--headless` /
@@ -136,8 +142,9 @@ are vendored as their references.
   Code (deferred), possibly heavy in CLIs that load every tool. Measure in one
   of those before cutting; if it hurts, advertise a core set and keep the rest
   callable by name, as LightCraft does with its `cmd_*` tools.
-- Page polish: an empty gap in the grid when snapshots are shown (cards of
-  different heights), and the DesignCraft picture's text is small at 1440 px.
+- [x] Page polish: the v0.6 list/detail surface replaces the variable-height
+  snapshot grid and gives the selected preview the detail width. Browser QA
+  covers desktop, narrow panes and mobile; native acceptance remains separate.
 - PiCode core, not this repo: no extension uses the v2 `picode/screen` result
   key yet (`docs/handoff/open/extensions.md`).
 

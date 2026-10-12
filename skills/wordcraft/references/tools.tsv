@@ -1,0 +1,17 @@
+tool	description	required
+list_commands	Every WordCraft command: id, label, ribbon location, shortcut and params. Filter with `query`.	-
+execute	Run one command by id with params, e.g. {command:"format.bold"} or {command:"insert.table", params:{rows:3, cols:4}}.	command
+batch	Run commands in order; stops at the first error unless keepGoing.	commands
+new_document	Start a document: blank, sample, letter, resume or report.	-
+open_document	Open a .docx, .odt, .rtf, .md, .tex, .html, .txt or .json file.	path
+save_document	Save (format from the extension: docx, pdf, odt, rtf, html, md, tex, txt, png).	-
+type_text	Type at the caret (replacing the selection). Use \n... for line breaks inside text; use execute text.newParagraph for new paragraphs, or `paragraphs: true` to split lines into paragraphs.	text
+select_text	Select the n-th occurrence of some text.	text
+get_text	Plain text of the document body.	-
+inspect_document	Structure: blocks with text, styles, formatting runs, lists, tables, sections, parts, selection, pages.	-
+render_page	Render a page to PNG to look at the result.	-
+parity	WordCraft's command coverage of the word-processor feature catalog.	-
+screenshot	Screenshot of the whole WordCraft window (desktop app only).	-
+click	Click at window coordinates (desktop app only).	x,y
+key	Press a key with modifiers (desktop app only), e.g. {key:"B", cmd:true}.	key
+ui_inspect	UI state: tab, panes, dialog, page rectangles on screen, caret (desktop app only).	-

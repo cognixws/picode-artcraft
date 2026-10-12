@@ -1,0 +1,338 @@
+{
+  "wordcraft": {
+    "title": "WordCraft",
+    "kind": "Documents",
+    "category": "Documents",
+    "purpose": "Write and format documents",
+    "icon": "document",
+    "extensions": [
+      ".docx",
+      ".doc",
+      ".odt",
+      ".rtf"
+    ],
+    "version": "0.5.0",
+    "port": 7982,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--connect",
+      "127.0.0.1:{port}"
+    ],
+    "probe": "ui_inspect",
+    "openTool": "open_document",
+    "paths": {
+      "open_document": [
+        "path"
+      ],
+      "save_document": [
+        "path"
+      ],
+      "render_page": [
+        "path"
+      ]
+    }
+  },
+  "deckcraft": {
+    "title": "DeckCraft",
+    "kind": "Presentations",
+    "category": "Documents",
+    "purpose": "Build slides and presentations",
+    "icon": "slides",
+    "extensions": [
+      ".deckcraft",
+      ".pptx"
+    ],
+    "version": "0.5.0",
+    "port": 7990,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--connect",
+      "{port}"
+    ],
+    "probe": "call_app",
+    "openTool": "open_presentation",
+    "paths": {
+      "open_presentation": [
+        "path"
+      ],
+      "save_presentation": [
+        "path"
+      ],
+      "export": [
+        "path"
+      ],
+      "insert_picture": [
+        "path"
+      ],
+      "screenshot": [
+        "path"
+      ]
+    },
+    "probeArgs": {
+      "method": "ui.inspect"
+    }
+  },
+  "gridcraft": {
+    "title": "GridCraft",
+    "kind": "Spreadsheets",
+    "category": "Documents",
+    "purpose": "Work with data, formulas and charts",
+    "icon": "grid",
+    "extensions": [
+      ".xlsx",
+      ".csv",
+      ".tsv"
+    ],
+    "version": "0.5.0",
+    "port": 7983,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--connect",
+      "{port}"
+    ],
+    "probe": "inspect_workbook",
+    "openTool": "open_workbook",
+    "paths": {
+      "open_workbook": [
+        "path"
+      ],
+      "save_workbook": [
+        "path"
+      ],
+      "screenshot": [
+        "path"
+      ]
+    }
+  },
+  "photocraft": {
+    "title": "PhotoCraft",
+    "kind": "Image editing",
+    "category": "Images",
+    "purpose": "Retouch and compose images",
+    "icon": "image",
+    "extensions": [
+      ".pcraft",
+      ".psd",
+      ".psb",
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".tif",
+      ".tiff",
+      ".webp"
+    ],
+    "version": "0.2.0",
+    "port": 7878,
+    "token": true,
+    "roots": true,
+    "connect": [
+      "--bridge",
+      "127.0.0.1:{port}"
+    ],
+    "probe": "ui_inspect",
+    "openTool": "doc_open",
+    "paths": {
+      "doc_open": [
+        "path"
+      ],
+      "doc_save": [
+        "path"
+      ],
+      "doc_export": [
+        "path"
+      ]
+    }
+  },
+  "vectorcraft": {
+    "title": "VectorCraft",
+    "kind": "Vector art",
+    "category": "Images",
+    "purpose": "Draw logos, shapes and vector artwork",
+    "icon": "vector",
+    "extensions": [
+      ".vectorcraft",
+      ".svg",
+      ".svgz",
+      ".ai",
+      ".eps"
+    ],
+    "version": "0.3.1",
+    "port": 7979,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--connect",
+      "127.0.0.1:{port}"
+    ],
+    "probe": "inspect_ui",
+    "openTool": "open_file",
+    "paths": {
+      "open_file": [
+        "path"
+      ],
+      "save_file": [
+        "path"
+      ],
+      "export": [
+        "path"
+      ],
+      "screenshot": [
+        "path"
+      ]
+    }
+  },
+  "lightcraft": {
+    "title": "LightCraft",
+    "kind": "Photo development",
+    "category": "Images",
+    "purpose": "Develop and organize photographs",
+    "icon": "sun",
+    "extensions": [],
+    "version": "0.2.1",
+    "port": 7980,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--connect",
+      "127.0.0.1:{port}"
+    ],
+    "probe": "inspect_ui",
+    "openTool": "import",
+    "openPath": "paths",
+    "paths": {
+      "import": [
+        "paths"
+      ],
+      "render_photo": [
+        "path"
+      ],
+      "export": [
+        "path",
+        "dir"
+      ],
+      "screenshot": [
+        "path"
+      ]
+    }
+  },
+  "effectcraft": {
+    "title": "EffectCraft",
+    "kind": "Motion graphics",
+    "category": "Motion",
+    "purpose": "Animate graphics and visual effects",
+    "icon": "motion",
+    "extensions": [
+      ".ecproj"
+    ],
+    "version": "0.3.1",
+    "port": 9877,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--bridge",
+      "{port}"
+    ],
+    "probe": "ui_inspect",
+    "openTool": "open_project",
+    "paths": {
+      "open_project": [
+        "path"
+      ],
+      "save_project": [
+        "path"
+      ],
+      "render_frame": [
+        "path"
+      ],
+      "screenshot": [
+        "path"
+      ]
+    }
+  },
+  "filmcraft": {
+    "title": "FilmCraft",
+    "kind": "Video editing",
+    "category": "Motion",
+    "purpose": "Cut and assemble video",
+    "icon": "film",
+    "extensions": [
+      ".fcproj"
+    ],
+    "version": "0.2.1",
+    "port": 9876,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--bridge",
+      "127.0.0.1:{port}"
+    ],
+    "probe": "ui_inspect",
+    "openTool": "command_run",
+    "openPath": "params.path",
+    "openArgs": {
+      "id": "file.open"
+    },
+    "paths": {}
+  },
+  "designcraft": {
+    "title": "DesignCraft",
+    "kind": "Page layout",
+    "category": "Documents",
+    "purpose": "Lay out publications and pages",
+    "icon": "layout",
+    "extensions": [
+      ".designcraft"
+    ],
+    "version": "0.2.1",
+    "port": 7981,
+    "token": false,
+    "roots": false,
+    "connect": [
+      "--connect",
+      "{port}"
+    ],
+    "probe": "ui_inspect",
+    "openTool": "open_document",
+    "paths": {
+      "open_document": [
+        "path"
+      ],
+      "save_document": [
+        "path"
+      ],
+      "place_image": [
+        "path"
+      ],
+      "render_page": [
+        "path"
+      ],
+      "export_png": [
+        "path"
+      ],
+      "screenshot": [
+        "path"
+      ]
+    }
+  },
+  "printcraft": {
+    "title": "PrintCraft",
+    "kind": "PDF editing",
+    "category": "Documents",
+    "purpose": "Read, annotate and edit PDFs",
+    "icon": "pdf",
+    "extensions": [
+      ".pdf"
+    ],
+    "version": "0.2.1",
+    "port": null,
+    "token": false,
+    "roots": true,
+    "headless": true,
+    "connect": [],
+    "probe": null,
+    "paths": {}
+  }
+}

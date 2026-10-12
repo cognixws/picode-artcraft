@@ -13,17 +13,25 @@ Premiere-style), [LightCraft](https://github.com/storytold/lightcraft)
 (PDFs, Acrobat-style). The agent works in the real app window while you watch, and
 saves into the workspace.
 
-> v0.5 — seven apps and a page. Plan and next steps in [docs/plan.md](docs/plan.md).
+> v0.6 — ten apps and a searchable catalog. [Architecture](docs/architecture.md),
+> [validation](docs/validation-office-gui.md) and [evolution plan](docs/office-gui-evolution.md).
+
+WordCraft (documents), DeckCraft (presentations) and GridCraft (spreadsheets)
+join the seven creative apps. Their agents edit in the real native windows and
+save DOCX, PPTX and XLSX into the workspace. The new page pairs a searchable app
+catalog with contextual actions and previews; it separates installation,
+connection and workspace states.
 
 ## How it works
 
-Both apps are built for agents: every menu item, tool and dialog is a command,
+The apps are built for agents: every menu item, tool and dialog is a command,
 and each ships its own MCP server (`photocraft-cli mcp`, `vectorcraft-cli mcp`)
 that can drive a running window over a loopback control channel. This
 extension adds what PiCode needs around them:
 
 - **One MCP server per app** (`photocraft`, `vectorcraft`, `effectcraft`,
-  `filmcraft`, `lightcraft`, `designcraft`, `printcraft`) with the app's own
+  `filmcraft`, `lightcraft`, `designcraft`, `printcraft`, `wordcraft`,
+  `deckcraft`, `gridcraft`) with the app's own
   tools plus `app_status`, `app_open` and `app_path`. LightCraft's 359 `cmd_*`
   shortcut tools (each is `run_command` with a fixed id) are not listed, to
   keep the agent's tool list small; calling one by name still works.
@@ -66,18 +74,37 @@ mirrored networking is needed.
 1. Install the apps. On Windows the portable zips are enough
    (`<app>-<v>-windows-x64-portable.zip` from each repository's releases),
    unzipped to `<drive>:\Apps\PhotoCraft`, `VectorCraft`, `EffectCraft`,
-   `FilmCraft`, `LightCraft`, `DesignCraft`, `PrintCraft`. Other places: `Program Files`, `AppData\Local\Programs`, or
+   `FilmCraft`, `LightCraft`, `DesignCraft`, `PrintCraft`, `WordCraft`,
+   `DeckCraft`, `GridCraft`. Other places: `Program Files`, `AppData\Local\Programs`, or
    set `PICODE_<APP>_DIR` (e.g. `PICODE_FILMCRAFT_DIR`) to the folder holding
    the app and its `-cli`. `PICODE_<APP>_PORT` moves an app off its default
    control port (PhotoCraft 7878, VectorCraft 7979, FilmCraft 9876,
-   EffectCraft 9877, LightCraft 7980, DesignCraft 7981 — not its own default
+   EffectCraft 9877, LightCraft 7980, WordCraft 7982, GridCraft 7983, DeckCraft 7990,
+   DesignCraft 7981 — not its own default
    7979, which is VectorCraft's; PrintCraft uses a control file, not a port).
 2. In PiCode: **Extensions → Install extension**, paste
    `https://github.com/cognixws/picode-artcraft`, review, **Install**, then
    turn it on in the workspaces where you want it.
 
+When using custom app folders or ports with a CLI that filters subprocess
+environment variables, pass those overrides explicitly in its MCP server `env`
+as well as to the page process. Standard discovery folders need no overrides.
+
+## Development
+
+`make ci-scoped` validates the package, JavaScript and lifecycle/domain tests.
+`make close` repeats those checks and checks whitespace; `make close-summary`
+prints the extension branch summary for handoff. `make web` checks this static
+HTML/JS package; no frontend bundler or additional dependency is required.
+Browser QA uses an owned PiCode scratch, system Playwright and
+`tests/browser_qa.py`; it labels simulated states explicitly.
+
 ## Security
 
+- WordCraft v0.5.0 uses its own rotating per-window key; the upstream CLI reads
+  it automatically. It never enters the page, manifest, arguments or receipts.
+  GridCraft and DeckCraft v0.5.0 have no documented control key. Watched native
+  Office apps are not filesystem-confined by workspace path translation.
 - PhotoCraft's control channel needs a 256-bit token. PhotoCraft creates it
   on first launch in `%LOCALAPPDATA%\picode-artcraft\` (Windows) or
   `~/.picode-artcraft/` (Linux); it never goes into a command line or a log.
@@ -92,6 +119,8 @@ mirrored networking is needed.
 - PiCode with extensions (ADR-0230). v0.3 declares `screen:follow`, which
   needs a PiCode with the screen-follow door (ADR-0230 amendment of
   2026-10-06); an older PiCode refuses the install — use v0.2.1 there.
+- WordCraft, DeckCraft and GridCraft integration is pinned to v0.5.0; native
+  content/file acceptance is recorded separately from screen-follow/WebView2.
 - Any of PhotoCraft 0.2, VectorCraft 0.3, EffectCraft 0.3, FilmCraft 0.2,
   LightCraft 0.2, DesignCraft 0.2, PrintCraft 0.2 (tested on Windows 11:
   0.2.0, 0.3.1, 0.3.1, 0.2.1, 0.2.1, 0.2.1, 0.2.1).

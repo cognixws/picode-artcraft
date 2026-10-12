@@ -1,10 +1,10 @@
 {
   "id": "artcraft",
   "name": "Crafting Apps",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "apiVersion": 1,
   "publisher": "PiCode",
-  "description": "Let your agents work in the Crafting Apps \u2014 PhotoCraft, VectorCraft, EffectCraft, FilmCraft, LightCraft, DesignCraft and PrintCraft \u2014 while you watch: they edit images, draw, animate, cut video, develop photos, lay out pages and work with PDFs in the real app windows and save into the workspace.",
+  "description": "Let your agents write documents, build presentations, work with spreadsheets, edit images and video, and lay out pages in ten Crafting Apps while you watch.",
   "icon": "icons/craft.svg",
   "permissions": [
     "screen:follow",
@@ -60,6 +60,27 @@
           "${extensionDir}/server/craft_mcp.py",
           "printcraft"
         ]
+      },
+      "wordcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "wordcraft"
+        ]
+      },
+      "deckcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "deckcraft"
+        ]
+      },
+      "gridcraft": {
+        "command": "python3",
+        "args": [
+          "${extensionDir}/server/craft_mcp.py",
+          "gridcraft"
+        ]
       }
     },
     "skills": [
@@ -69,7 +90,10 @@
       "skills/filmcraft",
       "skills/lightcraft",
       "skills/designcraft",
-      "skills/printcraft"
+      "skills/printcraft",
+      "skills/wordcraft",
+      "skills/deckcraft",
+      "skills/gridcraft"
     ]
   },
   "process": {
@@ -135,6 +159,46 @@
         "pattern": "*.pdf",
         "page": "apps",
         "title": "Open in PrintCraft"
+      },
+      {
+        "pattern": "*.docx",
+        "page": "apps",
+        "title": "Open in WordCraft"
+      },
+      {
+        "pattern": "*.odt",
+        "page": "apps",
+        "title": "Open in WordCraft"
+      },
+      {
+        "pattern": "*.rtf",
+        "page": "apps",
+        "title": "Open in WordCraft"
+      },
+      {
+        "pattern": "*.deckcraft",
+        "page": "apps",
+        "title": "Open in DeckCraft"
+      },
+      {
+        "pattern": "*.pptx",
+        "page": "apps",
+        "title": "Open in DeckCraft"
+      },
+      {
+        "pattern": "*.xlsx",
+        "page": "apps",
+        "title": "Open in GridCraft"
+      },
+      {
+        "pattern": "*.csv",
+        "page": "apps",
+        "title": "Open in GridCraft"
+      },
+      {
+        "pattern": "*.tsv",
+        "page": "apps",
+        "title": "Open in GridCraft"
       }
     ],
     "menus": {
@@ -149,7 +213,10 @@
       "*.vectorcraft",
       "*.ecproj",
       "*.fcproj",
-      "*.designcraft"
+      "*.designcraft",
+      "*.docx",
+      "*.pptx",
+      "*.xlsx"
     ]
   }
 }

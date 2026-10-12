@@ -1,7 +1,8 @@
 # Crafting Apps: Office integration and GUI evolution
 
-Status: researched proposal, 2026-10-12. No runtime implementation, installation,
-extension update, publication or native acceptance is claimed by this document.
+Status: owner approved implementation on 2026-10-12. This document preserves
+the proposed direction; implementation outcomes and limits are recorded in
+[validation-office-gui.md](validation-office-gui.md).
 Work branch: `feat/office-gui-plan`; baseline: `ac69723` (extension v0.5.0).
 
 ## Evidence and scope

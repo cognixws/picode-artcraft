@@ -15,6 +15,10 @@ needed. Paths cross with `wslpath`.
 
 import base64
 import functools
+import contextlib
+import fcntl
+import queue
+import threading
 import json
 import os
 import re
@@ -33,71 +37,19 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # folder on an update, and a process whose cwd was deleted makes wslpath fail
 # ("No such file or directory") for paths that exist.
 SAFE_CWD = "/mnt/c" if os.path.isdir("/mnt/c") else "/"
-VERSION = "0.5.0"
-STATE_DIR = os.path.join(os.path.expanduser("~"), ".picode-artcraft")
+VERSION = "0.6.0"
+STATE_DIR = os.environ.get("PICODE_CRAFT_STATE_DIR") or os.path.join(os.path.expanduser("~"), ".picode-artcraft")
 PROTOCOLS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
-APPS = {
-    "photocraft": {
-        "title": "PhotoCraft",
-        "port": 7878,
-        "token": True,   # bearer token file; the app creates it
-        "roots": True,   # file access only below --automation-*-root
-        "connect": lambda port: ["--bridge", f"127.0.0.1:{port}"],
-    },
-    "vectorcraft": {
-        "title": "VectorCraft",
-        "port": 7979,
-        "token": False,  # its control channel has no token (loopback only)
-        "roots": False,  # takes absolute paths
-        "connect": lambda port: ["--connect", f"127.0.0.1:{port}"],
-    },
-    "filmcraft": {
-        "title": "FilmCraft",
-        "port": 9876,
-        "token": False,
-        "roots": False,
-        "connect": lambda port: ["--bridge", f"127.0.0.1:{port}"],
-    },
-    "effectcraft": {
-        "title": "EffectCraft",
-        "port": 9877,
-        "token": False,
-        "roots": False,
-        "connect": lambda port: ["--bridge", str(port)],
-    },
-    "lightcraft": {
-        "title": "LightCraft",
-        "port": 7980,
-        "token": False,
-        "roots": False,
-        "connect": lambda port: ["--connect", f"127.0.0.1:{port}"],
-    },
-    "designcraft": {
-        "title": "DesignCraft",
-        "port": 7981,    # its own default (7979) is VectorCraft's
-        "token": False,
-        "roots": False,
-        "connect": lambda port: ["--connect", str(port)],
-    },
-    # PrintCraft's MCP server has no bridge to the window: it edits PDFs
-    # headless, only under --root. The window is driven by `printcraft-cli ui`
-    # over a control file (random loopback port, token inside), which this
-    # server turns into ui_* tools.
-    "printcraft": {
-        "title": "PrintCraft",
-        "port": None,
-        "token": False,
-        "roots": True,
-        "headless": True,
-        "connect": lambda port: [],
-    },
-}
+from catalog import APPS, public_catalog, candidates
 
 for _name, _spec in APPS.items():  # PICODE_<APP>_PORT moves an app off its default port
     _p = os.environ.get(f"PICODE_{_name.upper()}_PORT", "")
-    if _p.isdigit() and _spec["port"] is not None:
-        _spec["port"] = int(_p)
+    if _p and _spec["port"] is not None:
+        if _p.isdigit() and 1 <= int(_p) <= 65535:
+            _spec["port"] = int(_p)
+        else:
+            _spec["configError"] = "Invalid control port; choose a number from 1 to 65535."
 
 # Argument keys that may carry a file path. Only absolute POSIX values are
 # translated here: a relative value under `path` can be something else (an
@@ -109,6 +61,45 @@ TEXT_PATHS = {("filmcraft", "media_import")}
 
 class ToolError(Exception):
     pass
+
+
+_locks = {}
+_locks_guard = threading.Lock()
+_held = threading.local()
+
+
+@contextlib.contextmanager
+def app_lock(name, timeout=60):
+    """Serialize GUI/MCP callers across threads and processes; nesting is safe."""
+    with _locks_guard:
+        lock = _locks.setdefault(name, threading.RLock())
+    if not lock.acquire(timeout=timeout):
+        raise ToolError("This app is busy. Try again shortly.")
+    held = getattr(_held, "apps", {})
+    _held.apps = held
+    file = None
+    try:
+        if not held.get(name):
+            os.makedirs(STATE_DIR, mode=0o700, exist_ok=True)
+            file = open(os.path.join(STATE_DIR, name + ".lock"), "a")
+            deadline = time.monotonic() + timeout
+            while True:
+                try:
+                    fcntl.flock(file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.monotonic() >= deadline:
+                        raise ToolError("This app is busy. Try again shortly.")
+                    time.sleep(0.05)
+        held[name] = held.get(name, 0) + 1
+        try:
+            yield
+        finally:
+            held[name] -= 1
+    finally:
+        if file:
+            file.close()
+        lock.release()
 
 
 def log(*args):
@@ -195,6 +186,11 @@ class App:
         self._token_file = None
 
     def install(self):
+        if self.spec.get("configError"):
+            raise ToolError(self.spec["configError"])
+        port = self.spec["port"]
+        if port and any(n != self.name and s["port"] == port for n, s in APPS.items()):
+            raise ToolError("Two Crafting Apps use the same control port. Choose a different port.")
         found = find_install(self.name)
         if not found:
             raise ToolError(
@@ -284,6 +280,8 @@ class App:
         With PiCode's screen-follow door (ADR-0230 amendment of 2026-10-06)
         the extension points the screen itself; without it (an older PiCode,
         or the permission not granted) the agent is told how to."""
+        if not WSL:
+            return {"screen": "not followed (native window identity is unavailable on this platform)"}
         hwnd = None
         for _ in range(10):  # the window can appear a moment after the channel
             hwnd = self.window()
@@ -320,10 +318,28 @@ class App:
             n = str(len(out.stdout.split()))
         return n.isdigit() and int(n) > 0 and not self.listening_pid()
 
+    def verify_connection(self):
+        """Read-only protocol probe, with Windows listener identity checked first."""
+        if self.spec.get("headless"):
+            return self.ui("state", timeout=8)
+        if WSL:
+            name = powershell(
+                f"$c = Get-NetTCPConnection -LocalPort {self.spec['port']} -State Listen"
+                " -ErrorAction SilentlyContinue | Select-Object -First 1;"
+                " if ($c) { (Get-Process -Id $c.OwningProcess).ProcessName }")
+            if name.lower() != self.name:
+                raise ToolError("The control port belongs to another program. Choose a different port.")
+        with Bridge(self) as bridge:
+            res = bridge.call(self.spec["probe"], self.spec.get("probeArgs", {}), timeout=10)
+        if "error" in res or res.get("result", {}).get("isError"):
+            raise ToolError("The app is open but its agent connection is unavailable. Save your work and reopen it with Crafting Apps.")
+        return content_value(res.get("result"))
+
     def read_state(self):
         try:
             with open(self.state_file) as f:
-                return json.load(f)
+                data = json.load(f)
+                return data if isinstance(data, dict) else {}
         except (OSError, ValueError):
             return {}
 
@@ -345,6 +361,13 @@ class App:
         elif self.spec["roots"] and pid:
             st["files_root"] = state.get("root")
         if pid:
+            try:
+                self.install()
+                self.verify_connection()
+                st["connection"] = "connected"
+            except (ToolError, OSError, subprocess.SubprocessError):
+                st["connection"] = "unavailable"
+                st["hint"] = "The app is open but its agent connection is unavailable. Save your work and reopen it with Crafting Apps."
             hwnd = self.window()
             if hwnd:
                 st["window"] = hwnd
@@ -358,15 +381,19 @@ class App:
 
     def ensure_open(self):
         """Open the app with control on, unless it already listens. Returns True if launched now."""
+        with app_lock(self.name):
+            return self._ensure_open()
+
+    def _ensure_open(self):
         _, gui, _ = self.install()
         if self.listening_pid():
-            if self.spec["roots"] and not self.spec.get("headless"):
+            self.verify_connection()
+            if not self.spec.get("headless"):
                 root = self.read_state().get("root")
                 if root and root != self.root:
                     raise ToolError(
-                        f"{self.spec['title']} is open with files root {root}, not this workspace "
-                        f"({self.root}). Work with paths under that root, or ask the human to close "
-                        f"{self.spec['title']} so the next call opens it here.")
+                        f"{self.spec['title']} was opened for another workspace. Save your work and close "
+                        "the app before opening it for this workspace.")
             return False
         if self.running_without_control():
             raise ToolError(
@@ -385,28 +412,25 @@ class App:
         os.makedirs(STATE_DIR, exist_ok=True)
         log_path = os.path.join(STATE_DIR, f"{self.name}-app.log")
         with open(log_path, "w") as out:
-            subprocess.Popen(args, cwd=os.path.dirname(gui), stdin=subprocess.DEVNULL,
-                             stdout=out, stderr=subprocess.STDOUT, start_new_session=True)
-        with open(self.state_file, "w") as f:
-            json.dump({"root": self.root, "started": time.time()}, f)
+            child = subprocess.Popen(args, cwd=os.path.dirname(gui), stdin=subprocess.DEVNULL,
+                                     stdout=out, stderr=subprocess.STDOUT, start_new_session=True)
         deadline = time.time() + 45
         while time.time() < deadline:
             time.sleep(0.5)
-            try:
-                with open(log_path) as f:
-                    if "control server listening" in f.read():
-                        return True
-            except OSError:
-                pass
-            if self.spec.get("headless") and self.listening_pid():
+            if self.listening_pid():
+                self.verify_connection()
+                with open(self.state_file, "w") as f:
+                    json.dump({"root": self.root, "started": time.time()}, f)
                 return True
+            if child.poll() is not None:
+                raise ToolError(f"{self.spec['title']} stopped before its connection was ready. Check its launch log.")
         raise ToolError(f"{self.spec['title']} did not open its control channel in 45 s; see {log_path}")
 
     def bridge_cmd(self):
         _, _, cli = self.install()
         if self.spec.get("headless"):  # edits files, no window; confined to the workspace
             return [cli, "mcp", "--root", to_app_path(self.root)]
-        cmd = [cli, "mcp"] + self.spec["connect"](self.spec["port"])
+        cmd = [cli, "mcp"] + [arg.format(port=self.spec["port"]) for arg in self.spec["connect"]]
         if self.spec["token"]:
             cmd += ["--control-token-file", self.token_file()]
         return cmd
@@ -487,14 +511,42 @@ class Bridge:
         self.app = app
         self.proc = None
         self.next_id = 1
+        self.lines = None
 
-    def _rpc(self, method, params):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
+
+    def close(self):
+        if self.proc:
+            if self.proc.poll() is None:
+                self.proc.terminate()
+                try:
+                    self.proc.wait(timeout=2)
+                except subprocess.TimeoutExpired:
+                    self.proc.kill()
+                    self.proc.wait(timeout=2)
+            for stream in (self.proc.stdin, self.proc.stdout):
+                stream.close()
+            self.proc = None
+
+    def _rpc(self, method, params, timeout=120):
         i = self.next_id
         self.next_id += 1
         self.proc.stdin.write(json.dumps({"jsonrpc": "2.0", "id": i, "method": method, "params": params}) + "\n")
         self.proc.stdin.flush()
+        deadline = time.monotonic() + timeout
         while True:
-            line = self.proc.stdout.readline()
+            if time.monotonic() >= deadline:
+                self.close()
+                raise ToolError("The app did not answer in time. Check its state before trying the action again.")
+            try:
+                line = self.lines.get(timeout=max(0.01, deadline - time.monotonic()))
+            except queue.Empty:
+                self.close()
+                raise ToolError("The app did not answer in time. Check its state before trying the action again.")
             if not line:
                 raise ToolError(f"{self.app.spec['title']}'s MCP server stopped")
             try:
@@ -507,24 +559,41 @@ class Bridge:
     def start(self):
         self.proc = subprocess.Popen(self.app.bridge_cmd(), cwd=SAFE_CWD, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=subprocess.DEVNULL, text=True, encoding="utf-8")
+        self.lines = queue.Queue()
+        stream, lines = self.proc.stdout, self.lines
+
+        def read_lines():
+            try:
+                for line in stream:
+                    lines.put(line)
+            except (OSError, ValueError):
+                pass
+            finally:
+                lines.put("")
+        threading.Thread(target=read_lines, daemon=True).start()
         init = self._rpc("initialize", {"protocolVersion": PROTOCOLS[0], "capabilities": {},
-                                        "clientInfo": {"name": "picode-artcraft", "version": VERSION}})
+                                        "clientInfo": {"name": "picode-artcraft", "version": VERSION}}, timeout=10)
         if "error" in init:
+            self.close()
             raise ToolError(f"bridge refused: {init['error']}")
+        server_name = (init.get("result", {}).get("serverInfo", {}).get("name") or "").lower()
+        if self.app.name not in server_name:
+            self.close()
+            raise ToolError("The app bridge identity did not match. Check the installed app.")
         self.proc.stdin.write(json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}) + "\n")
         self.proc.stdin.flush()
 
-    def call(self, name, args):
-        for attempt in (1, 2):
+    def call(self, name, args, timeout=120):
+        with app_lock(self.app.name):
             if not self.proc or self.proc.poll() is not None:
+                self.close()
                 self.start()
             try:
-                return self._rpc("tools/call", {"name": name, "arguments": args})
+                return self._rpc("tools/call", {"name": name, "arguments": args}, timeout)
             except (ToolError, BrokenPipeError, OSError):
-                self.proc = None
-                if attempt == 2:
-                    raise
-        raise ToolError("unreachable")
+                self.close()
+                # A lost answer may already have changed the document. Never replay it.
+                raise
 
 
 # ---------- this server ----------
@@ -553,23 +622,9 @@ OWN_TOOLS = [
     },
 ]
 
-PATH_KEYS = {
-    "photocraft": {"doc_open": ["path"], "doc_save": ["path"], "doc_export": ["path"]},
-    "vectorcraft": {"open_file": ["path"], "save_file": ["path"], "export": ["path"], "screenshot": ["path"]},
-    "filmcraft": {},
-    "effectcraft": {"open_project": ["path"], "save_project": ["path"], "render_frame": ["path"],
-                    "screenshot": ["path"]},
-    "lightcraft": {"import": ["paths"], "render_photo": ["path"], "export": ["path", "dir"],
-                   "screenshot": ["path"]},
-    "designcraft": {"open_document": ["path"], "save_document": ["path"], "place_image": ["path"],
-                    "render_page": ["path"], "export_png": ["path"], "screenshot": ["path"]},
-    "printcraft": {},  # roots: see rootify
-}
-# app_open {file}: the tool, its fixed arguments and where the path goes.
-OPEN_TOOL = {"photocraft": ("doc_open", {}, "path"), "vectorcraft": ("open_file", {}, "path"),
-             "filmcraft": ("command_run", {"id": "file.open"}, "params.path"),
-             "effectcraft": ("open_project", {}, "path"),
-             "lightcraft": ("import", {}, "paths"), "designcraft": ("open_document", {}, "path")}
+PATH_KEYS = {name: spec["paths"] for name, spec in APPS.items()}
+OPEN_TOOL = {name: (spec["openTool"], spec.get("openArgs", {}), spec.get("openPath", "path"))
+             for name, spec in APPS.items() if spec.get("openTool")}
 
 # Tools that duplicate another (LightCraft's 359 cmd_* are run_command with a
 # fixed id): hidden from the list the agent loads, still forwarded if called.
@@ -774,42 +829,43 @@ def main():
         if method != "tools/call":
             raise LookupError(method)
         tool, args = params.get("name"), dict(params.get("arguments") or {})
-        try:
-            if tool == "app_status":
-                return text_result(app.status())
-            if tool == "app_open":
-                launched = app.ensure_open()
-                out = {"opened": launched, "already_open": not launched}
-                if args.get("file"):
-                    out["file"] = open_file_in(app, name, args["file"], bridge)
-                if name in RESTORE_WINDOW:
-                    out.update(restore_window(bridge))
-                out.update(app.window_hint())
-                return text_result(out)
-            if tool == "app_path":
-                return text_result({"path": app.path_arg(args.get("path", ""))})
-            if headless and tool in UI_TOOLS:
-                app.ensure_open()
-                app.follow_once()
-                return run_ui_tool(app, tool, args)
-            if tool not in known:
-                return text_result(f"unknown tool {tool}", True)
-            for key in PATH_KEYS[name].get(tool, []):
-                if key in args:
-                    v = args[key]
-                    args[key] = [app.path_arg(x) for x in v] if isinstance(v, list) else app.path_arg(v)
-            if name == "printcraft":
-                args = rootify(app, args)
-            else:
-                args = app.translate_abs(args, keys=FILE_KEYS | ({"text"} if (name, tool) in TEXT_PATHS else set()))
-                app.ensure_open()
-                app.follow_once()
-            res = bridge.call(tool, args)
-            if "error" in res:
-                return text_result(res["error"].get("message") or res["error"], True)
-            return res["result"]
-        except ToolError as e:
-            return text_result(str(e), True)
+        with app_lock(name):
+            try:
+                if tool == "app_status":
+                    return text_result(app.status())
+                if tool == "app_open":
+                    launched = app.ensure_open()
+                    out = {"opened": launched, "already_open": not launched}
+                    if args.get("file"):
+                        out["file"] = open_file_in(app, name, args["file"], bridge)
+                    if name in RESTORE_WINDOW:
+                        out.update(restore_window(bridge))
+                    out.update(app.window_hint())
+                    return text_result(out)
+                if tool == "app_path":
+                    return text_result({"path": app.path_arg(args.get("path", ""))})
+                if headless and tool in UI_TOOLS:
+                    app.ensure_open()
+                    app.follow_once()
+                    return run_ui_tool(app, tool, args)
+                if tool not in known:
+                    return text_result(f"unknown tool {tool}", True)
+                for key in PATH_KEYS[name].get(tool, []):
+                    if key in args:
+                        v = args[key]
+                        args[key] = [app.path_arg(x) for x in v] if isinstance(v, list) else app.path_arg(v)
+                if name == "printcraft":
+                    args = rootify(app, args)
+                else:
+                    args = app.translate_abs(args, keys=FILE_KEYS | ({"text"} if (name, tool) in TEXT_PATHS else set()))
+                    app.ensure_open()
+                    app.follow_once()
+                res = bridge.call(tool, args)
+                if "error" in res:
+                    return text_result(res["error"].get("message") or res["error"], True)
+                return res["result"]
+            except ToolError as e:
+                return text_result(str(e), True)
 
     for line in sys.stdin:
         line = line.strip()
@@ -831,6 +887,7 @@ def main():
             reply["error"] = {"code": -32603, "message": str(e)}
         sys.stdout.write(json.dumps(reply) + "\n")
         sys.stdout.flush()
+    bridge.close()
 
 
 if __name__ == "__main__":
